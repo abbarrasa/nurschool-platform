@@ -6,7 +6,7 @@ use Nurschool\Repository\EnquiryRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=EnquiryRepository::class)
+ * @ORM\Entity
  */
 class Enquiry
 {
