@@ -5,3 +5,6 @@ fos_user:
     from_email:
         address: '%env(resolve:MAILER_USER)%'
         sender_name: '%env(resolve:MAILER_USER)%'
+
+    service:
+        user_manager: Nurschool\Doctrine\UserManager
