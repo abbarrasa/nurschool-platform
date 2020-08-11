@@ -16,21 +16,15 @@ use FOS\UserBundle\Model\User as AbstractUser;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class User
- * @package Nurschool\Entity
- *
- * @ORM\Table(name="nurschool_user")
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\Table(name="nurschool_user")
  */
 class User extends AbstractUser
 {
-    const ROLE_DEFAULT = 'ROLE_NURSE';
-    const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
-
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(type="integer")
      */
     protected $id;
 
@@ -54,6 +48,18 @@ class User extends AbstractUser
      */
     private $facebookUid;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Nurschool\Entity\Group")
+     * @ORM\JoinTable(name="nurschool_user_group",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
+     * )
+     */
+    protected $groups;
+
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         parent::__construct();

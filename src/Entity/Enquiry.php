@@ -6,13 +6,14 @@ use Nurschool\Repository\EnquiryRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ORM\Table(name="nurschool_enquiry")
  * @ORM\Entity
  */
 class Enquiry
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
     private $id;

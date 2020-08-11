@@ -2,9 +2,16 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb' and 'couchdb'
     firewall_name: main
     user_class: Nurschool\Entity\User
+    group:
+        group_class: Nurschool\Entity\Group
     from_email:
         address: '%env(resolve:MAILER_USER)%'
         sender_name: '%env(resolve:MAILER_USER)%'
 
     service:
-        user_manager: Nurschool\Doctrine\UserManager
+        user_manager: Nurschool\Storage\UserStorage
+        mailer: Nurschool\Mailer\SendGridMailer
+
+    registration:
+        confirmation:
+            enabled: true

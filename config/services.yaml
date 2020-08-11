@@ -29,3 +29,5 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    Nurschool\Storage\UserStorage:
+        arguments: ["@fos_user.util.password_updater", "@fos_user.util.canonical_fields_updater", "@doctrine.orm.entity_manager", "%fos_user.model.user.class%"]
