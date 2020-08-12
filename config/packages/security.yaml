@@ -1,8 +1,12 @@
 security:
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+        ROLE_NURSE: ROLE_USER
+        ROLE_SUPER_ADMIN: [ ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH ]
+
     encoders:
         Nurschool\Entity\User:
             algorithm: auto
-
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
@@ -18,7 +22,14 @@ security:
         main:
             anonymous: lazy
             provider: user_provider
-
+            form_login:
+                default_target_path: /dashboard
+                check_path: /login_check
+                login_path: /login
+                remember_me: true
+            logout:
+                path:   /logout
+                target: /
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 

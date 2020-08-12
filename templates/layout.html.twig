@@ -1,0 +1,93 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<!DOCTYPE html>
+<html lang="{% block language %}es{% endblock %}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noodp, noimageindex, notranslate, nocache" />
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="generator" content="EasyAdmin" />
+
+    <title>{% block page_title %}{{ block('content_title')|striptags|raw }}{% endblock %}</title>
+
+    {% block head_stylesheets %}
+        <link rel="stylesheet" href="{{ asset('bundles/easyadmin/app.css') }}">
+    {% endblock %}
+
+    {% block configured_stylesheets %}{% endblock %}
+
+    {% block head_favicon %}{% endblock %}
+
+    {% block head_javascript %}
+        <script src="{{ asset('bundles/easyadmin/app.js') }}"></script>
+    {% endblock head_javascript %}
+
+    {% block configured_head_contents %}
+        {% for htmlContent in ea.assets.headContents ?? [] %}
+            {{ htmlContent|raw }}
+        {% endfor %}
+    {% endblock %}
+</head>
+
+{% block body %}
+    <body id="{% block body_id %}{% endblock %}" class="ea {% block body_class %}{% endblock %}">
+    <script>
+        document.body.classList.add(
+            'ea-content-width-' + (localStorage.getItem('ea/content/width') || 'normal'),
+            'ea-sidebar-width-' + (localStorage.getItem('ea/sidebar/width') || 'normal')
+        );
+    </script>
+
+    {% block wrapper_wrapper %}
+        {% block flash_messages %}{% endblock flash_messages %}
+
+        <div class="{% block wrapper_class %}wrapper{% endblock %}">
+            {% block wrapper %}
+                <header class="main-header {% block header_class %}{% endblock %}">
+                    {% block header %}
+                        <nav class="navbar" role="navigation">
+                            <button id="navigation-toggler" type="button" aria-label="Toggle navigation">
+                                <i class="fa fa-fw fa-bars"></i>
+                            </button>
+
+                            <div id="header-logo">
+                                {% block header_logo %}
+                                    <a class="logo logo-long" title="Nurschool" href="{{ path('home') }}">
+                                        Nurschool
+                                    </a>
+                                {% endblock header_logo %}
+                            </div>
+                        </nav>
+                    {% endblock header %}
+                </header>
+
+                <aside class="main-sidebar">
+                    {% block sidebar %}
+                        <section class="sidebar">
+                            {% block main_menu_wrapper %}{% endblock main_menu_wrapper %}
+                        </section>
+                    {% endblock sidebar %}
+                </aside>
+
+                <div class="content-wrapper">
+                    <div id="sidebar-resizer-handler" class="resizer-handler resizer-handler-left"></div>
+
+                    {% block content %}{% endblock content %}
+
+                    <div id="content-resizer-handler" class="resizer-handler resizer-handler-right"></div>
+                </div>
+
+                <footer>{% block footer %}Esto es el footer{% endblock footer %}</footer>
+            {% endblock wrapper %}
+        </div>
+    {% endblock wrapper_wrapper %}
+
+    {% block body_javascript %}{% endblock body_javascript %}
+
+    {% block configured_javascripts %}{% endblock %}
+
+    {% block configured_body_contents %}{% endblock %}
+    </body>
+{% endblock body %}
+</html>

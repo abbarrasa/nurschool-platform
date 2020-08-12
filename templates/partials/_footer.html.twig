@@ -1,0 +1,69 @@
+<div class="footer-top">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-4">
+                <div class="footer-widget">
+                    <!-- footer logo -->
+                    <div class="footer-logo">
+                        <a href="{{ path('home') }}">
+                            <img class="logo-alt" src="{{ asset('build/images/logo07.png') }}">
+                            <p>{{ 'home.motto' | trans({}, 'Nurschool') }}</p>
+                        </a>
+                    </div>
+                    <div class="social-links">
+                        <p>Síguenos en:</p>
+                        <ul>
+                            <li><a class="facebook-lnk" href="#"><i class="fab fa-facebook"></i></a></li>
+                            <li><a class="twitter-lnk" href="#"><i class="fab fa-twitter"></i></a></li>
+                            <li><a class="rss-lnk" href="#"><i class="fas fa-rss"></i></a></li>
+                            {#                                <li><a href="#"><i class="fab fa-linkedin"></i></a></li>#}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="footer-widget">
+                    <h3 class="footer-title">
+                        Reservation
+                    </h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Rooms</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">News</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col">
+                <div class="footer-widget">
+                    <h3 class="footer-title">Ayuda</h3>
+                    <ul>
+                        <li><a href="https://github.com/abbarrasa/nurschool/issues" target="_blank">Guía de usuario</a></li>
+                        <li><a href="https://github.com/abbarrasa/nurschool" target="_blank">Código fuente</a></li>
+                        <li><a href="https://github.com/abbarrasa/nurschool/ChangeLog.md" target="_blank">Notas de versión</a></li>
+                        <li><a href="https://github.com/abbarrasa/nurschool/" target="_blank">Seguimiento de incidencias</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="footer-widget">
+                    <h3 class="footer-title">Newsletter</h3>
+                    <p>Subscribe newsletter to get updates</p>
+{#                    {{ include('partial/_form_newsletter.html.twig') }}#}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer-bottom">
+    <div class="container">
+        <div class="footer-border"></div>
+        <div class="row">
+            <div class="col">
+                <p class="copyright">
+                    <i>nurschool</i> v{{ version }} | Copyright &copy;{{ 'now'|date('Y') }} all rights reserved | This project is made with <i class="far fa-heart heart-beat" aria-hidden="true"></i> by <a href="https://github.com/abbarrasa" target="_blank">abbarrasa</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
