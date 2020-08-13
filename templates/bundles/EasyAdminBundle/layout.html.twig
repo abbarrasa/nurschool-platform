@@ -97,9 +97,13 @@
     </div>
 {% endblock header %}
 
-{% block main_menu_wrapper %}
-    {{ include(ea.templatePath('main_menu')) }}
-{% endblock main_menu_wrapper %}
+{% block sidebar %}
+    <section class="sidebar">
+        {% block main_menu_wrapper %}
+            {{ include(ea.templatePath('main_menu')) }}
+        {% endblock main_menu_wrapper %}
+    </section>
+{% endblock sidebar %}
 
 {% block content %}
     <div class="content">

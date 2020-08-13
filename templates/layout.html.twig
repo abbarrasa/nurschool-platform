@@ -1,13 +1,13 @@
-{% trans_default_domain 'FOSUserBundle' %}
+{% trans_default_domain 'Nurschool' %}
 
 <!DOCTYPE html>
-<html lang="{% block language %}es{% endblock %}">
+<html lang="{% block language %}{{ app.request.locale }}{% endblock %}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noodp, noimageindex, notranslate, nocache" />
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <meta name="generator" content="EasyAdmin" />
+    <meta name="generator" content="Nurschool" />
 
     <title>{% block page_title %}{{ block('content_title')|striptags|raw }}{% endblock %}</title>
 
@@ -44,7 +44,7 @@
 
         <div class="{% block wrapper_class %}wrapper{% endblock %}">
             {% block wrapper %}
-                <header class="main-header {% block header_class %}{% endblock %}">
+                <header class="{% block header_class %}main-header{% endblock %}">
                     {% block header %}
                         <nav class="navbar" role="navigation">
                             <button id="navigation-toggler" type="button" aria-label="Toggle navigation">
@@ -62,6 +62,8 @@
                     {% endblock header %}
                 </header>
 
+                {% set sidebar = block('sidebar') is defined ? block('sidebar') : '' %}
+                {% if sidebar is not empty %}
                 <aside class="main-sidebar">
                     {% block sidebar %}
                         <section class="sidebar">
@@ -69,16 +71,52 @@
                         </section>
                     {% endblock sidebar %}
                 </aside>
+                {% endif %}
 
                 <div class="content-wrapper">
                     <div id="sidebar-resizer-handler" class="resizer-handler resizer-handler-left"></div>
 
-                    {% block content %}{% endblock content %}
+                    {% block content %}
+                        <div class="content">
+                            {% block content_header_wrapper %}
+                                <section class="content-header">
+                                    {% block content_header %}
+                                        <div class="d-flex flex-row justify-content-between align-content-center w-100">
+                                            <div class="content-header-title">
+                                                <h1 class="title">{% block content_title %}{% endblock %}</h1>
+                                            </div>
+
+                                            {% block page_actions_wrapper %}
+                                                <div class="page-actions">{% block page_actions %}{% endblock %}</div>
+                                            {% endblock %}
+                                        </div>
+                                    {% endblock content_header %}
+                                </section>
+                            {% endblock content_header_wrapper %}
+
+                            <section id="main" class="content-body">
+                                {% block main %}{% endblock %}
+                            </section>
+
+                            {% block content_footer_wrapper %}
+                                {% set content_footer = block('content_footer') is defined ? block('content_footer') : '' %}
+                                {% if content_footer is not empty %}
+                                    <section class="content-footer">
+                                        {{ content_footer }}
+                                    </section>
+                                {% endif %}
+                            {% endblock %}
+                        </div>
+                    {% endblock content %}
 
                     <div id="content-resizer-handler" class="resizer-handler resizer-handler-right"></div>
                 </div>
 
-                <footer>{% block footer %}Esto es el footer{% endblock footer %}</footer>
+                <footer>
+                    {% block footer %}
+                        {% include 'partials/_footer.html.twig' %}
+                    {% endblock footer %}
+                </footer>
             {% endblock wrapper %}
         </div>
     {% endblock wrapper_wrapper %}
