@@ -3,6 +3,7 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     exception_controller: null
-    form_themes: ['@EasyAdmin/crud/form_theme.html.twig']
+#    form_themes: ['@EasyAdmin/crud/form_theme.html.twig']
+    form_themes: ['bootstrap_4_layout.html.twig']
     globals:
         version: '%env(resolve:APP_VERSION)%'

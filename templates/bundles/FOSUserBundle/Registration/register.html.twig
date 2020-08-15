@@ -1,0 +1,155 @@
+{% extends '@FOSUser/layout.html.twig' %}
+
+{% block page_title %}Registro en nurschool{% endblock %}
+
+{% block wrapper %}
+{#	{% set page_title = block('page_title') %}#}
+{#	{% set _username_label = username_label is defined ? username_label|trans : 'login_page.username'|trans({}, 'EasyAdminBundle') %}#}
+{#	{% set _password_label = password_label is defined ? password_label|trans : 'login_page.password'|trans({}, 'EasyAdminBundle') %}#}
+{#	{% set _sign_in_label = sign_in_label is defined ? sign_in_label|trans : 'login_page.sign_in'|trans({}, 'EasyAdminBundle') %}#}
+
+	<div class="row justify-content-center">
+		<div class="col-12 col-lg-6">
+			<div class="card">
+				<img class="card-img-top img-fluid" src="{{ asset('build/images/background05.jpg') }}" alt="Card image cap">
+				<div class="card-body">
+					<h2 class="card-title">{{ 'layout.login'|trans }}</h2>
+					<section class="content">
+						{{ form_start(form) }}
+						{{ form_row(form.email) }}
+
+						<div class="form-group row">
+							<div class="col-sm-6">
+								{{ form_widget(form.plainPassword.first) }}
+{#								{{ form_help(form.plainPassword) }}#}
+								{{ form_errors(form.plainPassword.first) }}
+							</div>
+							<div class="col-sm-6">
+								{{ form_widget(form.plainPassword.second) }}
+								{{ form_errors(form.plainPassword.second) }}
+							</div>
+						</div>
+
+						<div class="form-group field-button">
+							<button type="submit" class="btn btn-primary btn-lg btn-block">Registrar</button>
+						</div>
+
+						{{ form_end(form) }}
+
+					</section>
+				</div>
+				<div class="card-footer">
+					2 days ago
+				</div>
+			</div>
+
+
+
+{#			<div class="card">#}
+{#				<div class="card-header card-header-img" style="background-image: url('{{ asset('build/images/background05.jpg') }}');"></div>#}
+{#				<div class="card-body">#}
+{#					<h2 class="card-title">{{ 'layout.register'|trans }}</h2>#}
+
+{#					<section class="content">#}
+{#						{{ form(form) }}#}
+{#					</section>#}
+
+
+{#					<div class="form-group text-center">#}
+{#						<div class="button-group-area">#}
+{#							<a href="{{ path('connect_google_start') }}" class="social-btn google-btn">#}
+{#								<span class="fab fa-google"></span>{{ 'security.connect_start_google'|trans }}#}
+{#							</a>#}
+
+{#							<a href="{{ path('connect_facebook_start') }}" class="social-btn facebook-btn">#}
+{#								<span class="fab fa-facebook-f"></span>{{ 'security.connect_start_facebook'|trans }}#}
+{#							</a>#}
+{#						</div>#}
+{#						<small class="form-text text-muted">{{ 'registration.help_connect_start'|trans({'%url_terms%': path('terms')})|raw }}</small>#}
+{#					</div>#}
+
+{#					<div class="form-group row">#}
+{#						<div class="col"><hr></div>#}
+{#						<div class="col-auto">O</div>#}
+{#						<div class="col"><hr></div>#}
+{#					</div>#}
+
+{#					<div class="form-group">#}
+{#						{{ form_widget(form.email) }}#}
+{#						{{ form_errors(form.email) }}#}
+{#					</div>#}
+
+{#					<div class="form-group">#}
+{#						{{ form_widget(form.plainPassword.first) }}#}
+{#						{{ form_help(form.plainPassword) }}#}
+{#						{{ form_errors(form.plainPassword.first) }}#}
+{#					</div>#}
+{#					<div class="form-group">#}
+{#						{{ form_widget(form.plainPassword.second) }}#}
+{#						{{ form_errors(form.plainPassword.second) }}#}
+{#					</div>#}
+{#					<div class="form-group">#}
+{#						{{ form_label(form.roles) }}#}
+{#						{{ form_widget(form.roles) }}#}
+{#					</div>#}
+{#					<div class="form-group">#}
+{#						{{ form_widget(form.agreeTerms) }}#}
+{#					</div>#}
+{#					<div class="form-group text-center">#}
+{#						<input type="submit" value="{{ 'registration.submit'|trans }}" class="generic-btn primary" />#}
+{#					</div>#}
+
+{#					{{ form_end(form) }}#}
+{#				</div>#}
+{#				<div class="card-footer">#}
+{#					<p class="card-text">{{ 'registration.login'|trans({'%url%': path('sonata_user_admin_security_login')})|raw }}</p>#}
+{#				</div>#}
+{#			</div>#}
+		</div>
+	</div>
+
+
+	{#    <header class="main-header mb-4">#}
+	{#        <div id="header-logo">#}
+	{#            <div class="logo {{ page_title|length > 14 ? 'logo-long' }}">#}
+	{#                {{ page_title|raw }}#}
+	{#            </div>#}
+	{#        </div>#}
+	{#    </header>#}
+
+	{#    {% if error|default(false) %}#}
+	{#        <div class="w-100 alert alert-danger">#}
+	{#            {{ error.messageKey|trans(error.messageData, 'security') }}#}
+	{#        </div>#}
+	{#    {% endif %}#}
+
+	{#    <section class="content">#}
+	{#        <form method="post" action="{{ action|default('') }}">#}
+	{#            {% if csrf_token_intention|default(false) %}#}
+	{#                <input type="hidden" name="_csrf_token" value="{{ csrf_token(csrf_token_intention) }}">#}
+	{#            {% endif %}#}
+
+	{#            <input type="hidden" name="{{ target_path_parameter|default('_target_path') }}" value="{{ target_path|default(ea is defined ? path(ea.dashboardRouteName) : '/') }}" />#}
+
+	{#            <div class="form-group field-text">#}
+	{#                <label for="username" class="sr-only form-control-label required">{{ _username_label }}</label>#}
+	{#                <div class="form-widget form-widget-with-icon">#}
+	{#                    <i class="fa fa-fw fa-user"></i>#}
+	{#                    <input type="text" id="username" name="{{ username_parameter|default('_username') }}" class="form-control" placeholder="{{ _username_label }}" value="{{ last_username|default('') }}" required autofocus>#}
+	{#                </div>#}
+	{#            </div>#}
+
+	{#            <div class="form-group field-password">#}
+	{#                <label for="password" class="sr-only form-control-label required">{{ _password_label }}</label>#}
+	{#                <div class="form-widget form-widget-with-icon">#}
+	{#                    <i class="fa fa-fw fa-lock"></i>#}
+	{#                    <input type="password" id="password" name="{{ password_parameter|default('_password') }}" class="form-control" placeholder="{{ _password_label }}" required>#}
+	{#                </div>#}
+	{#            </div>#}
+
+	{#            <div class="form-group field-button">#}
+	{#                <button type="submit" class="btn btn-primary btn-lg btn-block" onclick="this.form.submit(); this.disabled=true;">{{ _sign_in_label }}</button>#}
+	{#            </div>#}
+	{#        </form>#}
+	{#    </section>#}
+{% endblock %}

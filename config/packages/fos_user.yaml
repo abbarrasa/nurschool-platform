@@ -13,5 +13,7 @@ fos_user:
         mailer: Nurschool\Mailer\SendGridMailer
 
     registration:
+        form:
+            type: Nurschool\Form\Type\RegistrationFormType
         confirmation:
             enabled: true
