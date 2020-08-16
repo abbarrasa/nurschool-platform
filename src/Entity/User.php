@@ -14,13 +14,22 @@ namespace Nurschool\Entity;
 
 use FOS\UserBundle\Model\User as AbstractUser;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Nurschool\Model\UserInterface;
+use Nurschool\Repository\UserRepository;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="nurschool_user")
  */
-class User extends AbstractUser
+class User extends AbstractUser implements UserInterface
 {
+    /**
+     * Hook timestampable behavior
+     * updates createdAt, updatedAt fields
+     */
+    use TimestampableEntity;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -49,6 +58,12 @@ class User extends AbstractUser
     private $facebookUid;
 
     /**
+     * @ORM\Column(type="integer")
+     * @ORM\Version
+     */
+    private $version;
+
+    /**
      * @ORM\ManyToMany(targetEntity="Nurschool\Entity\Group")
      * @ORM\JoinTable(name="nurschool_user_group",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
@@ -65,50 +80,62 @@ class User extends AbstractUser
         parent::__construct();
     }
 
-    public function getFirstname(): ?string
+    public function getFirstname()
     {
         return $this->firstname;
     }
 
-    public function setFirstname(?string $firstname): self
+    public function setFirstname($firstname)
     {
         $this->firstname = $firstname;
 
         return $this;
     }
 
-    public function getLastname(): ?string
+    public function getLastname()
     {
         return $this->lastname;
     }
 
-    public function setLastname(?string $lastname): self
+    public function setLastname($lastname)
     {
         $this->lastname = $lastname;
 
         return $this;
     }
 
-    public function getGoogleUid(): ?string
+    public function getGoogleUid()
     {
         return $this->googleUid;
     }
 
-    public function setGoogleUid(?string $googleUid): self
+    public function setGoogleUid($googleUid)
     {
         $this->googleUid = $googleUid;
 
         return $this;
     }
 
-    public function getFacebookUid(): ?string
+    public function getFacebookUid()
     {
         return $this->facebookUid;
     }
 
-    public function setFacebookUid(?string $facebookUid): self
+    public function setFacebookUid($facebookUid)
     {
         $this->facebookUid = $facebookUid;
+
+        return $this;
+    }
+
+    public function getVersion(): ?int
+    {
+        return $this->version;
+    }
+
+    public function setVersion(int $version): self
+    {
+        $this->version = $version;
 
         return $this;
     }

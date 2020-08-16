@@ -18,6 +18,12 @@
                 <section class="content login-wrapper">
                     <h2 class="card-title section-title">{{ 'layout.login'|trans }}</h2>
 
+                    {% if error|default(false) %}
+                        <div class="w-100 alert alert-danger">
+                            {{ error.messageKey|trans(error.messageData, 'security') }}
+                        </div>
+                    {% endif %}
+
                     {{ include('@FOSUser/partials/_social-form-login.html.twig') }}
 
                     <form action="{{ path("fos_user_security_check") }}" method="post" role="form">

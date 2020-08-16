@@ -2,12 +2,9 @@
 
 {% block page_title %}Registro en nurschool{% endblock %}
 
-{% block wrapper %}
-{#	{% set page_title = block('page_title') %}#}
-{#	{% set _username_label = username_label is defined ? username_label|trans : 'login_page.username'|trans({}, 'EasyAdminBundle') %}#}
-{#	{% set _password_label = password_label is defined ? password_label|trans : 'login_page.password'|trans({}, 'EasyAdminBundle') %}#}
-{#	{% set _sign_in_label = sign_in_label is defined ? sign_in_label|trans : 'login_page.sign_in'|trans({}, 'EasyAdminBundle') %}#}
 
+
+{% block wrapper %}
 	<div class="row justify-content-center">
 		<div class="col-12 col-lg-6">
 			<div class="card">
@@ -19,12 +16,21 @@
 						{{ include('@FOSUser/partials/_social-form-login.html.twig') }}
 
 						{{ form_start(form) }}
-						{{ form_row(form.email) }}
+						{{ form_errors(form) }}
+						<div class="form-group row">
+							<div class="col-sm-6">
+								{{ form_row(form.email) }}
+								{{ form_errors(form.email) }}
+							</div>
+							<div class="col-sm-6">
+								{{ form_row(form.username) }}
+								{{ form_errors(form.username) }}
+							</div>
+						</div>
 
 						<div class="form-group row">
 							<div class="col-sm-6">
 								{{ form_widget(form.plainPassword.first) }}
-{#								{{ form_help(form.plainPassword) }}#}
 								{{ form_errors(form.plainPassword.first) }}
 							</div>
 							<div class="col-sm-6">
@@ -32,6 +38,7 @@
 								{{ form_errors(form.plainPassword.second) }}
 							</div>
 						</div>
+						{{ form_help(form.plainPassword) }}
 
 						<div class="form-group field-button">
 							<button type="submit" class="btn btn-primary btn-lg btn-block">Registrar</button>

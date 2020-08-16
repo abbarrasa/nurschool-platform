@@ -43,6 +43,11 @@ class RegistrationFormType extends FOSUserRegistrationFormType
                 'attr' => ['placeholder' => 'form.email'],
                 'translation_domain' => 'FOSUserBundle'
             ])
+            ->add('username', null, [
+                'label' => false,
+                'attr' => ['placeholder' => 'form.username'],
+                'translation_domain' => 'FOSUserBundle'
+            ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'options' => [

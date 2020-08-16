@@ -2,9 +2,10 @@
 
 {% trans_default_domain 'FOSUserBundle' %}
 
-{% block body_class 'page-login' %}
+{#{% block body_class 'page-login' %}#}
 
 {% block wrapper_wrapper %}
+    {% block flash_messages %}{% endblock flash_messages %}
     <div class="container-fluid">
         {% block wrapper %}{% endblock wrapper %}
     </div>
