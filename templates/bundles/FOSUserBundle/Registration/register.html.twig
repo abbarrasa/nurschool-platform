@@ -13,8 +13,11 @@
 			<div class="card">
 				<img class="card-img-top img-fluid" src="{{ asset('build/images/background05.jpg') }}" alt="Card image cap">
 				<div class="card-body">
-					<h2 class="card-title">{{ 'layout.login'|trans }}</h2>
+					<h2 class="card-title section-title">{{ 'layout.login'|trans }}</h2>
 					<section class="content">
+
+						{{ include('@FOSUser/partials/_social-form-login.html.twig') }}
+
 						{{ form_start(form) }}
 						{{ form_row(form.email) }}
 

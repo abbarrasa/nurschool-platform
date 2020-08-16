@@ -1,0 +1,2 @@
+login_page:
+    remember_me: '{1} Recuérdame durante un día|]1,Inf[ Recuérdame durante %count% días'

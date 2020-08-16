@@ -7,3 +7,4 @@ twig:
     form_themes: ['bootstrap_4_layout.html.twig']
     globals:
         version: '%env(resolve:APP_VERSION)%'
+        remember_me_lifetime: '%env(resolve:APP_REMEMBER_ME_LIFETIME)%'

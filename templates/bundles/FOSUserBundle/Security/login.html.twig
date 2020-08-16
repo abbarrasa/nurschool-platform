@@ -7,54 +7,73 @@
     {% set _username_label = username_label is defined ? username_label|trans : 'login_page.username'|trans({}, 'EasyAdminBundle') %}
     {% set _password_label = password_label is defined ? password_label|trans : 'login_page.password'|trans({}, 'EasyAdminBundle') %}
     {% set _sign_in_label = sign_in_label is defined ? sign_in_label|trans : 'login_page.sign_in'|trans({}, 'EasyAdminBundle') %}
+    {% set _remember_me_label = 'login_page.remember_me'|trans({'%count%': (remember_me_lifetime // 86400)}, 'EasyAdminBundle') %}
 
 <div class="row justify-content-center">
     <div class="col-12 col-lg-6">
 
-        <div class="card">
-            <div class="row no-gutters">
-                <div class="col-12 col-lg-4">
-                    <img class="card-img-left img-fluid" src="{{ asset('build/images/background06.jpg') }}" alt="Card image cap">
-                </div>
-                <div class="col">
-                    <div class="card-body">
-                        <h2 class="card-title">{{ 'layout.login'|trans }}</h2>
-                        <section class="content login-wrapper">
-                            <form action="{{ path("fos_user_security_check") }}" method="post" role="form">
-                                {% if csrf_token_intention|default(false) %}
-                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token(csrf_token_intention) }}">
-                                {% endif %}
+        <div class="card card-horizontal">
+            <div class="card-header card-header-img" style="background-image: url('{{ asset('build/images/background06.jpg') }}');"></div>
+            <div class="card-body">
+                <section class="content login-wrapper">
+                    <h2 class="card-title section-title">{{ 'layout.login'|trans }}</h2>
 
-                                <input type="hidden" name="{{ target_path_parameter|default('_target_path') }}" value="{{ target_path|default(ea is defined ? path(ea.dashboardRouteName) : '/') }}" />
+                    {{ include('@FOSUser/partials/_social-form-login.html.twig') }}
 
-                                <div class="form-group field-text">
-                                    <label for="username" class="sr-only form-control-label required">{{ _username_label }}</label>
-                                    <div class="form-widget form-widget-with-icon">
-                                        <i class="fa fa-fw fa-user"></i>
-                                        <input type="text" id="username" name="{{ username_parameter|default('_username') }}" class="form-control" placeholder="{{ _username_label }}" value="{{ last_username|default('') }}" required autofocus>
-                                    </div>
-                                </div>
+                    <form action="{{ path("fos_user_security_check") }}" method="post" role="form">
+                        {% if csrf_token_intention|default(false) %}
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token(csrf_token_intention) }}">
+                        {% endif %}
 
-                                <div class="form-group field-password">
-                                    <label for="password" class="sr-only form-control-label required">{{ _password_label }}</label>
-                                    <div class="form-widget form-widget-with-icon">
-                                        <i class="fa fa-fw fa-lock"></i>
-                                        <input type="password" id="password" name="{{ password_parameter|default('_password') }}" class="form-control" placeholder="{{ _password_label }}" required>
-                                    </div>
-                                </div>
+                        <input type="hidden" name="{{ target_path_parameter|default('_target_path') }}" value="{{ target_path|default(ea is defined ? path(ea.dashboardRouteName) : '/') }}" />
 
-                                <div class="form-group field-button">
-                                    <button type="submit" class="btn btn-primary btn-lg btn-block" onclick="this.form.submit(); this.disabled=true;">{{ _sign_in_label }}</button>
-                                </div>
-                            </form>
-                        </section>
-                    </div>
-                </div>
+                        <div class="form-group field-text">
+                            <label for="username" class="sr-only form-control-label required">{{ _username_label }}</label>
+                            <div class="form-widget form-widget-with-icon">
+                                <i class="fa fa-fw fa-user"></i>
+                                <input type="text" id="username" name="{{ username_parameter|default('_username') }}" class="form-control" placeholder="{{ _username_label }}" value="{{ last_username|default('') }}" required autofocus>
+                            </div>
+                        </div>
+
+                        <div class="form-group field-password">
+                            <label for="password" class="sr-only form-control-label required">{{ _password_label }}</label>
+                            <div class="form-widget form-widget-with-icon">
+                                <i class="fa fa-fw fa-lock"></i>
+                                <input type="password" id="password" name="{{ password_parameter|default('_password') }}" class="form-control" placeholder="{{ _password_label }}" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group field-checkbox">
+                            <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                            <label for="remember_me" class="form-control-label">{{ _remember_me_label }}</label>
+                        </div>
+
+                        <div class="form-group field-button">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block" onclick="this.form.submit(); this.disabled=true;">{{ _sign_in_label }}</button>
+                        </div>
+
+                        <p class="card-text">{{ 'security.forgotten_password'|trans({'%url%': path('home')})|raw }}</p>
+                    </form>
+                </section>
             </div>
-            <div class="card-footer w-100 text-muted">
-                Footer stating cats are CUTE little animals
-            </div>
-        </div>
+
+
+
+{#        <div class="card">#}
+{#            <div class="row no-gutters">#}
+{#                <div class="col-12 col-lg-5">#}
+{#                    <img class="card-img-left img-fluid" src="{{ asset('build/images/background06.jpg') }}" alt="Card image cap">#}
+{#                </div>#}
+{#                <div class="col">#}
+{#                    <div class="card-body">#}
+{#                        <h2 class="card-title">{{ 'layout.login'|trans }}</h2>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="card-footer w-100 text-muted">#}
+{#                Footer stating cats are CUTE little animals#}
+{#            </div>#}
+{#        </div>#}
 
 
 

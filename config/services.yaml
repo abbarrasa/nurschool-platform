@@ -31,3 +31,20 @@ services:
     # please note that last definitions always *replace* previous ones
     Nurschool\Storage\UserStorage:
         arguments: ["@fos_user.util.password_updater", "@fos_user.util.canonical_fields_updater", "@doctrine.orm.entity_manager", "%fos_user.model.user.class%"]
+
+    Nurschool\Form\Type\RegistrationFormType:
+        arguments: ["@router", "%fos_user.model.user.class%"]
+
+#    Nurschool\Controller\RegistrationController:
+#        decorates: fos_user.registration.controller
+#        arguments:
+#            - '@Nurschool\Controller\RegistrationController.inner'
+##            - '@EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext'
+#            - '@event_dispatcher'
+#            - '@fos_user.registration.form.factory'
+#            - '@fos_user.user_manager'
+##            - '@fos_user.listener.authentication'
+##            - '@fos_user.listener.flash'
+##            - '@App\Media\AvatarManager'
+##            - '@translator'
+#        tags: ['controller.service_arguments']
