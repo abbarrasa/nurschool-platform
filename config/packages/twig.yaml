@@ -4,7 +4,7 @@ twig:
     strict_variables: '%kernel.debug%'
     exception_controller: null
 #    form_themes: ['@EasyAdmin/crud/form_theme.html.twig']
-    form_themes: ['bootstrap_4_layout.html.twig']
+    form_themes: ['form/form_theme.html.twig']
     globals:
         version: '%env(resolve:APP_VERSION)%'
         remember_me_lifetime: '%env(resolve:APP_REMEMBER_ME_LIFETIME)%'

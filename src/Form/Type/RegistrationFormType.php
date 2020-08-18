@@ -20,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\Constraints\IsTrue;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class RegistrationFormType extends FOSUserRegistrationFormType
 {
@@ -83,14 +84,19 @@ class RegistrationFormType extends FOSUserRegistrationFormType
 //                'translation_domain' => 'FOSUserBundle',
 //                'choice_translation_domain' => 'FOSUserBundle'
 //            ])
-//            ->add('agreeTerms', ToggleButtonType::class, [
-//                'mapped' => false,
-//                'required' => false,
-//                'label' => 'form.terms',
+            ->add('agreeTerms', BooleanType::class, [
+                'mapped' => false,
+                'required' => false,
+                'widget' => BooleanType::WIDGET_SWITCH,
+                'label' => 'form.terms',
 //                'label_translation_parameters' => [ '%link%' => $this->router->generate('terms') ],
-//                'translation_domain' => 'FOSUserBundle',
-//                'constraints' => new IsTrue(['message' => 'terms.rejected'])
-//            ])
+                'label_translation_parameters' => [ '%link%' => $this->router->generate('home') ],
+                'translation_domain' => 'FOSUserBundle',
+                'constraints' => [
+                    new NotNull(['message' => 'terms.rejected']),
+                    new IsTrue(['message' => 'terms.rejected'])
+                ]
+            ])
         ;
     }
 }
