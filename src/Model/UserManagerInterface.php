@@ -23,7 +23,7 @@ interface UserManagerInterface extends FOSUserManagerInterface
      * @param $phoneOrEmail
      * @return UserInterface|null
      */
-    public function findUserByPhoneOrEmail($phoneOrEmail);
+//    public function findUserByPhoneOrEmail($phoneOrEmail);
 
     /**
      * Finds a user by its phone.

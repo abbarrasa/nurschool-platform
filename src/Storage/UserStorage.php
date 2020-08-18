@@ -65,10 +65,10 @@ class UserStorage extends UserManager implements UserManagerInterface
         return $this->entityManager->getRepository($this->getClass())->findAll();
     }
 
-    public function findUserByPhoneOrEmail($phoneOrEmail)
-    {
-        // TODO: Implement findUserByPhoneOrEmail() method.
-    }
+//    public function findUserByPhoneOrEmail($phoneOrEmail)
+//    {
+//        // TODO: Implement findUserByPhoneOrEmail() method.
+//    }
 
     public function findUserByPhone($phone)
     {
