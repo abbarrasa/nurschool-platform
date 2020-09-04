@@ -98,8 +98,9 @@ class FacebookAuthenticator extends SocialAuthenticator
                 /** @var UserInterface $user */
                 $user = $this->userManager->createUser();
                 $user->setEnabled(true);
-                $user->addRole('ROLE_ADMIN');
+//                $user->addRole('ROLE_ADMIN');
                 $user->setEmail($email);
+                $user->setUsername($facebookUser->getName());
                 $user->setFirstname($facebookUser->getFirstName());
                 $user->setLastname($facebookUser->getLastName());
 

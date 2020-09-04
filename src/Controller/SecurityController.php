@@ -11,6 +11,7 @@
 
 namespace Nurschool\Controller;
 
+use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\FOSUserEvents;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -70,24 +71,22 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/connect/check", name="connect_check")
+     * @Route("/connect/google/check", name="connect_google_check")
      *
      * After going to Google, you're redirected back here
      * because this is the "redirect_route" you configured
      * in config/packages/knpu_oauth2_client.yaml
      *
      * @param Request $request
-     * @param ClientRegistry $clientRegistry
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function connectCheck(Request $request, ClientRegistry $clientRegistry)
+    public function connectGoogleCheck(Request $request/*, ClientRegistry $clientRegistry*/)
     {
+//        die(sprintf("Entra en %s", __FUNCTION__));
         $email = $request->getSession()->get('fos_user_send_confirmation_email/email');
         if (empty($email)) {
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('dashboard');
         }
-
-        $this->eventDispatcher->dispatch(new Event(), FOSUserEvents::REGISTRATION_COMPLETED);
 
         return $this->redirectToRoute('fos_user_registration_check_email');
     }

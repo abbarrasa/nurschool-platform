@@ -13,4 +13,5 @@ import '../scss/app.scss';
 // import $ from 'jquery';
 import '../../public/bundles/easyadmin/app'
 
+
 console.log('Hello Webpack Encore! Edit me in assets/js/app.js');

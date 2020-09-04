@@ -4,6 +4,20 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    config_mailer:
+        sandbox: '%env(bool:SENDGRID_SANDBOX_MODE)%'
+        sender:
+            default:
+                address: '%env(resolve:MAILER_USER)%'
+                name: '%env(resolve:MAILER_NAME)%'
+            admin:
+                address: '%env(resolve:MAILER_USER)%'
+                name: '%env(resolve:MAILER_NAME)%'
+        template:
+            confirmation: '%env(resolve:SENDGRID_CONFIRMATION_TEMPLATE_ID)%'
+#            invitation: '%env(resolve:SENDGRID_INVITATION_TEMPLATE_ID)%'
+            resetting: '%env(resolve:SENDGRID_RESETTING_TEMPLATE_ID)%'
+#            enquiry: '%env(resolve:SENDGRID_ENQUIRY_TEMPLATE_ID)%'
 
 services:
     # default configuration for services in *this* file
@@ -37,10 +51,24 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
     Nurschool\Storage\UserStorage:
-        arguments: ["@fos_user.util.password_updater", "@fos_user.util.canonical_fields_updater", "@doctrine.orm.entity_manager", "%fos_user.model.user.class%"]
+        arguments: ['@fos_user.util.password_updater', '@fos_user.util.canonical_fields_updater', '@doctrine.orm.entity_manager', '%fos_user.model.user.class%']
+
+    Nurschool\Mailer\SendGridMailer:
+        arguments:
+            - '@og_send_grid.provider'
+            - '@router'
+            - '@translator'
+            - '%config_mailer%'
 
     Nurschool\Form\Type\RegistrationFormType:
-        arguments: ["@router", "%fos_user.model.user.class%"]
+        arguments: ['@router', '%fos_user.model.user.class%']
+
+    Nurschool\Form\Type\ProfileFormType:
+        arguments: ['%fos_user.model.user.class%']
+
+    Nurschool\Controller\ProfileController:
+        decorates: fos_user.profile.controller
+        arguments: ['@Nurschool\Controller\ProfileController.inner']
 
 #    Nurschool\Controller\RegistrationController:
 #        decorates: fos_user.registration.controller

@@ -11,6 +11,7 @@
 
 namespace Nurschool\Security;
 
+use Nurschool\Event\Oauth2UserRegisteredEvent;
 use Nurschool\Model\UserInterface;
 use Nurschool\Model\UserManagerInterface;
 //use App\Entity\User;
@@ -21,7 +22,6 @@ use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
 use KnpU\OAuth2ClientBundle\Client\Provider\GoogleClient;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Provider\GoogleUser;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,6 +29,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class GoogleAuthenticator extends SocialAuthenticator
 {
@@ -40,14 +41,13 @@ class GoogleAuthenticator extends SocialAuthenticator
 //    private $avatarGenerator;
     /** @var RouterInterface */
     private $router;
-    /** @var EventDispatcherInterface  */
+    /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
     /**
      * GoogleAuthenticator constructor.
      * @param ClientRegistry $clientRegistry
      * @param UserManagerInterface $userManager
-//     * @param AvatarManager $avatarGenerator
      * @param RouterInterface $router
      * @param EventDispatcherInterface $eventDispatcher
      */
@@ -72,7 +72,15 @@ class GoogleAuthenticator extends SocialAuthenticator
     public function supports(Request $request)
     {
         // continue ONLY if the current ROUTE matches the check ROUTE
-        return $request->attributes->get('_route') === 'connect_check';
+        return $request->attributes->get('_route') === 'connect_google_check';
+//        $route = $request->attributes->get('_route');
+//        $routeParams = $request->attributes->get('_route_params');
+//
+//        return
+//            $route === 'connect_client_check' &&
+//            isset($routeParams['client']) &&
+//            $routeParams['client'] === 'google'
+//        ;
     }
 
     /**
@@ -112,12 +120,15 @@ class GoogleAuthenticator extends SocialAuthenticator
                 /** @var UserInterface $user */
                 $user = $this->userManager->createUser();
                 $user->setEnabled(true);
-                $user->addRole('ROLE_ADMIN');
+//                $user->addRole('ROLE_ADMIN');
                 $user->setEmail($email);
+                $user->setUsername($googleUser->getName());
                 $user->setFirstname($googleUser->getFirstName());
                 $user->setLastname($googleUser->getLastName());
+//                $user->setAvatar($googleUser->getAvatar());
 
-                $this->eventDispatcher->dispatch(new UserEvent($user), Events::OAUTH2_REGISTRATION_SUCCESS);
+//                $this->eventDispatcher->dispatch(new UserEvent($user), Events::OAUTH2_REGISTRATION_SUCCESS);
+                $this->eventDispatcher->dispatch(new Oauth2UserRegisteredEvent($user));
             }
 
             $user->setGoogleUid($googleUser->getId());
@@ -125,7 +136,7 @@ class GoogleAuthenticator extends SocialAuthenticator
 
 //        $this->avatarGenerator->updateAvatarFromUrl($user, $googleUser->getAvatar());
 
-        $this->userManager->save($user);
+        $this->userManager->updateUser($user);
 
         return $userProvider->loadUserByUsername($user->getUsername());
     }
@@ -146,8 +157,10 @@ class GoogleAuthenticator extends SocialAuthenticator
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
+        die(sprintf("Entra en %s", __FUNCTION__));
+
         // on success, let the request continue
-        return new RedirectResponse($this->router->generate('home'));
+        return new RedirectResponse($this->router->generate('dashboard'));
 //        return null;
     }
 
@@ -166,9 +179,12 @@ class GoogleAuthenticator extends SocialAuthenticator
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        $message = strtr($exception->getMessageKey(), $exception->getMessageData());
+        die(sprintf("Entra en %s", __FUNCTION__));
 
-        return new Response($message, Response::HTTP_FORBIDDEN);
+//        $message = strtr($exception->getMessageKey(), $exception->getMessageData());
+//
+//        return new Response($message, Response::HTTP_FORBIDDEN);
+        return new RedirectResponse($this->router->generate('fos_user_security_login'));
     }
 
     /**
@@ -182,6 +198,9 @@ class GoogleAuthenticator extends SocialAuthenticator
      */
     public function start(Request $request, AuthenticationException $authException = null)
     {
+        die(sprintf("Entra en %s", __FUNCTION__));
+
+
         return new RedirectResponse(
             $this->router->generate('fos_user_security_login'), // might be the site, where users choose their oauth provider
             Response::HTTP_TEMPORARY_REDIRECT

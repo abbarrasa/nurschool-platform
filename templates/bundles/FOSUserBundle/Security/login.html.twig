@@ -24,7 +24,7 @@
                         </div>
                     {% endif %}
 
-                    {{ include('@FOSUser/partials/_social-form-login.html.twig') }}
+                    {{ include('@FOSUser/partials/_social-connect-form.html.twig') }}
 
                     <form action="{{ path("fos_user_security_check") }}" method="post" role="form">
                         {% if csrf_token_intention|default(false) %}
@@ -50,8 +50,10 @@
                         </div>
 
                         <div class="form-group field-checkbox">
-                            <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-                            <label for="remember_me" class="form-control-label">{{ _remember_me_label }}</label>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" id="remember_me" name="_remember_me" value="on" class="custom-control-input"/>
+                                <label for="remember_me" class="custom-control-label">{{ _remember_me_label }}</label>
+                            </div>
                         </div>
 
                         <div class="form-group field-button">

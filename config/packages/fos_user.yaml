@@ -12,6 +12,10 @@ fos_user:
         user_manager: Nurschool\Storage\UserStorage
         mailer: Nurschool\Mailer\SendGridMailer
 
+    profile:
+        form:
+            type: Nurschool\Form\Type\ProfileFormType
+
     registration:
         form:
             type: Nurschool\Form\Type\RegistrationFormType

@@ -4,13 +4,13 @@ namespace Nurschool\Entity;
 
 use Nurschool\Repository\GroupRepository;
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Model\Group as FOSGroup;
+use FOS\UserBundle\Model\Group as FOSUserGroup;
 
 /**
  * @ORM\Entity(repositoryClass=GroupRepository::class)
  * @ORM\Table(name="nurschool_group")
  */
-class Group extends FOSGroup
+class Group extends FOSUserGroup
 {
     /**
      * @ORM\Id()

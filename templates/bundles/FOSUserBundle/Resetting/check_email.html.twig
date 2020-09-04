@@ -1,0 +1,40 @@
+{% extends '@FOSUser/layout.html.twig' %}
+
+{% block page_title %}{{ 'layout.resetting'|trans }}{% endblock %}
+
+{% block wrapper %}
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-6">
+
+        <div class="card card-horizontal">
+            <div class="card-header card-header-img" style="background-image: url('{{ asset('build/images/background13.jpg') }}');"></div>
+            <div class="card-body">
+                <section class="content">
+                    <h2 class="card-title section-title">{{ 'layout.resetting'|trans }}</h2>
+
+                    {{ 'resetting.check_email'|trans({ '%tokenLifetime%': tokenLifetime, '%url%': path('contact') })|raw }}
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{#Hello abbarrasa,#}
+
+{#A request has been received to change the password for your SendGrid account.#}
+{#Reset Password#}
+
+
+{#If you did not initiate this request, please contact us immediately at support@sendgrid.com.#}
+
+{#Thank you,#}
+{#The SendGrid Team#}
+
+
+{#Reset Password#}
+
+{#If we found an account associated with that username, we've sent password reset instructions to the primary email address on the account.#}
+
+{#Still having trouble logging in? Contact Support.#}

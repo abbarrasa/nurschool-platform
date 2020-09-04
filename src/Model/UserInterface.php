@@ -12,7 +12,9 @@
 namespace Nurschool\Model;
 
 
-interface UserInterface
+use FOS\UserBundle\Model\UserInterface as FOSUserInterface;
+
+interface UserInterface extends FOSUserInterface
 {
     public function getFirstname();
     public function setFirstname($firstname);

@@ -1,6 +1,6 @@
 {% extends '@FOSUser/layout.html.twig' %}
 
-{% block page_title %}Registro en nurschool{% endblock %}
+{% block page_title %}{{ 'layout.register'|trans }}{% endblock %}
 
 
 
@@ -13,7 +13,7 @@
 					<h2 class="card-title section-title">{{ 'layout.login'|trans }}</h2>
 					<section class="content">
 
-						{{ include('@FOSUser/partials/_social-form-login.html.twig') }}
+						{{ include('@FOSUser/partials/_social-connect-form.html.twig') }}
 
 						{{ form_start(form) }}
 						{{ form_errors(form) }}
