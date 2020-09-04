@@ -48,16 +48,6 @@ class User extends AbstractUser implements UserInterface
     private $lastname;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true, unique=true)
-     */
-    private $googleUid;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true, unique=true)
-     */
-    private $facebookUid;
-
-    /**
      * @ORM\Column(type="integer")
      * @ORM\Version
      */
@@ -100,30 +90,6 @@ class User extends AbstractUser implements UserInterface
     public function setLastname($lastname)
     {
         $this->lastname = $lastname;
-
-        return $this;
-    }
-
-    public function getGoogleUid()
-    {
-        return $this->googleUid;
-    }
-
-    public function setGoogleUid($googleUid)
-    {
-        $this->googleUid = $googleUid;
-
-        return $this;
-    }
-
-    public function getFacebookUid()
-    {
-        return $this->facebookUid;
-    }
-
-    public function setFacebookUid($facebookUid)
-    {
-        $this->facebookUid = $facebookUid;
 
         return $this;
     }

@@ -20,10 +20,6 @@ interface UserInterface extends FOSUserInterface
     public function setFirstname($firstname);
     public function getLastname();
     public function setLastname($lastname);
-    public function getGoogleUid();
-    public function setGoogleUid($googleUid);
-    public function getFacebookUid();
-    public function setFacebookUid($facebookUid);
     public function getVersion();
     public function setVersion(int $version);
     public function setCreatedAt(\DateTime $updatedAt);

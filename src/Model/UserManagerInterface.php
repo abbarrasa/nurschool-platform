@@ -32,17 +32,4 @@ interface UserManagerInterface extends FOSUserManagerInterface
      */
     public function findUserByPhone($phone);
 
-    /**
-     * Finds a user by its Google User ID
-     * @param $googleUid
-     * @return UserInterface|null
-     */
-    public function findUserByGoogleUid($googleUid);
-
-    /**
-     * Finds a user by its Facebook User ID
-     * @param $facebookUid
-     * @return UserInterface|null
-     */
-    public function findUserByFacebookUid($facebookUid);
 }

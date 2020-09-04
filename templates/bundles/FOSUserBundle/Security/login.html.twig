@@ -24,8 +24,6 @@
                         </div>
                     {% endif %}
 
-                    {{ include('@FOSUser/partials/_social-connect-form.html.twig') }}
-
                     <form action="{{ path("fos_user_security_check") }}" method="post" role="form">
                         {% if csrf_token_intention|default(false) %}
                             <input type="hidden" name="_csrf_token" value="{{ csrf_token(csrf_token_intention) }}">

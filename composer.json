@@ -13,7 +13,6 @@
         "easycorp/easyadmin-bundle": "^3.1",
         "friendsofsymfony/user-bundle": "^2.1",
         "gedmo/doctrine-extensions": "^2.4",
-        "knpuniversity/oauth2-client-bundle": "^2.2",
         "laminas/laminas-code": "^3.4",
         "laminas/laminas-eventmanager": "^3.2",
         "league/oauth2-facebook": "^2.0",

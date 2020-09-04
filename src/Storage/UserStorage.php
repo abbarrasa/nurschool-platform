@@ -75,16 +75,6 @@ class UserStorage extends UserManager implements UserManagerInterface
         // TODO: Implement findUserByPhone() method.
     }
 
-    public function findUserByGoogleUid($googleUid)
-    {
-        return $this->findUserBy(['googleUid' => $googleUid]);
-    }
-
-    public function findUserByFacebookUid($facebookUid)
-    {
-        return $this->findUserBy(['facebookUid' => $facebookUid]);
-    }
-
     public function reloadUser(UserInterface $user)
     {
         $this->entityManager->refresh($user);
