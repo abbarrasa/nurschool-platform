@@ -66,6 +66,10 @@ services:
     Nurschool\Form\Type\ProfileFormType:
         arguments: ['%fos_user.model.user.class%']
 
+    Nurschool\Controller\SecurityController:
+        decorates: fos_user.security.controller
+        arguments: ['@Nurschool\Controller\SecurityController.inner']
+
     Nurschool\Controller\ProfileController:
         decorates: fos_user.profile.controller
         arguments: ['@Nurschool\Controller\ProfileController.inner']
