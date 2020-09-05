@@ -60,19 +60,19 @@ services:
             - '@translator'
             - '%config_mailer%'
 
-    Nurschool\Form\Type\RegistrationFormType:
-        arguments: ['@router', '%fos_user.model.user.class%']
-
-    Nurschool\Form\Type\ProfileFormType:
-        arguments: ['%fos_user.model.user.class%']
-
-    Nurschool\Controller\SecurityController:
-        decorates: fos_user.security.controller
-        arguments: ['@Nurschool\Controller\SecurityController.inner']
-
-    Nurschool\Controller\ProfileController:
-        decorates: fos_user.profile.controller
-        arguments: ['@Nurschool\Controller\ProfileController.inner']
+#    Nurschool\Form\Type\RegistrationFormType:
+#        arguments: ['@router', '%fos_user.model.user.class%']
+#
+#    Nurschool\Form\Type\ProfileFormType:
+#        arguments: ['%fos_user.model.user.class%']
+#
+#    Nurschool\Controller\SecurityController:
+#        decorates: fos_user.security.controller
+#        arguments: ['@Nurschool\Controller\SecurityController.inner']
+#
+#    Nurschool\Controller\ProfileController:
+#        decorates: fos_user.profile.controller
+#        arguments: ['@Nurschool\Controller\ProfileController.inner']
 
 #    Nurschool\Controller\RegistrationController:
 #        decorates: fos_user.registration.controller

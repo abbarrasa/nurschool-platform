@@ -13,29 +13,28 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserCrudController extends AbstractCrudController
 {
-    protected $profileController;
-    protected $manager;
-
-    public function __construct(UserManagerInterface $manager)
-    {
-        $this->manager = $manager;
-    }
-
+//    protected $manager;
+//
+//    public function __construct(UserManagerInterface $manager)
+//    {
+//        $this->manager = $manager;
+//    }
+//
     public static function getEntityFqcn(): string
     {
         return User::class;
     }
-
-    public function createNewUserEntity()
-    {
-        return $this->manager->createUser();
-    }
-
-    public function persistUserEntity($user)
-    {
-        $this->manager->updateUser($user);
-        parent::persistEntity($user);
-    }
+//
+//    public function createNewUserEntity()
+//    {
+//        return $this->manager->createUser();
+//    }
+//
+//    public function persistUserEntity($user)
+//    {
+//        $this->manager->updateUser($user);
+//        parent::persistEntity($user);
+//    }
 
     /*
     public function configureFields(string $pageName): iterable
