@@ -38,11 +38,24 @@
 # Build data
 /build/
 
-# Composer PHAR
+# Composer
 /composer.phar
+/composer.lock
 
 # Backup entities generated with doctrine:generate:entities command
 **/Entity/*~
 
 # Embedded web-server pid file
 /.web-server-pid
+
+# Environment
+/.env
+/.env.local
+/.env.*
+/.env.*.local
+
+# Symfony
+/symfony.lock
+
+# IDE
+/.idea
