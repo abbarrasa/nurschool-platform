@@ -3,6 +3,7 @@
 namespace Nurschool\Controller;
 
 use Nurschool\Entity\User;
+use Nurschool\Event\RegisteredUserEvent;
 use Nurschool\Form\RegistrationFormType;
 use Nurschool\Security\EmailVerifier;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -12,18 +13,23 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
-    private $emailVerifier;
+    /** @var EventDispatcherInterface  */
+    private $eventDispatcher;
+//    private $emailVerifier;
 
-    public function __construct(EmailVerifier $emailVerifier)
+    public function __construct(EventDispatcherInterface $eventDispatcher)
     {
-        $this->emailVerifier = $emailVerifier;
+        $this->eventDispatcher = $eventDispatcher;
+//        $this->emailVerifier = $emailVerifier;
     }
 
     /**
+     * Registers an user
      * @Route("/register", name="register")
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
@@ -48,8 +54,10 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            $this->eventDispatcher->dispatch(new RegisteredUserEvent($user));
+
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('verify_email', $user);
+//            $this->emailVerifier->sendEmailConfirmation('verify_email', $user);
 //            $this->emailVerifier->sendEmailConfirmation('verify_email', $user,
 //                (new TemplatedEmail())
 //                    ->from(new Address('admin@nurschool.es', 'Nurschool Mail Bot'))
@@ -68,17 +76,19 @@ class RegistrationController extends AbstractController
     }
 
     /**
+     * Verifies an user account
      * @Route("/verify/email", name="verify_email")
      * @param Request $request
+     * @param EmailVerifier $emailVerifier
      * @return Response
      */
-    public function verifyUserEmail(Request $request): Response
+    public function verifyUserEmail(Request $request, EmailVerifier $emailVerifier): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
-            $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
+            $emailVerifier->handleEmailConfirmation($request, $this->getUser());
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $exception->getReason());
 

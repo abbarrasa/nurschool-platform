@@ -12,7 +12,7 @@
 namespace Nurschool\Mailer;
 
 
-use Symfony\Component\Security\Core\User\UserInterface;
+use Nurschool\Model\UserInterface;
 
 interface MailerInterface
 {

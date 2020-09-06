@@ -3,10 +3,10 @@
 namespace Nurschool\Entity;
 
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Nurschool\Model\UserInterface;
 use Nurschool\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)

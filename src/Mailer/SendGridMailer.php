@@ -13,11 +13,11 @@ namespace Nurschool\Mailer;
 
 
 use Nurschool\Mailer\Exception\ConfigMailerException;
+use Nurschool\Model\UserInterface;
 use OG\SendGridBundle\Provider\SendGridProvider;
 use SendGrid\Mail\Mail;
 use SendGrid\Mail\MailSettings;
 use SendGrid\Mail\SandBoxMode;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SendGridMailer implements MailerInterface
