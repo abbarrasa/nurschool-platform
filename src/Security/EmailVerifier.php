@@ -3,9 +3,9 @@
 namespace Nurschool\Security;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Nurschool\Mailer\MailerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
@@ -23,7 +23,7 @@ class EmailVerifier
         $this->entityManager = $manager;
     }
 
-    public function sendEmailConfirmation(string $verifyEmailRouteName, UserInterface $user, TemplatedEmail $email): void
+    public function sendEmailConfirmation(string $verifyEmailRouteName, UserInterface $user/*, TemplatedEmail $email*/): void
     {
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
             $verifyEmailRouteName,
@@ -31,13 +31,15 @@ class EmailVerifier
             $user->getEmail()
         );
 
-        $context = $email->getContext();
-        $context['signedUrl'] = $signatureComponents->getSignedUrl();
-        $context['expiresAt'] = $signatureComponents->getExpiresAt();
+        $this->mailer->sendConfirmationEmail($user, $signatureComponents->getSignedUrl(), $signatureComponents->getExpiresAt());
 
-        $email->context($context);
-
-        $this->mailer->send($email);
+//        $context = $email->getContext();
+//        $context['signedUrl'] = $signatureComponents->getSignedUrl();
+//        $context['expiresAt'] = $signatureComponents->getExpiresAt();
+//
+//        $email->context($context);
+//
+//        $this->mailer->send($email);
     }
 
     /**

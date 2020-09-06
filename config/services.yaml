@@ -4,12 +4,21 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    config_mailer:
+        sandbox: '%env(bool:SENDGRID_SANDBOX_MODE)%'
+        default:
+            address: '%env(resolve:MAILER_DEFAULT_ADDRESS)%'
+            name: '%env(resolve:MAILER_DEFAULT_NAME)%'
+        confirmation:
+            template: '%env(resolve:SENDGRID_CONFIRMATION_TEMPLATE_ID)%'
 
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $mailer: '@nurschool.mailer'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -35,3 +44,10 @@ services:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
             - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
+    nurschool.mailer:
+        class: Nurschool\Mailer\SendGridMailer
+        arguments:
+            - '@og_send_grid.provider'
+            - '@translator'
+            - '%config_mailer%'
