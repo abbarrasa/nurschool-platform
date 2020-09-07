@@ -13,8 +13,12 @@ namespace Nurschool\Mailer;
 
 
 use Nurschool\Model\UserInterface;
+use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
+use SymfonyCasts\Bundle\VerifyEmail\Model\VerifyEmailSignatureComponents;
 
 interface MailerInterface
 {
-    public function sendConfirmationEmail(UserInterface $user, string $signedUrl, \DateTimeInterface $expiresAt);
+    public function sendConfirmationEmail(UserInterface $user, VerifyEmailSignatureComponents $signatureComponents/*string $signedUrl, \DateTimeInterface $expiresAt*/);
+    public function sendResettingPasswordEmail(UserInterface $user, ResetPasswordToken $resetToken, int $tokenLifetime);
+
 }

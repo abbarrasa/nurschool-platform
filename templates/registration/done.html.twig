@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Successful registration{% endblock %}
+
+{% block body %}
+    <p>Your registration has been successful</p>
+    <p>An email has been sent that contains a link that you can click to verify your account. This link will expire in {{ expiresAt|date('g') }} hour(s).</p>
+{% endblock %}

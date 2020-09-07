@@ -70,12 +70,14 @@ class RegistrationController extends AbstractController
     public function registerDone(Request $request)
     {
         $email = $request->getSession()->get('nurschool_send_confirmation_email/email');
+        $expiresAt = $request->getSession()->get('nurschool_send_confirmation_email/expiresAt');
 
         if (empty($email)) {
             return $this->redirectToRoute('register');
         }
 
         $request->getSession()->remove('nurschool_send_confirmation_email/email');
+        $request->getSession()->remove('nurschool_send_confirmation_email/expiresAt');
         $entityManager = $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
 
@@ -85,6 +87,7 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/done.html.twig', [
             'user' => $user,
+            'expiresAt' => $expiresAt
         ]);
     }
 

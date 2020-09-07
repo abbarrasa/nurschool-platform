@@ -7,34 +7,32 @@ use Nurschool\Mailer\MailerInterface;
 use Nurschool\Model\UserInterface;
 use Symfony\Component\HttpFoundation\Request;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use SymfonyCasts\Bundle\VerifyEmail\Model\VerifyEmailSignatureComponents;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 class EmailVerifier
 {
     private $verifyEmailHelper;
-    private $mailer;
     private $entityManager;
 
-    public function __construct(VerifyEmailHelperInterface $helper, MailerInterface $mailer, EntityManagerInterface $manager)
+    public function __construct(VerifyEmailHelperInterface $helper, EntityManagerInterface $manager)
     {
         $this->verifyEmailHelper = $helper;
-        $this->mailer = $mailer;
         $this->entityManager = $manager;
     }
 
     /**
      * @param string $verifyEmailRouteName
      * @param UserInterface $user
+     * @return VerifyEmailSignatureComponents
      */
-    public function sendEmailConfirmation(string $verifyEmailRouteName, UserInterface $user): void
+    public function generateSignatureConfirmation(string $verifyEmailRouteName, UserInterface $user): VerifyEmailSignatureComponents
     {
-        $signatureComponents = $this->verifyEmailHelper->generateSignature(
+        return $this->verifyEmailHelper->generateSignature(
             $verifyEmailRouteName,
             $user->getId(),
             $user->getEmail()
         );
-
-        $this->mailer->sendConfirmationEmail($user, $signatureComponents->getSignedUrl(), $signatureComponents->getExpiresAt());
     }
 
     /**

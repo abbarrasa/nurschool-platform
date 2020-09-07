@@ -18,12 +18,18 @@ use OG\SendGridBundle\Provider\SendGridProvider;
 use SendGrid\Mail\Mail;
 use SendGrid\Mail\MailSettings;
 use SendGrid\Mail\SandBoxMode;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
+use SymfonyCasts\Bundle\VerifyEmail\Model\VerifyEmailSignatureComponents;
 
 class SendGridMailer implements MailerInterface
 {
     /** @var SendGridProvider */
     protected $provider;
+
+    /** @var UrlGeneratorInterface */
+    protected $router;
 
     /** @var TranslatorInterface */
     protected $translator;
@@ -34,28 +40,45 @@ class SendGridMailer implements MailerInterface
     /**
      * SendGridMailer constructor.
      * @param SendGridProvider $provider
+     * @param UrlGeneratorInterface $router
      * @param TranslatorInterface $translator
      * @param array $config
      */
     public function __construct(
         SendGridProvider $provider,
+        UrlGeneratorInterface $router,
         TranslatorInterface $translator,
         array $config
     ) {
         $this->provider = $provider;
+        $this->router = $router;
         $this->translator = $translator;
         $this->config = $config;
     }
 
-    public function sendConfirmationEmail(UserInterface $user, string $signedUrl, \DateTimeInterface $expiresAt)
+    public function sendConfirmationEmail(UserInterface $user, VerifyEmailSignatureComponents $signatureComponents)
     {
         $templateId = $this->getTemplateId('confirmation');
 //        $subject    = $this->translator->trans('email.subject.confirmation', [], 'Nurschool');
         $subject = 'Please Confirm your Email';
-        $from       = $this->getFrom('admin');
-        $email      = $this->createMessage($from, $user->getEmail(), $subject, $templateId);
-        $email->addDynamicTemplateData('url', $signedUrl);
-        $email->addDynamicTemplateData('expiresAt', $expiresAt->format('g'));
+        $from = $this->getFrom('admin');
+        $email = $this->createMessage($from, $user->getEmail(), $subject, $templateId);
+        $email->addDynamicTemplateData('url', $signatureComponents->getSignedUrl());
+        $email->addDynamicTemplateData('expiresAt', $signatureComponents->getExpiresAt()->format('g'));
+
+        return $this->sendMessage($email);
+    }
+
+    public function sendResettingPasswordEmail(UserInterface $user, ResetPasswordToken $resetToken, int $tokenLifetime)
+    {
+        $templateId = $this->getTemplateId('resetting');
+//        $subject    = $this->translator->trans('email.subject.confirmation', [], 'Nurschool');
+        $subject = 'Please Confirm your Email';
+        $from = $this->getFrom('admin');
+        $url = $this->router->generate('reset_password', ['token' => $resetToken->getToken()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $email = $this->createMessage($from, $user->getEmail(), $subject, $templateId);
+        $email->addDynamicTemplateData('url', $url);
+        $email->addDynamicTemplateData('tokenLifetime', $tokenLifetime);
 
         return $this->sendMessage($email);
     }

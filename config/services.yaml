@@ -11,6 +11,8 @@ parameters:
             name: '%env(resolve:MAILER_DEFAULT_NAME)%'
         confirmation:
             template: '%env(resolve:SENDGRID_CONFIRMATION_TEMPLATE_ID)%'
+        resetting:
+            template: '%env(resolve:SENDGRID_RESETTING_TEMPLATE_ID)%'
 
 services:
     # default configuration for services in *this* file
