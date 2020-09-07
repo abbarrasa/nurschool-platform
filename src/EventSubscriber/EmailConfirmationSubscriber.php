@@ -13,7 +13,6 @@ namespace Nurschool\EventSubscriber;
 
 
 use Nurschool\Event\RegisteredUserEvent;
-use Nurschool\Model\UserInterface;
 use Nurschool\Security\EmailVerifier;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;

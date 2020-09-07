@@ -6,30 +6,26 @@ use Nurschool\Entity\User;
 use Nurschool\Event\RegisteredUserEvent;
 use Nurschool\Form\RegistrationFormType;
 use Nurschool\Security\EmailVerifier;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
     /** @var EventDispatcherInterface  */
     private $eventDispatcher;
-//    private $emailVerifier;
 
     public function __construct(EventDispatcherInterface $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
-//        $this->emailVerifier = $emailVerifier;
     }
 
     /**
-     * Registers an user
+     * Register an user
      * @Route("/register", name="register")
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
@@ -54,20 +50,10 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->eventDispatcher->dispatch(new RegisteredUserEvent($user));
+            // Launch an event when user account is created
+            $this->eventDispatcher->dispatch(new RegisteredUserEvent($user), RegisteredUserEvent::NAME);
 
-            // generate a signed url and email it to the user
-//            $this->emailVerifier->sendEmailConfirmation('verify_email', $user);
-//            $this->emailVerifier->sendEmailConfirmation('verify_email', $user,
-//                (new TemplatedEmail())
-//                    ->from(new Address('admin@nurschool.es', 'Nurschool Mail Bot'))
-//                    ->to($user->getEmail())
-//                    ->subject('Please Confirm your Email')
-//                    ->htmlTemplate('registration/confirmation_email.html.twig')
-//            );
-            // do anything else you need here, like send an email
-
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('register_done');
         }
 
         return $this->render('registration/register.html.twig', [
@@ -76,7 +62,34 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * Verifies an user account
+     * Tell the user to check their email provider.
+     * @Route("/register/done", name="register_done")
+     * @param Request $request
+     * @return RedirectResponse|Response|null
+     */
+    public function registerDone(Request $request)
+    {
+        $email = $request->getSession()->get('nurschool_send_confirmation_email/email');
+
+        if (empty($email)) {
+            return $this->redirectToRoute('register');
+        }
+
+        $request->getSession()->remove('nurschool_send_confirmation_email/email');
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+
+        if (null === $user) {
+            return $this->redirectToRoute('login');
+        }
+
+        return $this->render('registration/done.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
+    /**
+     * Verify an user account
      * @Route("/verify/email", name="verify_email")
      * @param Request $request
      * @param EmailVerifier $emailVerifier

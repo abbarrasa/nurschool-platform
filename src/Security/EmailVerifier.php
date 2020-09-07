@@ -5,7 +5,6 @@ namespace Nurschool\Security;
 use Doctrine\ORM\EntityManagerInterface;
 use Nurschool\Mailer\MailerInterface;
 use Nurschool\Model\UserInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
@@ -23,7 +22,11 @@ class EmailVerifier
         $this->entityManager = $manager;
     }
 
-    public function sendEmailConfirmation(string $verifyEmailRouteName, UserInterface $user/*, TemplatedEmail $email*/): void
+    /**
+     * @param string $verifyEmailRouteName
+     * @param UserInterface $user
+     */
+    public function sendEmailConfirmation(string $verifyEmailRouteName, UserInterface $user): void
     {
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
             $verifyEmailRouteName,
@@ -32,17 +35,11 @@ class EmailVerifier
         );
 
         $this->mailer->sendConfirmationEmail($user, $signatureComponents->getSignedUrl(), $signatureComponents->getExpiresAt());
-
-//        $context = $email->getContext();
-//        $context['signedUrl'] = $signatureComponents->getSignedUrl();
-//        $context['expiresAt'] = $signatureComponents->getExpiresAt();
-//
-//        $email->context($context);
-//
-//        $this->mailer->send($email);
     }
 
     /**
+     * @param Request $request
+     * @param UserInterface $user
      * @throws VerifyEmailExceptionInterface
      */
     public function handleEmailConfirmation(Request $request, UserInterface $user): void
