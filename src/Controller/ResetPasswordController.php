@@ -36,6 +36,9 @@ class ResetPasswordController extends AbstractController
      * Display & process form to request a password reset.
      *
      * @Route("", name="forgot_password_request")
+     * @param Request $request
+     * @param MailerInterface $mailer
+     * @return Response
      */
     public function request(Request $request, MailerInterface $mailer): Response
     {
@@ -159,7 +162,7 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('check_email');
         }
 
-        $this->mailer->sendResettingPasswordEmail($user, $resetToken, $this->resetPasswordHelper->getTokenLifetime());
+        $mailer->sendResettingPasswordEmail($user, $resetToken, $this->resetPasswordHelper->getTokenLifetime());
 
 //        $email = (new TemplatedEmail())
 //            ->from(new Address('admin@nurschool.es', 'Nurschool Mailbot'))

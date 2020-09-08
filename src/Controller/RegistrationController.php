@@ -26,6 +26,7 @@ class RegistrationController extends AbstractController
 
     /**
      * Register an user
+     *
      * @Route("/register", name="register")
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
@@ -63,6 +64,7 @@ class RegistrationController extends AbstractController
 
     /**
      * Tell the user to check their email provider.
+     *
      * @Route("/register/done", name="register_done")
      * @param Request $request
      * @return RedirectResponse|Response|null
@@ -93,6 +95,7 @@ class RegistrationController extends AbstractController
 
     /**
      * Verify an user account
+     *
      * @Route("/verify/email", name="verify_email")
      * @param Request $request
      * @param EmailVerifier $emailVerifier
