@@ -28,6 +28,8 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
 
     public function setLastname(string $lastname);
 
+    public function getFullName();
+
     public function getPassword(): string;
 
     public function setPassword(string $password);
@@ -35,4 +37,8 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
     public function isVerified(): bool;
 
     public function setIsVerified(bool $isVerified);
+
+    public function isEnabled(): ?bool;
+
+    public function setEnabled(bool $enabled);
 }
