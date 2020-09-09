@@ -4,6 +4,7 @@ namespace Nurschool\Controller;
 
 use Nurschool\Entity\Enquiry;
 use Nurschool\Form\EnquiryFormType;
+use Nurschool\Mailer\MailerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,9 +25,9 @@ class HomeController extends AbstractController
     {
         $form =$this->createForm(EnquiryFormType::class, new Enquiry());
         $result = $this->processEnquiryForm($request, $form);
-        if (self::STATUS_FORM_SUCCESS) {
+        if (self::STATUS_FORM_SUCCESS == $result) {
             return $this->redirectToRoute('home');
-        } elseif (self::STATUS_FORM_FAILED) {
+        } elseif (self::STATUS_FORM_FAILED == $result) {
         }
 
         return $this->render('home/index.html.twig', [
@@ -36,11 +37,11 @@ class HomeController extends AbstractController
     }
 
     /**
-     * @Route("/contact-us", name="contact")
+     * @Route("/contact-us", name="contact_us")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function contact(Request $request)
+    public function contactUs(Request $request)
     {
         $form =$this->createForm(EnquiryFormType::class, new Enquiry());
         if (self::STATUS_FORM_SUCCESS == $this->processEnquiryForm($request, $form)) {
