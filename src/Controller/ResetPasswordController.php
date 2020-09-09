@@ -162,19 +162,6 @@ class ResetPasswordController extends AbstractController
 
         $mailer->sendResettingPasswordEmail($user, $resetToken, $this->resetPasswordHelper->getTokenLifetime());
 
-//        $email = (new TemplatedEmail())
-//            ->from(new Address('admin@nurschool.es', 'Nurschool Mailbot'))
-//            ->to($user->getEmail())
-//            ->subject('Your password reset request')
-//            ->htmlTemplate('reset_password/email.html.twig')
-//            ->context([
-//                'resetToken' => $resetToken,
-//                'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime(),
-//            ])
-//        ;
-//
-//        $mailer->send($email);
-
         return $this->redirectToRoute('check_email');
     }
 }
