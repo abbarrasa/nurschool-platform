@@ -5,11 +5,16 @@ namespace Nurschool\Controller;
 use Nurschool\Entity\Enquiry;
 use Nurschool\Form\EnquiryFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
+    private const STATUS_FORM_SUCCESS = 'Success';
+    private const STATUS_FORM_FAILED = 'Failed';
+    private const STATUS_FORM_NOT_SUBMITTED = 'Not submitted';
+
     /**
      * @Route("/", name="home")
      * @param Request $request
@@ -17,7 +22,17 @@ class HomeController extends AbstractController
      */
     public function index(Request $request)
     {
-        return $this->buildAndProcessEnquiryForm($request);
+        $form =$this->createForm(EnquiryFormType::class, new Enquiry());
+        $result = $this->processEnquiryForm($request, $form);
+        if (self::STATUS_FORM_SUCCESS) {
+            return $this->redirectToRoute('home');
+        } elseif (self::STATUS_FORM_FAILED) {
+        }
+
+        return $this->render('home/index.html.twig', [
+            'controller_name' => 'HomeController',
+            'enquiryForm' => $form->createView()
+        ]);
     }
 
     /**
@@ -27,38 +42,33 @@ class HomeController extends AbstractController
      */
     public function contact(Request $request)
     {
-        return $this->buildAndProcessEnquiryForm($request);
-    }
-
-    protected function buildAndProcessEnquiryForm(Request $request)
-    {
-        $enquiry = new Enquiry();
-        $form = $this->createForm(EnquiryFormType::class, $enquiry);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($enquiry);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('home');
+        $form =$this->createForm(EnquiryFormType::class, new Enquiry());
+        if (self::STATUS_FORM_SUCCESS == $this->processEnquiryForm($request, $form)) {
+            return $this->redirectToRoute('contact');
         }
 
-        return $this->renderPage($request, [
+        return $this->render('home/contact.html.twig', [
             'controller_name' => 'HomeController',
             'enquiryForm' => $form->createView()
         ]);
     }
 
-    protected function renderPage(Request $request, array $parameters = [])
+    protected function processEnquiryForm(Request $request, FormInterface $form)
     {
-        $route = $request->attributes->get('_route');
-        if ($route == 'contact') {
-            $view = 'home/contact.html.twig';
-        } else {
-            $view = 'home/index.html.twig';
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            if (!$form->isValid()) {
+                return self::STATUS_FORM_FAILED;
+            }
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $enquiry = $form->getData();
+            $entityManager->persist($enquiry);
+            $entityManager->flush();
+
+            return self::STATUS_FORM_SUCCESS;
         }
 
-        return $this->render($view, $parameters);
+        return self::STATUS_FORM_NOT_SUBMITTED;
     }
 }
