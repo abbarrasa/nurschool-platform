@@ -145,6 +145,16 @@ class User implements UserInterface
         return $this;
     }
 
+    public function hasRole(string $role): bool
+    {
+        return in_array(strtoupper($role), $this->getRoles(), true);
+    }
+
+    public function hasAnyRole(): bool
+    {
+        return $this->hasRole('ROLE_ADMIN') || $this->hasRole('ROLE_NURSE');
+    }
+
     /**
      * @see UserInterface
      */

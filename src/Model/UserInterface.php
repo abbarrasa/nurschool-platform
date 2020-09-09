@@ -33,6 +33,10 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
     public function getPassword(): string;
 
     public function setPassword(string $password);
+    
+    public function hasRole(string $role): bool;
+    
+    public function hasAnyRole(): bool;
 
     public function isVerified(): bool;
 
@@ -41,4 +45,8 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
     public function isEnabled(): ?bool;
 
     public function setEnabled(bool $enabled);
+
+    public function getLastLogin(): \DateTimeInterface;
+
+    public function setLastLogin(\DateTimeInterface $datetime);
 }

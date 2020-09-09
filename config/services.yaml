@@ -54,3 +54,7 @@ services:
             - '@router'
             - '@translator'
             - '%config_mailer%'
+
+    Nurschool\EventListener\LoginListener:
+        tags:
+            - { name: 'kernel.event_listener', event: 'security.interactive_login' }

@@ -29,7 +29,7 @@ class SendGridMailer implements MailerInterface
     protected $provider;
 
     /** @var UrlGeneratorInterface */
-    protected $router;
+    protected $urlGenerator;
 
     /** @var TranslatorInterface */
     protected $translator;
@@ -40,18 +40,18 @@ class SendGridMailer implements MailerInterface
     /**
      * SendGridMailer constructor.
      * @param SendGridProvider $provider
-     * @param UrlGeneratorInterface $router
+     * @param UrlGeneratorInterface $urlGenerator
      * @param TranslatorInterface $translator
      * @param array $config
      */
     public function __construct(
         SendGridProvider $provider,
-        UrlGeneratorInterface $router,
+        UrlGeneratorInterface $urlGenerator,
         TranslatorInterface $translator,
         array $config
     ) {
         $this->provider = $provider;
-        $this->router = $router;
+        $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
         $this->config = $config;
     }
@@ -75,7 +75,7 @@ class SendGridMailer implements MailerInterface
 //        $subject    = $this->translator->trans('email.subject.confirmation', [], 'Nurschool');
         $subject = 'Please Confirm your Email';
         $from = $this->getFrom('admin');
-        $url = $this->router->generate('reset_password', ['token' => $resetToken->getToken()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $url = $this->urlGenerator->generate('reset_password', ['token' => $resetToken->getToken()], UrlGeneratorInterface::ABSOLUTE_URL);
         $email = $this->createMessage($from, $user->getEmail(), $subject, $templateId);
         $email->addDynamicTemplateData('url', $url);
         $email->addDynamicTemplateData('tokenLifetime', $tokenLifetime);
