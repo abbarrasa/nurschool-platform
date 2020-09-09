@@ -46,7 +46,7 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
 
     public function setEnabled(bool $enabled);
 
-    public function getLastLogin(): \DateTimeInterface;
+    public function getLastLogin(): ?\DateTimeInterface;
 
-    public function setLastLogin(\DateTimeInterface $datetime);
+    public function setLastLogin(?\DateTimeInterface $datetime);
 }

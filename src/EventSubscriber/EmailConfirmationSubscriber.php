@@ -51,7 +51,7 @@ class EmailConfirmationSubscriber implements EventSubscriberInterface
         $signatureComponents = $this->emailVerifier->generateSignatureConfirmation('verify_email', $user);
         $this->mailer->sendConfirmationEmail($user, $signatureComponents);
 
-        $this->session->set('nurschool_send_confirmation_email/email', $user->getEmail());
-        $this->session->set('nurschool_send_confirmation_email/expiresAt', $signatureComponents->getExpiresAt());
+        $this->session->set('SendConfirmationEmail', $user->getEmail());
+        $this->session->set('SendConfirmationTokenExpiresAt', $signatureComponents->getExpiresAt());
     }
 }

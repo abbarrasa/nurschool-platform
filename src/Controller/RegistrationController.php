@@ -71,15 +71,16 @@ class RegistrationController extends AbstractController
      */
     public function registerDone(Request $request)
     {
-        $email = $request->getSession()->get('nurschool_send_confirmation_email/email');
-        $expiresAt = $request->getSession()->get('nurschool_send_confirmation_email/expiresAt');
+        $session = $request->getSession();
+        $email = $session->get('SendConfirmationEmail');
+        $expiresAt = $session->get('SendConfirmationTokenExpiresAt');
 
         if (empty($email)) {
             return $this->redirectToRoute('register');
         }
 
-        $request->getSession()->remove('nurschool_send_confirmation_email/email');
-        $request->getSession()->remove('nurschool_send_confirmation_email/expiresAt');
+        $session->remove('SendConfirmationEmail');
+        $session->remove('SendConfirmationTokenExpiresAt');
         $entityManager = $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
 
@@ -117,6 +118,6 @@ class RegistrationController extends AbstractController
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Your email address has been verified.');
 
-        return $this->redirectToRoute('dashboard');
+        return $this->redirectToRoute('welcome');
     }
 }

@@ -3,7 +3,6 @@
 namespace Nurschool\Security;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Nurschool\Mailer\MailerInterface;
 use Nurschool\Model\UserInterface;
 use Symfony\Component\HttpFoundation\Request;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;

@@ -5,7 +5,6 @@ namespace Nurschool\Security;
 use Nurschool\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Nurschool\Security\Util\AuthenticationSuccessTrait;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -29,14 +28,14 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     public const LOGIN_ROUTE = 'login';
 
     private $entityManager;
-//    private $urlGenerator;
+    private $urlGenerator;
     private $csrfTokenManager;
     private $passwordEncoder;
 
-    public function __construct(EntityManagerInterface $entityManager, /*UrlGeneratorInterface $urlGenerator, */CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->entityManager = $entityManager;
-//        $this->urlGenerator = $urlGenerator;
+        $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
     }
@@ -95,18 +94,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         return $this->getAuthenticatedResponse(
-            $request,
             $token->getUser(),
             $this->getTargetPath($request->getSession(), $providerKey)
         );
-
-
-//        if ()) {
-//            return new RedirectResponse($targetPath);
-//        }
-
-        // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
     protected function getLoginUrl()

@@ -52,7 +52,6 @@ services:
         arguments:
             - '@og_send_grid.provider'
             - '@router'
-            - '@translator'
             - '%config_mailer%'
 
     Nurschool\EventListener\LoginListener:

@@ -19,7 +19,6 @@ use SendGrid\Mail\Mail;
 use SendGrid\Mail\MailSettings;
 use SendGrid\Mail\SandBoxMode;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
 use SymfonyCasts\Bundle\VerifyEmail\Model\VerifyEmailSignatureComponents;
 
@@ -31,9 +30,6 @@ class SendGridMailer implements MailerInterface
     /** @var UrlGeneratorInterface */
     protected $urlGenerator;
 
-    /** @var TranslatorInterface */
-    protected $translator;
-
     /** @var array */
     protected $config;
 
@@ -41,28 +37,23 @@ class SendGridMailer implements MailerInterface
      * SendGridMailer constructor.
      * @param SendGridProvider $provider
      * @param UrlGeneratorInterface $urlGenerator
-     * @param TranslatorInterface $translator
      * @param array $config
      */
     public function __construct(
         SendGridProvider $provider,
         UrlGeneratorInterface $urlGenerator,
-        TranslatorInterface $translator,
         array $config
     ) {
         $this->provider = $provider;
         $this->urlGenerator = $urlGenerator;
-        $this->translator = $translator;
         $this->config = $config;
     }
 
     public function sendConfirmationEmail(UserInterface $user, VerifyEmailSignatureComponents $signatureComponents)
     {
         $templateId = $this->getTemplateId('confirmation');
-//        $subject    = $this->translator->trans('email.subject.confirmation', [], 'Nurschool');
-        $subject = 'Please Confirm your Email';
         $from = $this->getFrom('admin');
-        $email = $this->createMessage($from, $user->getEmail(), $subject, $templateId);
+        $email = $this->createMessage($from, $user->getEmail(), ' ', $templateId);
         $email->addDynamicTemplateData('url', $signatureComponents->getSignedUrl());
         $email->addDynamicTemplateData('expiresAt', $signatureComponents->getExpiresAt()->format('g'));
 
@@ -72,27 +63,25 @@ class SendGridMailer implements MailerInterface
     public function sendResettingPasswordEmail(UserInterface $user, ResetPasswordToken $resetToken, int $tokenLifetime)
     {
         $templateId = $this->getTemplateId('resetting');
-//        $subject    = $this->translator->trans('email.subject.confirmation', [], 'Nurschool');
-        $subject = 'Please Confirm your Email';
         $from = $this->getFrom('admin');
         $url = $this->urlGenerator->generate('reset_password', ['token' => $resetToken->getToken()], UrlGeneratorInterface::ABSOLUTE_URL);
-        $email = $this->createMessage($from, $user->getEmail(), $subject, $templateId);
+        $email = $this->createMessage($from, $user->getEmail(), ' ', $templateId);
         $email->addDynamicTemplateData('url', $url);
-        $email->addDynamicTemplateData('tokenLifetime', $tokenLifetime);
+        $email->addDynamicTemplateData('tokenLifetime', date('g', $tokenLifetime));
 
         return $this->sendMessage($email);
     }
 
     /**
      * Creates an email with SendGrid API
-     * @param null $from
-     * @param null $to
-     * @param null $subject
+     * @param $from
+     * @param $to
+     * @param string $subject
      * @param null $templateId
-     * @return \SendGrid\Mail\Mail
+     * @return Mail
      * @throws \SendGrid\Mail\TypeException
      */
-    protected function createMessage($from = null, $to = null, $subject = null, $templateId = null)
+    protected function createMessage($from, $to, $subject = ' ', $templateId = null)
     {
         $email        = $this->provider->createMessage();
         $mailSettings = new MailSettings();
@@ -101,22 +90,15 @@ class SendGridMailer implements MailerInterface
         $mailSettings->setSandboxMode($sandboxMode);
         $email->setMailSettings($mailSettings);
 
-        if (isset($from)) {
-            if (is_array($from)) {
-                list($fromEmail, $senderName) = $from;
-                $email->setFrom($fromEmail, $senderName);
-            } else {
-                $email->setFrom($from);
-            }
+        if (is_array($from)) {
+            list($fromEmail, $senderName) = $from;
+            $email->setFrom($fromEmail, $senderName);
+        } else {
+            $email->setFrom($from);
         }
 
-        if (isset($to)) {
-            $email->addTo($to);
-        }
-
-        if (isset($subject)) {
-            $email->setSubject($subject);
-        }
+        $email->addTo($to);
+        $email->setSubject($subject);
 
         if (isset($templateId)) {
             $email->setTemplateId($templateId);

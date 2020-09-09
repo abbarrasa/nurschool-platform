@@ -13,20 +13,22 @@ namespace Nurschool\Security\Util;
 
 
 use Nurschool\Model\UserInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\RouterInterface;
 
 trait AuthenticationSuccessTrait
 {
-    private $urlGenerator;
+    /** @var RouterInterface */
+    private $router;
 
-    public function getAuthenticatedResponse(Request $request, UserInterface $user, string $targetPath = null)
+    public function getAuthenticatedResponse(UserInterface $user, string $targetPath = null)
     {
-        if ($request->attributes->get('_route') !== 'verify_email') {
-            if (!$user->isVerified() || !$user->hasAnyRole())  {
+        if (!$user->isVerified() || !$user->hasAnyRole())  {
+            if (!$this->matchWithRoute('verify_email', $targetPath)) {
                 throw new \Exception('TODO: Redirect to Welcome '.__FILE__);
             }
         }
-        
-        
+
         if ($targetPath) {
             return new RedirectResponse($targetPath);
         }
@@ -36,9 +38,27 @@ trait AuthenticationSuccessTrait
 
     /**
      * @required
+     * @param RouterInterface $router
      */
-    public function setUrlGenerator(UrlGeneratorInterface $urlGenerator)
+    public function setRouter(RouterInterface $router)
     {
-        $this->urlGenerator = $urlGenerator;
+        $this->router = $router;
+    }
+
+    /**
+     * @param string $route
+     * @param string|null $url
+     * @return bool
+     */
+    private function matchWithRoute(string $route, ?string $url): bool
+    {
+        if ($url) {
+            $parsedUrl = parse_url($url);
+            $routeInfo = $this->router->match($parsedUrl['path']);
+
+            return $routeInfo['_route'] == $route;
+        }
+
+        return false;
     }
 }
