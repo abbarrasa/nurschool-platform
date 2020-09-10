@@ -25,7 +25,7 @@ trait AuthenticationSuccessTrait
     {
         if (!$user->isVerified() || !$user->hasAnyRole())  {
             if (!$this->matchWithRoute('verify_email', $targetPath)) {
-                throw new \Exception('TODO: Redirect to Welcome '.__FILE__);
+                return new RedirectResponse($this->router->generate('welcome'));
             }
         }
 
@@ -33,7 +33,7 @@ trait AuthenticationSuccessTrait
             return new RedirectResponse($targetPath);
         }
         
-        return new RedirectResponse($this->urlGenerator->generate('dashboard'));
+        return new RedirectResponse($this->router->generate('dashboard'));
     }
 
     /**

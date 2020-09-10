@@ -57,3 +57,7 @@ services:
     Nurschool\EventListener\LoginListener:
         tags:
             - { name: 'kernel.event_listener', event: 'security.interactive_login' }
+
+    Nurschool\EventListener\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
