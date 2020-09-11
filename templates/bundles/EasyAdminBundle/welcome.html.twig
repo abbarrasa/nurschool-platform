@@ -14,5 +14,9 @@
 
     <p>
         You must config your user account.
+
+        {% form_theme profileForm '@EasyAdmin/form/bootstrap_4.html.twig' %}
+        {{ form(profileForm) }}
+
     </p>
 {% endblock %}

@@ -5,6 +5,7 @@ namespace Nurschool\Controller;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use Nurschool\Form\WelcomeFormType;
 use Nurschool\Mailer\MailerInterface;
 use Nurschool\Model\UserInterface;
 use Nurschool\Security\EmailVerifier;
@@ -32,13 +33,36 @@ class DashboardController extends AbstractDashboardController
      * @Route("/welcome", name="welcome")
      * @return Response
      */
-    public function welcome(): Response
+    public function welcome(Request $request): Response
     {
-        if (!$this->getUser()->isVerified()) {
+        /** @var UserInterface $user */
+        $user = $this->getUser();
+        if (!$user->isVerified()) {
             return $this->render('@EasyAdmin/verification_required.html.twig');
         }
 
-        return $this->render('@EasyAdmin/welcome.html.twig');
+        $form = $this->createForm(WelcomeFormType::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+
+        }
+
+        return $this->render('@EasyAdmin/welcome.html.twig', [
+            'profileForm' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/welcome/config", name="config")
+     * @return Response
+     */
+    public function config(): Response
+    {
+        throw new \Exception('It is not implemented yet');
     }
 
     /**
