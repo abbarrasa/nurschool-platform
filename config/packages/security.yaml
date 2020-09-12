@@ -17,6 +17,7 @@ security:
         main:
             anonymous: lazy
             provider: user_provider
+            user_checker: Nurschool\Security\UserChecker
             guard:
                 authenticators:
                     - Nurschool\Security\LoginFormAuthenticator
