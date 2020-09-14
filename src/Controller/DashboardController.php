@@ -7,7 +7,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Nurschool\Entity\Enquiry;
 use Nurschool\Entity\School;
-use Nurschool\Form\Factory\WelcomeFormFactory;
 use Nurschool\Form\WelcomeUserProfileFormType;
 use Nurschool\Mailer\MailerInterface;
 use Nurschool\Model\UserInterface;
@@ -35,10 +34,13 @@ class DashboardController extends AbstractDashboardController
 
     /**
      * @Route("/welcome", name="welcome")
+     * @Route("/welcome/profile", name="welcome_profile_user")
+     * @Route("/welcome/config-admin", name="welcome_config_admin")
+     * @Route("/welcome/config-nurse", name="welcome_config_nurse")
      * @param Request $request
      * @return Response
      */
-    public function welcome(Request $request, WelcomeFormFactory $formFactory): Response
+    public function welcome(Request $request): Response
     {
         /** @var UserInterface $user */
         $user = $this->getUser();
@@ -46,29 +48,16 @@ class DashboardController extends AbstractDashboardController
             return $this->render('@EasyAdmin/verification_required.html.twig');
         }
 
-//        $form = $this->createForm(WelcomeFormType::class, $user);
-        $form = $formFactory->createWelcomeUserProfileForm();
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+        $route = $request->attributes->get('_route');
+        if ('welcome_profile_user' === $route) {
 
+        } elseif ('welcome_config_admin' === $route) {
+
+        } elseif ('welcome_config_nurse' === $route) {
 
         }
 
-        return $this->render('@EasyAdmin/welcome.html.twig', [
-            'profileForm' => $form->createView()
-        ]);
-    }
-
-    /**
-     * @Route("/welcome/config", name="config")
-     * @return Response
-     */
-    public function config(): Response
-    {
-        throw new \Exception('It is not implemented yet');
+        return $this->render('@EasyAdmin/welcome.html.twig');
     }
 
     /**
@@ -108,5 +97,29 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('Schools', 'fa fa-tags', School::class);
         }
         // yield MenuItem::linkToCrud('The Label', 'icon class', EntityClass::class);
+    }
+
+    private function performanceWelcomeProfileUser(Request $request): Response
+    {
+        /** @var UserInterface $user */
+        $user = $this->getUser();
+        $form = $this->createForm(WelcomeUserProfileFormType::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            if ($user->hasRole('ROLE_ADMIN')) {
+                return $this->redirectToRoute('we');
+            }
+
+            return $this->redirectToRoute('welcome_config_nurse');
+        }
+
+        return $this->render('@EasyAdmin/welcome.html.twig', [
+            'profileForm' => $form->createView()
+        ]);
+
     }
 }
