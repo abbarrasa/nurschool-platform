@@ -12,15 +12,17 @@
 namespace Nurschool\Form;
 
 
+use Doctrine\ORM\EntityRepository;
 use Nurschool\Entity\School;
 use Nurschool\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class WelcomeSchoolFormType extends AbstractType
+class WelcomeAdminConfigFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -31,6 +33,17 @@ class WelcomeSchoolFormType extends AbstractType
                 'constraints' => [
                     new NotBlank()
                 ]
+            ])
+            ->add('nurses', EntityType::class, [
+                'label' => 'Nurses',
+                'mapped' => false,
+                'class' => User::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->findByRole('ROLE_NURSE');
+                },
+                'choice_label' => function($user) {
+                    return "{$user->getLastname()}, {$user->getFirstname()}";
+                }
             ])
         ;
     }

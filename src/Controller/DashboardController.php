@@ -8,7 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Nurschool\Entity\Enquiry;
 use Nurschool\Entity\School;
 use Nurschool\Form\Factory\WelcomeFormFactory;
-use Nurschool\Form\WelcomeFormType;
+use Nurschool\Form\WelcomeUserProfileFormType;
 use Nurschool\Mailer\MailerInterface;
 use Nurschool\Model\UserInterface;
 use Nurschool\Security\EmailVerifier;
