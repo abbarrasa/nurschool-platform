@@ -5,10 +5,14 @@ namespace Nurschool\Controller;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use Nurschool\Entity\Enquiry;
+use Nurschool\Entity\School;
+use Nurschool\Form\Factory\WelcomeFormFactory;
 use Nurschool\Form\WelcomeFormType;
 use Nurschool\Mailer\MailerInterface;
 use Nurschool\Model\UserInterface;
 use Nurschool\Security\EmailVerifier;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -31,9 +35,10 @@ class DashboardController extends AbstractDashboardController
 
     /**
      * @Route("/welcome", name="welcome")
+     * @param Request $request
      * @return Response
      */
-    public function welcome(Request $request): Response
+    public function welcome(Request $request, WelcomeFormFactory $formFactory): Response
     {
         /** @var UserInterface $user */
         $user = $this->getUser();
@@ -41,7 +46,8 @@ class DashboardController extends AbstractDashboardController
             return $this->render('@EasyAdmin/verification_required.html.twig');
         }
 
-        $form = $this->createForm(WelcomeFormType::class, $user);
+//        $form = $this->createForm(WelcomeFormType::class, $user);
+        $form = $formFactory->createWelcomeUserProfileForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -93,6 +99,14 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linktoDashboard('Dashboard', 'fa fa-home');
+
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            yield MenuItem::linkToCrud('Enquiries', 'fa fa-tags', Enquiry::class);
+        }
+
+        if ($this->isGranted('ROLE_ADMIN')) {
+            yield MenuItem::linkToCrud('Schools', 'fa fa-tags', School::class);
+        }
         // yield MenuItem::linkToCrud('The Label', 'icon class', EntityClass::class);
     }
 }

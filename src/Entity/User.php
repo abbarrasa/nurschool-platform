@@ -2,6 +2,8 @@
 
 namespace Nurschool\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Nurschool\Model\UserInterface;
 use Nurschool\Repository\UserRepository;
@@ -13,7 +15,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="nurschool_user")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
-class User implements UserInterface
+class User implements UserInterface, \ArrayAccess
 {
     /**
      * Hook timestampable behavior
@@ -74,6 +76,16 @@ class User implements UserInterface
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $lastLogin;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=School::class, mappedBy="users")
+     */
+    private $schools;
+
+    public function __construct()
+    {
+        $this->schools = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -238,5 +250,53 @@ class User implements UserInterface
         $this->lastLogin = $lastLogin;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|School[]
+     */
+    public function getSchools(): Collection
+    {
+        return $this->schools;
+    }
+
+    public function addSchool(School $school): self
+    {
+        if (!$this->schools->contains($school)) {
+            $this->schools[] = $school;
+            $school->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSchool(School $school): self
+    {
+        if ($this->schools->contains($school)) {
+            $this->schools->removeElement($school);
+            $school->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    public function offsetExists($offset)
+    {
+        return in_array($offset, ['firstname', 'lastname', 'roles']);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->$offset;
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        $this->$offset = $value;
+    }
+
+    public function offsetUnset($offset)
+    {
+        $this->$offset = null;
     }
 }

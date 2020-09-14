@@ -15,8 +15,17 @@
     <p>
         You must config your user account.
 
-        {% form_theme profileForm '@EasyAdmin/form/bootstrap_4.html.twig' %}
-        {{ form(profileForm) }}
+        {% form_theme profileForm '@EasyAdmin/crud/form_theme.html.twig' %}
+        {{ form_start(profileForm) }}
+        {{ form_row(profileForm.firstname) }}
+        {{ form_row(profileForm.lastname) }}
+        {{ form_row(profileForm.roles) }}
+
+        <button class="btn btn-primary" type="submit" value="next">
+            <span class="btn-label">Next</span>
+        </button>
+
+        {{ form_end(profileForm) }}
 
     </p>
 {% endblock %}
