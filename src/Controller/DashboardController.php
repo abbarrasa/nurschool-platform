@@ -12,6 +12,10 @@ use Nurschool\Form\WelcomeUserProfileFormType;
 use Nurschool\Mailer\MailerInterface;
 use Nurschool\Model\UserInterface;
 use Nurschool\Security\EmailVerifier;
+use Nurschool\Wizard\Container\StageContainerInterface;
+use Nurschool\Wizard\Stage\FormHandlerInterface;
+use Nurschool\Wizard\Stage\WizardCompleteInterface;
+use Nurschool\Wizard\Wizard;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -37,9 +41,11 @@ class DashboardController extends AbstractDashboardController
      * @Route("/welcome", name="welcome")
      * @Route("/welcome/{stage}", name="welcome_stage")
      * @param Request $request
+     * @param StageContainerInterface $stageContainer
+     * @param null $stage
      * @return Response
      */
-    public function welcome(Request $request, WelcomeStageContainer $stageContainer, $stage = null): Response
+    public function welcome(Request $request, StageContainerInterface $stageContainer, $stage = null): Response
     {
         /** @var UserInterface $user */
         $user = $this->getUser();
@@ -63,38 +69,38 @@ class DashboardController extends AbstractDashboardController
 //            return $this->render('@EasyAdmin/welcome.html.twig');
 //        }
 //
-//        // begin the wizard
-//        $wizard = new Wizard($stageContainer, realpath(__DIR__ . '/../../config/stages/welcome_stages.yaml'));
-//        $currentStage = $wizard->getCurrentStage($stage);
-//        if ($currentStage instanceof WizardCompleteInterface) {
-//            $this->addFlash('success', 'Cuenta configurada satisfactoriamente. Ya puedes usar nurschool.');
-//            return $currentStage->getResponse($request);
-//        }
+        // begin the wizard
+        $wizard = new Wizard($stageContainer, realpath(__DIR__ . '/../../config/stages/welcome_stages.yaml'));
+        $currentStage = $wizard->getCurrentStage($stage);
+        if ($currentStage instanceof WizardCompleteInterface) {
+            $this->addFlash('success', 'Cuenta configurada satisfactoriamente. Ya puedes usar nurschool.');
+            return $currentStage->getResponse($request);
+        }
+
+        $templateParams = $currentStage->getTemplateParams();
+        if ($wizard->isHalted()) {
+            $this->addFlash('danger', $wizard->getWarning());
+            return $this->render('@MyCustomBundle/error.html.twig', $templateParams);
+//            $request->getSession()->getFlashBag()->add('danger', $wizard->getWarning());
+//            return new Response($this->twig->render('@MyCustomBundle/error.html.twig', $templateParams));
+        }
+
+        // handle the form
+        if ($currentStage instanceof FormHandlerInterface) {
+            $form = $currentStage->getFormType();
+//            $form = $this->formFactory->create($currentStage->getFormType());
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $currentStage->handleFormResult($form);
+                return $this->redirectToRoute('welcome_stage', ['stage' => $wizard->getNextStage()->getName()]);
+//                $url = $this->router->generate('index', ['stage' => $wizard->getNextStage()->getName()], true);
 //
-//        $templateParams = $currentStage->getTemplateParams();
-//        if ($wizard->isHalted()) {
-//            $this->addFlash('danger', $wizard->getWarning());
-//            return $this->render('@MyCustomBundle/error.html.twig', $templateParams);
-////            $request->getSession()->getFlashBag()->add('danger', $wizard->getWarning());
-////            return new Response($this->twig->render('@MyCustomBundle/error.html.twig', $templateParams));
-//        }
-//
-//        // handle the form
-//        if ($currentStage instanceof FormHandlerInterface) {
-//            $form = $currentStage->getFormType();
-////            $form = $this->formFactory->create($currentStage->getFormType());
-//            $form->handleRequest($request);
-//            if ($form->isSubmitted() && $form->isValid()) {
-//                $currentStage->handleFormResult($form);
-//                return $this->redirectToRoute('welcome_stage', ['stage' => $wizard->getNextStage()->getName()]);
-////                $url = $this->router->generate('index', ['stage' => $wizard->getNextStage()->getName()], true);
-////
-////                return new RedirectResponse($url);
-//            }
-//            $templateParams['form'] = $form->createView();
-//        }
-//
-//        return $this->render($currentStage->getTemplateName(), $templateParams);
+//                return new RedirectResponse($url);
+            }
+            $templateParams['form'] = $form->createView();
+        }
+
+        return $this->render($currentStage->getTemplateName(), $templateParams);
 
 //        return new Response($this->twig->render($currentStage->getTemplateName(), $templateParams));
         

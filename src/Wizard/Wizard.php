@@ -12,6 +12,8 @@
 namespace Nurschool\Wizard;
 
 use InvalidArgumentException;
+use Nurschool\Wizard\Container\StageContainerInterface;
+use Nurschool\Wizard\Loader\YamlFileLoader;
 use Symfony\Component\Config\Exception\LoaderLoadException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
@@ -57,8 +59,9 @@ class Wizard
     private $warning = '';
 
     /**
-     * Constructor.
-     *
+     * Wizard constructor.
+     * @param StageContainerInterface $stageContainer
+     * @param string $path
      * @throws LoaderLoadException
      */
     public function __construct(StageContainerInterface $stageContainer, string $path)
