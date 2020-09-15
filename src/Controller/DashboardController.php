@@ -44,6 +44,7 @@ class DashboardController extends AbstractDashboardController
      * @param StageContainerInterface $stageContainer
      * @param null $stage
      * @return Response
+     * @throws \Symfony\Component\Config\Exception\LoaderLoadException
      */
     public function welcome(Request $request, StageContainerInterface $stageContainer, $stage = null): Response
     {
