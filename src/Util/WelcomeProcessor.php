@@ -14,8 +14,8 @@ namespace Nurschool\Util;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Nurschool\Entity\School;
-use Nurschool\Form\WelcomeAdminConfigFormType;
-use Nurschool\Form\WelcomeNurseConfigFormType;
+use Nurschool\Form\WelcomeConfigAdminFormType;
+use Nurschool\Form\WelcomeConfigNurseFormType;
 use Nurschool\Form\WelcomeUserProfileFormType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -57,8 +57,8 @@ class WelcomeProcessor
     protected function createResquestedForm(Request $request): FormInterface
     {
         $form = $this->formFactory->createNamed('UserProfileForm', WelcomeUserProfileFormType::class, $this->security->getUser());
-        $form = $this->formFactory->createNamed('AdminConfigForm', WelcomeAdminConfigFormType::class, new School());
-        $form = $this->formFactory->create('NurseConfigForm', WelcomeNurseConfigFormType::class, $this->security->getUser());
+        $form = $this->formFactory->createNamed('AdminConfigForm', WelcomeConfigAdminFormType::class, new School());
+        $form = $this->formFactory->create('NurseConfigForm', WelcomeConfigNurseFormType::class, $this->security->getUser());
 
         return $form;
     }

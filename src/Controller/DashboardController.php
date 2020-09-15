@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Nurschool\Entity\Enquiry;
 use Nurschool\Entity\School;
+use Nurschool\EventListener\WelcomeStageContainer;
 use Nurschool\Form\WelcomeUserProfileFormType;
 use Nurschool\Mailer\MailerInterface;
 use Nurschool\Model\UserInterface;
@@ -34,13 +35,11 @@ class DashboardController extends AbstractDashboardController
 
     /**
      * @Route("/welcome", name="welcome")
-     * @Route("/welcome/profile", name="welcome_profile_user")
-     * @Route("/welcome/config-admin", name="welcome_config_admin")
-     * @Route("/welcome/config-nurse", name="welcome_config_nurse")
+     * @Route("/welcome/{stage}", name="welcome_stage")
      * @param Request $request
      * @return Response
      */
-    public function welcome(Request $request): Response
+    public function welcome(Request $request, WelcomeStageContainer $stageContainer, $stage = null): Response
     {
         /** @var UserInterface $user */
         $user = $this->getUser();
@@ -48,16 +47,57 @@ class DashboardController extends AbstractDashboardController
             return $this->render('@EasyAdmin/verification_required.html.twig');
         }
 
-        $route = $request->attributes->get('_route');
-        if ('welcome_profile_user' === $route) {
+//        $route = $request->attributes->get('_route');
+//        if ('welcome_profile_user' === $route) {
+//
+//        } elseif ('welcome_config_admin' === $route) {
+//
+//        } elseif ('welcome_config_nurse' === $route) {
+//
+//        }
+//
+//        return $this->render('@EasyAdmin/welcome.html.twig');
 
-        } elseif ('welcome_config_admin' === $route) {
 
-        } elseif ('welcome_config_nurse' === $route) {
+//        if (null === $stage) {
+//            return $this->render('@EasyAdmin/welcome.html.twig');
+//        }
+//
+//        // begin the wizard
+//        $wizard = new Wizard($stageContainer, realpath(__DIR__ . '/../../config/stages/welcome_stages.yaml'));
+//        $currentStage = $wizard->getCurrentStage($stage);
+//        if ($currentStage instanceof WizardCompleteInterface) {
+//            $this->addFlash('success', 'Cuenta configurada satisfactoriamente. Ya puedes usar nurschool.');
+//            return $currentStage->getResponse($request);
+//        }
+//
+//        $templateParams = $currentStage->getTemplateParams();
+//        if ($wizard->isHalted()) {
+//            $this->addFlash('danger', $wizard->getWarning());
+//            return $this->render('@MyCustomBundle/error.html.twig', $templateParams);
+////            $request->getSession()->getFlashBag()->add('danger', $wizard->getWarning());
+////            return new Response($this->twig->render('@MyCustomBundle/error.html.twig', $templateParams));
+//        }
+//
+//        // handle the form
+//        if ($currentStage instanceof FormHandlerInterface) {
+//            $form = $currentStage->getFormType();
+////            $form = $this->formFactory->create($currentStage->getFormType());
+//            $form->handleRequest($request);
+//            if ($form->isSubmitted() && $form->isValid()) {
+//                $currentStage->handleFormResult($form);
+//                return $this->redirectToRoute('welcome_stage', ['stage' => $wizard->getNextStage()->getName()]);
+////                $url = $this->router->generate('index', ['stage' => $wizard->getNextStage()->getName()], true);
+////
+////                return new RedirectResponse($url);
+//            }
+//            $templateParams['form'] = $form->createView();
+//        }
+//
+//        return $this->render($currentStage->getTemplateName(), $templateParams);
 
-        }
-
-        return $this->render('@EasyAdmin/welcome.html.twig');
+//        return new Response($this->twig->render($currentStage->getTemplateName(), $templateParams));
+        
     }
 
     /**

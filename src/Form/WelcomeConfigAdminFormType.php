@@ -22,7 +22,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class WelcomeAdminConfigFormType extends AbstractType
+class WelcomeConfigAdminFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
