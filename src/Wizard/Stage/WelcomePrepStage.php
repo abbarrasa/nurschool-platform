@@ -3,7 +3,7 @@
 namespace Nurschool\Stage;
 
 
-class WelcomePrepStage /*implements StageInterface*/
+class WelcomePrepStage implements StageInterface
 {
     public function getName(): string
     {

@@ -49,8 +49,16 @@ class WelcomeConfigAdminStage /*implements StageInterface, FormHandlerInterface*
      */
     public function handleFormResult(FormInterface $form): bool
     {
-        $user = $form->getData();
-        $this->entityManager->persist($user);
+        /** @var School $school */
+        $school = $form->getData();
+        $nurses = $form['nurses']->getData();
+
+        foreach($nurses as $nurse) {
+            $school->addUser($nurse);
+        }
+
+
+        $this->entityManager->persist($school);
         $this->entityManager->flush();
 
         return true;

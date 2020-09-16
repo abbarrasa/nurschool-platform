@@ -5,7 +5,7 @@ namespace Nurschool\Stage;
 
 use Nurschool\Form\WelcomeUserProfileFormType;
 
-class WelcomeGetInfoStage /*implements StageInterface, FormHandlerInterface*/
+class WelcomeGetInfoStage implements StageInterface, FormHandlerInterface
 {
     private $security;
     private $formFactory;

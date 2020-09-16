@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass=SchoolRepository::class)
  * @ORM\Table(name="nurschool_school")
  */
-class School implements \ArrayAccess
+class School
 {
     /**
      * @ORM\Id
@@ -94,26 +94,4 @@ class School implements \ArrayAccess
     {
         return $this->users->filter(function(User $u) { return $u->hasRole('ROLE_NURSE'); });
     }
-
-    public function offsetExists($offset)
-    {
-        return in_array($offset, ['name']);
-    }
-
-    public function offsetGet($offset)
-    {
-        return $this->$offset;
-    }
-
-    public function offsetSet($offset, $value)
-    {
-        $this->$offset = $value;
-    }
-
-    public function offsetUnset($offset)
-    {
-        $this->$offset = null;
-    }
-
-
 }

@@ -24,6 +24,13 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class WelcomeConfigAdminFormType extends AbstractType
 {
+    protected $security;
+    
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -43,7 +50,8 @@ class WelcomeConfigAdminFormType extends AbstractType
                 },
                 'choice_label' => function($user) {
                     return "{$user->getLastname()}, {$user->getFirstname()}";
-                }
+                },
+                'data' => $this->security->isGranted('ROLE_NURSE') ? $this->security->getUser() : null 
             ])
         ;
     }

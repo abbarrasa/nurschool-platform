@@ -4,7 +4,7 @@
 namespace Nurschool\Stage;
 
 
-class WelcomeCompleteStage /*implements StageInterface, WizardCompleteInterface*/
+class WelcomeCompleteStage implements StageInterface, WizardCompleteInterface
 {
     private $urlGenerator;
 
