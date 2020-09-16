@@ -6,7 +6,7 @@ namespace Nurschool\Stage;
 use Nurschool\Entity\School;
 use Nurschool\Form\WelcomeConfigAdminFormType;
 
-class WelcomeConfigAdminStage /*implements StageInterface, FormHandlerInterface*/
+class WelcomeConfigAdminStage implements StageInterface, FormHandlerInterface
 {
     private $security;
     private $formFactory;
