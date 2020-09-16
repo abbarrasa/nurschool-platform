@@ -51,7 +51,7 @@ class WelcomeConfigAdminStage /*implements StageInterface, FormHandlerInterface*
     {
         /** @var School $school */
         $school = $form->getData();
-        $nurses = $form['nurses']->getData();
+        $nurses = $form->get('nurses')->getData();
 
         foreach($nurses as $nurse) {
             $school->addUser($nurse);
