@@ -19,6 +19,8 @@ use Nurschool\Wizard\Wizard;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 /**
  * @Route("/dashboard")
@@ -54,24 +56,12 @@ class DashboardController extends AbstractDashboardController
             return $this->render('@EasyAdmin/verification_required.html.twig');
         }
 
-//        $route = $request->attributes->get('_route');
-//        if ('welcome_profile_user' === $route) {
-//
-//        } elseif ('welcome_config_admin' === $route) {
-//
-//        } elseif ('welcome_config_nurse' === $route) {
-//
-//        }
-//
-//        return $this->render('@EasyAdmin/welcome.html.twig');
+        if (null === $stage) {
+            return $this->render('@EasyAdmin/welcome.html.twig');
+        }
 
-
-//        if (null === $stage) {
-//            return $this->render('@EasyAdmin/welcome.html.twig');
-//        }
-//
         // begin the wizard
-        $wizard = new Wizard($stageContainer, realpath(__DIR__ . '/../../config/stages/welcome_stages.yaml'));
+        $wizard = new Wizard($stageContainer, $this->getParameter('kernel.project_dir') . '/config/stages/welcome_stages.yaml');
         $currentStage = $wizard->getCurrentStage($stage);
         if ($currentStage instanceof WizardCompleteInterface) {
             $this->addFlash('success', 'Cuenta configurada satisfactoriamente. Ya puedes usar nurschool.');

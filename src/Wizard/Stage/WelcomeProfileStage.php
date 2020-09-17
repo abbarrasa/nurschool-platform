@@ -1,16 +1,27 @@
 <?php
 
-namespace Nurschool\Stage;
+namespace Nurschool\Wizard\Stage;
 
 
+use Doctrine\ORM\EntityManagerInterface;
 use Nurschool\Form\WelcomeUserProfileFormType;
+use Nurschool\Wizard\Exception\AbortStageException;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Security\Core\Security;
 
-class WelcomeGetInfoStage implements StageInterface, FormHandlerInterface
+class WelcomeProfileStage implements StageInterface, FormHandlerInterface
 {
     private $security;
     private $formFactory;
     private $entityManager;
 
+    /**
+     * WelcomeGetInfoStage constructor.
+     * @param Security $security
+     * @param FormFactoryInterface $formFactory
+     * @param EntityManagerInterface $entityManager
+     */
     public function __construct(Security $security, FormFactoryInterface $formFactory, EntityManagerInterface $entityManager)
     {
         $this->security = $security;
@@ -20,12 +31,12 @@ class WelcomeGetInfoStage implements StageInterface, FormHandlerInterface
 
     public function getName(): string
     {
-        return 'getinfo';
+        return 'profile';
     }
 
     public function getTemplateName(): string
     {
-        return '@EasyAdmin/stages/welcome_get_info.html.twig';
+        return '@EasyAdmin/stages/welcome_profile.html.twig';
     }
 
     public function isNecessary(): bool
@@ -38,14 +49,11 @@ class WelcomeGetInfoStage implements StageInterface, FormHandlerInterface
         return [];
     }
 
-    public function getFormType(): string
+    public function getFormType()
     {
         return $this->formFactory->create(WelcomeUserProfileFormType::class, $this->security->getUser(), $this->getFormOptions());
     }
 
-    /**
-     * Handle results of previously validated form
-     */
     public function handleFormResult(FormInterface $form): bool
     {
         $user = $form->getData();
@@ -55,9 +63,6 @@ class WelcomeGetInfoStage implements StageInterface, FormHandlerInterface
         return true;
     }
 
-    /**
-     * Returns an array of options applied to the Form.
-     */
     public function getFormOptions(): array
     {
         return [];

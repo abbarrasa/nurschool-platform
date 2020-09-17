@@ -39,7 +39,7 @@ class WelcomeUserProfileFormType extends AbstractType
                     'expanded' => true,
                     'multiple' => true,
                     'constraints' => [
-                        new NotNull()
+                        new NotBlank()
                     ],
                     'help' => 'aadfasdfsdfsdffds'
                 ]

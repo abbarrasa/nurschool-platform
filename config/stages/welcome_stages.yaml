@@ -1,0 +1,13 @@
+stages:
+    profile:
+        class: Nurschool\Wizard\Stage\WelcomeProfileStage
+        order: 1
+    configAdmin:
+        class: Nurschool\Wizard\Stage\WelcomeConfigAdminStage
+        order: 2
+    configNurse:
+        class: Nurschool\Wizard\Stage\WelcomeConfigNurseStage
+        order: 3
+    complete:
+        class: Nurschool\Wizard\Stage\WelcomeCompleteStage
+        order: 4

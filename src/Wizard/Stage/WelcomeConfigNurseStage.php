@@ -1,10 +1,15 @@
 <?php
 
-namespace Nurschool\Stage;
+namespace Nurschool\Wizard\Stage;
 
 
+use Doctrine\ORM\EntityManagerInterface;
 use Nurschool\Entity\School;
 use Nurschool\Form\WelcomeConfigAdminFormType;
+use Nurschool\Wizard\Exception\AbortStageException;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Security\Core\Security;
 
 class WelcomeConfigNurseStage implements StageInterface, FormHandlerInterface
 {
@@ -12,6 +17,12 @@ class WelcomeConfigNurseStage implements StageInterface, FormHandlerInterface
     private $formFactory;
     private $entityManager;
 
+    /**
+     * WelcomeConfigNurseStage constructor.
+     * @param Security $security
+     * @param FormFactoryInterface $formFactory
+     * @param EntityManagerInterface $entityManager
+     */
     public function __construct(Security $security, FormFactoryInterface $formFactory, EntityManagerInterface $entityManager)
     {
         $this->security = $security;
@@ -21,7 +32,7 @@ class WelcomeConfigNurseStage implements StageInterface, FormHandlerInterface
 
     public function getName(): string
     {
-        return 'configadmin';
+        return 'configNurse';
     }
 
     public function getTemplateName(): string
@@ -31,6 +42,10 @@ class WelcomeConfigNurseStage implements StageInterface, FormHandlerInterface
 
     public function isNecessary(): bool
     {
+        if (!$this->security->getUser()->hasAnyRole()) {
+            throw new AbortStageException('User has not any role.');
+        }
+
         return $this->security->isGranted('ROLE_ADMIN');
     }
 
@@ -39,14 +54,11 @@ class WelcomeConfigNurseStage implements StageInterface, FormHandlerInterface
         return [];
     }
 
-    public function getFormType(): string
+    public function getFormType()
     {
         return $this->formFactory->create(WelcomeConfigAdminFormType::class, new School(), $this->getFormOptions());
     }
 
-    /**
-     * Handle results of previously validated form
-     */
     public function handleFormResult(FormInterface $form): bool
     {
         $user = $form->getData();
@@ -56,12 +68,8 @@ class WelcomeConfigNurseStage implements StageInterface, FormHandlerInterface
         return true;
     }
 
-    /**
-     * Returns an array of options applied to the Form.
-     */
     public function getFormOptions(): array
     {
         return [];
     }
-
 }

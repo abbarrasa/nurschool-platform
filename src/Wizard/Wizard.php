@@ -13,9 +13,13 @@ namespace Nurschool\Wizard;
 
 use InvalidArgumentException;
 use Nurschool\Wizard\Container\StageContainerInterface;
+use Nurschool\Wizard\Exception\AbortStageException;
 use Nurschool\Wizard\Loader\YamlFileLoader;
+use Nurschool\Wizard\Stage\StageInterface;
 use Symfony\Component\Config\Exception\LoaderLoadException;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
 /**
@@ -23,6 +27,11 @@ use Symfony\Component\Filesystem\Exception\FileNotFoundException;
  */
 class Wizard
 {
+    /**
+     * @var ContainerInterface
+     */
+    private  $container;
+
     /**
      * @var StageContainerInterface
      */
@@ -49,11 +58,6 @@ class Wizard
     private $currentStageName;
 
     /**
-     * @var YamlFileLoader
-     */
-    private $yamlFileLoader;
-
-    /**
      * @var string
      */
     private $warning = '';
@@ -67,11 +71,11 @@ class Wizard
     public function __construct(StageContainerInterface $stageContainer, string $path)
     {
         $this->stageContainer = $stageContainer;
-        if (!empty($path)) {
-            $this->loadStagesFromYaml($path);
-        } else {
+        if (empty($path)) {
             throw new LoaderLoadException('No stage definition file provided.');
         }
+
+        $this->loadStagesFromYaml($path);
     }
 
     /**
@@ -81,23 +85,21 @@ class Wizard
      */
     public function loadStagesFromYaml(string $path): void
     {
-        if (!file_exists($path)) {
-            throw new LoaderLoadException('Stage definition file cannot be found.');
-        }
+//        if (!file_exists($path)) {
+//            throw new LoaderLoadException('Stage definition file cannot be found.');
+//        }
         $pathInfo = pathinfo($path);
         if (!in_array($pathInfo['extension'], ['yml', 'yaml'])) {
             throw new LoaderLoadException('Stage definition file must include .yml extension.');
         }
-
+//
         // empty the stages
         $this->stagesByName = [];
-        if (!isset($this->yamlFileLoader)) {
-            $this->yamlFileLoader = new YamlFileLoader(new FileLocator($pathInfo['dirname']));
-        }
-        $this->yamlFileLoader->load($pathInfo['basename']);
-        $stages = $this->yamlFileLoader->getContent();
-        $stages = $stages['stages'];
-        foreach ($stages as $key => $stageArray) {
+//        $containerBuilder = new ContainerBuilder();
+//        $loader = new YamlFileLoader($this->stageContainer, $containerBuilder, new FileLocator($pathInfo['dirname']));
+        $loader = new YamlFileLoader(new FileLocator($pathInfo['dirname']));
+        $stages = $loader->load($pathInfo['basename']);
+        foreach ($stages['stages'] as $key => $stageArray) {
             $this->stagesByName[$key] = $stageArray['class'];
             $this->stageOrder[$stageArray['order']] = $key;
             if (isset($stageArray['default'])) {

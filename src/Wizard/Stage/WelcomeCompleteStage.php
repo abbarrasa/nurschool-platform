@@ -1,15 +1,29 @@
 <?php
 
 
-namespace Nurschool\Stage;
+namespace Nurschool\Wizard\Stage;
 
+
+use Nurschool\Wizard\Exception\AbortStageException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Security;
 
 class WelcomeCompleteStage implements StageInterface, WizardCompleteInterface
 {
+    private $security;
     private $urlGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    /**
+     * WelcomeCompleteStage constructor.
+     * @param Security $security
+     * @param UrlGeneratorInterface $urlGenerator
+     */
+    public function __construct(Security $security, UrlGeneratorInterface $urlGenerator)
     {
+        $this->security = $security;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -25,6 +39,10 @@ class WelcomeCompleteStage implements StageInterface, WizardCompleteInterface
 
     public function isNecessary(): bool
     {
+        if (!$this->security->getUser()->hasAnyRole()) {
+            throw new AbortStageException('User has not any role.');
+        }
+
         return true;
     }
 
