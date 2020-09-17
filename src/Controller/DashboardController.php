@@ -63,6 +63,10 @@ class DashboardController extends AbstractDashboardController
         // begin the wizard
         $wizard = new Wizard($stageContainer, $this->getParameter('kernel.project_dir') . '/config/stages/welcome_stages.yaml');
         $currentStage = $wizard->getCurrentStage($stage);
+        if ($stage !== $currentStage->getName()) {
+            return $this->redirectToRoute('welcome_stage', ['stage' => $currentStage->getName()]);
+        }
+
         if ($currentStage instanceof WizardCompleteInterface) {
             $this->addFlash('success', 'Cuenta configurada satisfactoriamente. Ya puedes usar nurschool.');
             return $currentStage->getResponse($request);
@@ -71,30 +75,21 @@ class DashboardController extends AbstractDashboardController
         $templateParams = $currentStage->getTemplateParams();
         if ($wizard->isHalted()) {
             $this->addFlash('danger', $wizard->getWarning());
-            return $this->render('@MyCustomBundle/error.html.twig', $templateParams);
-//            $request->getSession()->getFlashBag()->add('danger', $wizard->getWarning());
-//            return new Response($this->twig->render('@MyCustomBundle/error.html.twig', $templateParams));
+            return $this->render('@EasyAdmin/welcome.html.twig');
         }
 
         // handle the form
         if ($currentStage instanceof FormHandlerInterface) {
             $form = $currentStage->getFormType();
-//            $form = $this->formFactory->create($currentStage->getFormType());
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $currentStage->handleFormResult($form);
                 return $this->redirectToRoute('welcome_stage', ['stage' => $wizard->getNextStage()->getName()]);
-//                $url = $this->router->generate('index', ['stage' => $wizard->getNextStage()->getName()], true);
-//
-//                return new RedirectResponse($url);
             }
             $templateParams['form'] = $form->createView();
         }
 
         return $this->render($currentStage->getTemplateName(), $templateParams);
-
-//        return new Response($this->twig->render($currentStage->getTemplateName(), $templateParams));
-        
     }
 
     /**
@@ -134,29 +129,5 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('Schools', 'fa fa-tags', School::class);
         }
         // yield MenuItem::linkToCrud('The Label', 'icon class', EntityClass::class);
-    }
-
-    private function performanceWelcomeProfileUser(Request $request): Response
-    {
-        /** @var UserInterface $user */
-        $user = $this->getUser();
-        $form = $this->createForm(WelcomeUserProfileFormType::class, $user);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            if ($user->hasRole('ROLE_ADMIN')) {
-                return $this->redirectToRoute('we');
-            }
-
-            return $this->redirectToRoute('welcome_config_nurse');
-        }
-
-        return $this->render('@EasyAdmin/welcome.html.twig', [
-            'profileForm' => $form->createView()
-        ]);
-
     }
 }

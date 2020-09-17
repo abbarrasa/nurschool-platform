@@ -46,7 +46,7 @@ class WelcomeConfigNurseStage implements StageInterface, FormHandlerInterface
             throw new AbortStageException('User has not any role.');
         }
 
-        return $this->security->isGranted('ROLE_ADMIN');
+        return !$this->security->isGranted('ROLE_ADMIN');
     }
 
     public function getTemplateParams(): array
