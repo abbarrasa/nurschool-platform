@@ -17,10 +17,12 @@ use Nurschool\Entity\School;
 use Nurschool\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class WelcomeConfigAdminFormType extends AbstractType
@@ -38,14 +40,21 @@ class WelcomeConfigAdminFormType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Name',
-                'required' => true,
                 'constraints' => [
                     new NotBlank()
+                ]
+            ])
+            ->add('logo', FileType::class, [
+                'label' => 'Logo',
+                'required' => false,
+                'constraints' => [
+                    new Image()
                 ]
             ])
             ->add('nurses', EntityType::class, [
                 'label' => 'Nurses',
                 'mapped' => false,
+                'required' => false,
                 'class' => User::class,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->findByRole('ROLE_NURSE');

@@ -7,6 +7,8 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Based in parts of the Zikula package <https://ziku.la/>
  */
 
 namespace Nurschool\Wizard;
@@ -27,11 +29,6 @@ use Symfony\Component\Filesystem\Exception\FileNotFoundException;
  */
 class Wizard
 {
-    /**
-     * @var ContainerInterface
-     */
-    private  $container;
-
     /**
      * @var StageContainerInterface
      */
@@ -81,22 +78,12 @@ class Wizard
     /**
      * Load the stage definitions from $path
      *
-     * @throws LoaderLoadException
+     * @param string $path
+     * @throws \Exception
      */
     public function loadStagesFromYaml(string $path): void
     {
-//        if (!file_exists($path)) {
-//            throw new LoaderLoadException('Stage definition file cannot be found.');
-//        }
         $pathInfo = pathinfo($path);
-        if (!in_array($pathInfo['extension'], ['yml', 'yaml'])) {
-            throw new LoaderLoadException('Stage definition file must include .yml extension.');
-        }
-//
-        // empty the stages
-        $this->stagesByName = [];
-//        $containerBuilder = new ContainerBuilder();
-//        $loader = new YamlFileLoader($this->stageContainer, $containerBuilder, new FileLocator($pathInfo['dirname']));
         $loader = new YamlFileLoader(new FileLocator($pathInfo['dirname']));
         $stages = $loader->load($pathInfo['basename']);
         foreach ($stages['stages'] as $key => $stageArray) {
@@ -110,6 +97,9 @@ class Wizard
 
     /**
      * Get the stage that is the first necessary stage
+     *
+     * @param string $name
+     * @return StageInterface
      */
     public function getCurrentStage(string $name): StageInterface
     {
@@ -117,7 +107,6 @@ class Wizard
         $stageClass = $this->getStageClassName($name);
 
         // loop each stage until finds the first that is necessary
-
         do {
             $useCurrentStage = false;
             /** @var StageInterface $currentStage */
@@ -143,6 +132,8 @@ class Wizard
 
     /**
      * Get an instance of the previous stage
+     *
+     * @return StageInterface
      */
     public function getPreviousStage(): StageInterface
     {
@@ -151,6 +142,8 @@ class Wizard
 
     /**
      * Get an instance of the next stage
+     *
+     * @return StageInterface
      */
     public function getNextStage(): StageInterface
     {
@@ -159,6 +152,9 @@ class Wizard
 
     /**
      * Get either previous or next stage
+     *
+     * @param string $direction
+     * @return StageInterface|null
      */
     private function getSequentialStage(string $direction): ?StageInterface
     {
@@ -178,6 +174,9 @@ class Wizard
 
     /**
      * Get stage from stageContainer
+     *
+     * @param string $stageClass
+     * @return StageInterface
      */
     private function getStage(string $stageClass): StageInterface
     {
@@ -189,6 +188,8 @@ class Wizard
 
     /**
      * Has the wizard been halted?
+     *
+     * @return bool
      */
     public function isHalted(): bool
     {
@@ -197,6 +198,8 @@ class Wizard
 
     /**
      * Get any warning currently set
+     *
+     * @return string
      */
     public function getWarning(): string
     {
@@ -206,6 +209,8 @@ class Wizard
     /**
      * Match the stage and return the stage classname or default.
      *
+     * @param string $name
+     * @return string
      * @throws InvalidArgumentException
      */
     private function getStageClassName(string $name): string

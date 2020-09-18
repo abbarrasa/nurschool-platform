@@ -1,11 +1,21 @@
 <?php
 
+/*
+ * This file is part of the Nurschool project.
+ *
+ * (c) Nurschool <https://github.com/abbarrasa/nurschool>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Nurschool\Wizard\Stage;
 
 
 use Doctrine\ORM\EntityManagerInterface;
+use Nurschool\Event\ChangedRolesEvent;
 use Nurschool\Form\WelcomeUserProfileFormType;
-use Nurschool\Wizard\Exception\AbortStageException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Security;
@@ -15,18 +25,25 @@ class WelcomeProfileStage implements StageInterface, FormHandlerInterface
     private $security;
     private $formFactory;
     private $entityManager;
+    private $eventDispatcher;
 
     /**
-     * WelcomeGetInfoStage constructor.
+     * WelcomeProfileStage constructor.
      * @param Security $security
      * @param FormFactoryInterface $formFactory
      * @param EntityManagerInterface $entityManager
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Security $security, FormFactoryInterface $formFactory, EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        Security $security,
+        FormFactoryInterface $formFactory,
+        EntityManagerInterface $entityManager,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->security = $security;
         $this->formFactory = $formFactory;
         $this->entityManager = $entityManager;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function getName(): string
@@ -60,6 +77,8 @@ class WelcomeProfileStage implements StageInterface, FormHandlerInterface
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
+        $this->eventDispatcher->dispatch(new ChangedRolesEvent($user), ChangedRolesEvent::NAME);
+
         return true;
     }
 
@@ -67,5 +86,4 @@ class WelcomeProfileStage implements StageInterface, FormHandlerInterface
     {
         return [];
     }
-
 }

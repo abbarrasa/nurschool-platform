@@ -1,7 +1,21 @@
 <?php
 
+/*
+ * This file is part of the Nurschool project.
+ *
+ * (c) Nurschool <https://github.com/abbarrasa/nurschool>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Nurschool\Form\Type;
 
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RoleListType extends AbstractType
 {
@@ -13,6 +27,7 @@ class RoleListType extends AbstractType
         $resolver->setDefaults([
             // make expanded default value
             'expanded' => true,
+            'multiple' => true,
             'choices' => function (Options $options, $parentChoices) {
                 return ['Administrador' => 'ROLE_ADMIN', 'Enfermera' => 'ROLE_NURSE'];
             },
@@ -28,6 +43,7 @@ class RoleListType extends AbstractType
 
                 return $value;
             },
+            'help' => 'aadfasdfsdfsdffds'
         ]);
     }
 

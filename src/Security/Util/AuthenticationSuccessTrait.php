@@ -23,7 +23,7 @@ trait AuthenticationSuccessTrait
 
     public function getAuthenticatedResponse(UserInterface $user, string $targetPath = null)
     {
-        if (!$user->isVerified() || !$user->hasAnyRole())  {
+        if (!$user->isConfigured())  {
             if (!$this->matchWithRoute('verify_email', $targetPath)) {
                 return new RedirectResponse($this->router->generate('welcome'));
             }

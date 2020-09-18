@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Nurschool project.
  *
  * (c) Nurschool <https://github.com/abbarrasa/nurschool>

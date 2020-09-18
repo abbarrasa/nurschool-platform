@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Nurschool project.
+ *
+ * (c) Nurschool <https://github.com/abbarrasa/nurschool>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Nurschool\Wizard\Stage;
 
 
@@ -68,7 +77,6 @@ class WelcomeConfigAdminStage implements StageInterface, FormHandlerInterface
         foreach($nurses as $nurse) {
             $school->addUser($nurse);
         }
-
 
         $this->entityManager->persist($school);
         $this->entityManager->flush();

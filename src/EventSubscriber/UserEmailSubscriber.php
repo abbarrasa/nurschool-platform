@@ -12,13 +12,14 @@
 namespace Nurschool\EventSubscriber;
 
 
+use Nurschool\Event\JoinSchoolRequestEvent;
 use Nurschool\Event\RegisteredUserEvent;
 use Nurschool\Mailer\MailerInterface;
 use Nurschool\Security\EmailVerifier;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class EmailConfirmationSubscriber implements EventSubscriberInterface
+class UserEmailSubscriber implements EventSubscriberInterface
 {
     /** @var EmailVerifier  */
     protected $emailVerifier;
@@ -39,11 +40,11 @@ class EmailConfirmationSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            RegisteredUserEvent::NAME => 'onRegistration'
+            RegisteredUserEvent::NAME => 'sendConfirmationEmail'
         ];
     }
 
-    public function onRegistration(RegisteredUserEvent $event)
+    public function sendConfirmationEmail(RegisteredUserEvent $event)
     {
         $user = $event->getUser();
 

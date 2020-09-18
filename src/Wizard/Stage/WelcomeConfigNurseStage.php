@@ -1,10 +1,19 @@
 <?php
 
+/*
+ * This file is part of the Nurschool project.
+ *
+ * (c) Nurschool <https://github.com/abbarrasa/nurschool>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Nurschool\Wizard\Stage;
 
 
 use Doctrine\ORM\EntityManagerInterface;
-use Nurschool\Entity\School;
+use Nurschool\Entity\JoinSchoolRequest;
 use Nurschool\Form\WelcomeConfigAdminFormType;
 use Nurschool\Wizard\Exception\AbortStageException;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -56,13 +65,16 @@ class WelcomeConfigNurseStage implements StageInterface, FormHandlerInterface
 
     public function getFormType()
     {
-        return $this->formFactory->create(WelcomeConfigAdminFormType::class, new School(), $this->getFormOptions());
+        $joinSchoolRequest = new JoinSchoolRequest();
+        $joinSchoolRequest->setApplicant($this->security->getUser());
+        $joinSchoolRequest->setRole('ROLE_NURSE');
+
+        return $this->formFactory->create(WelcomeConfigAdminFormType::class, $joinSchoolRequest, $this->getFormOptions());
     }
 
     public function handleFormResult(FormInterface $form): bool
     {
-        $user = $form->getData();
-        $this->entityManager->persist($user);
+        $this->entityManager->persist($form->getData());
         $this->entityManager->flush();
 
         return true;

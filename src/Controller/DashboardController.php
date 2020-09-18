@@ -56,6 +56,10 @@ class DashboardController extends AbstractDashboardController
             return $this->render('@EasyAdmin/verification_required.html.twig');
         }
 
+        if ($user->isConfigured()) {
+            return $this->redirectToRoute('dashboard');
+        }
+
         if (null === $stage) {
             return $this->render('@EasyAdmin/welcome.html.twig');
         }

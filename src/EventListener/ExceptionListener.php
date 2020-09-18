@@ -12,6 +12,8 @@
 namespace Nurschool\EventListener;
 
 
+use Nurschool\Entity\User;
+use Nurschool\Model\UserInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -37,8 +39,9 @@ class ExceptionListener
         // You get the exception object from the received event
         $exception = $event->getThrowable();
         if ($exception instanceof AccessDeniedHttpException) {
+            /** @var UserInterface $user */
             $user = $this->security->getUser();
-            if (!$user->isVerified() || !$user->hasAnyRole())  {
+            if (!$user->isConfigured())  {
                 $event->setResponse(new RedirectResponse($this->urlGenerator->generate('welcome')));
             }
         }

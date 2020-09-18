@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Nurschool project.
+ *
+ * (c) Nurschool <https://github.com/abbarrasa/nurschool>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Nurschool\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -82,9 +91,15 @@ class User implements UserInterface
      */
     private $schools;
 
+    /**
+     * @ORM\OneToMany(targetEntity=JoinSchoolRequest::class, mappedBy="applicant", orphanRemoval=true)
+     */
+    private $joinSchoolRequests;
+
     public function __construct()
     {
         $this->schools = new ArrayCollection();
+        $this->joinSchoolRequests = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -278,5 +293,46 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection|JoinSchoolRequest[]
+     */
+    public function getJoinSchoolRequests(): Collection
+    {
+        return $this->joinSchoolRequests;
+    }
+
+    public function addJoinSchoolRequest(JoinSchoolRequest $joinSchoolRequest): self
+    {
+        if (!$this->joinSchoolRequests->contains($joinSchoolRequest)) {
+            $this->joinSchoolRequests[] = $joinSchoolRequest;
+            $joinSchoolRequest->setApplicant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJoinSchoolRequest(JoinSchoolRequest $joinSchoolRequest): self
+    {
+        if ($this->joinSchoolRequests->contains($joinSchoolRequest)) {
+            $this->joinSchoolRequests->removeElement($joinSchoolRequest);
+            // set the owning side to null (unless already changed)
+            if ($joinSchoolRequest->getApplicant() === $this) {
+                $joinSchoolRequest->setApplicant(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isConfigured(): bool
+    {
+        return
+            $this->isEnabled() &&
+            $this->isVerified() &&
+            $this->hasAnyRole() &&
+            (!$this->getSchools()->isEmpty() || !$this->getJoinSchoolRequests()->isEmpty())
+        ;
     }
 }
