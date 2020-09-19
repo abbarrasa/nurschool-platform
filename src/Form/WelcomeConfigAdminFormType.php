@@ -13,23 +13,24 @@ namespace Nurschool\Form;
 
 
 use Doctrine\ORM\EntityRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Form\Type\FileUploadType;
 use Nurschool\Entity\School;
 use Nurschool\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class WelcomeConfigAdminFormType extends AbstractType
 {
     /** @var Security */
     protected $security;
-    
+
     public function __construct(Security $security)
     {
         $this->security = $security;
@@ -44,17 +45,15 @@ class WelcomeConfigAdminFormType extends AbstractType
                     new NotBlank()
                 ]
             ])
-            ->add('logo', FileType::class, [
+            ->add('logoFile', VichImageType::class, [
                 'label' => 'Logo',
-                'required' => false,
-                'constraints' => [
-                    new Image()
-                ]
+                'required' => false
             ])
             ->add('nurses', EntityType::class, [
                 'label' => 'Nurses',
                 'mapped' => false,
                 'required' => false,
+                'multiple' => true,
                 'class' => User::class,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->findByRole('ROLE_NURSE');

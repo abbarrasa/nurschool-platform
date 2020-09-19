@@ -6,6 +6,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Nurschool\Entity\School;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class SchoolCrudController extends AbstractCrudController
 {
@@ -21,7 +22,7 @@ class SchoolCrudController extends AbstractCrudController
 //            TextField::new('title'),
 //            TextEditorField::new('description'),
             TextField::new('name'),
-            ImageField::new('logo')->setBasePath('uploads/images/schools')
+            ImageField::new('logoFile')->setFormType(VichImageType::class)
         ];
     }
 }

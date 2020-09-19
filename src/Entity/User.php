@@ -18,11 +18,14 @@ use Nurschool\Model\UserInterface;
 use Nurschool\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="nurschool_user")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @Vich\Uploadable
  */
 class User implements UserInterface
 {
@@ -87,6 +90,11 @@ class User implements UserInterface
     private $lastLogin;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $avatar;
+
+    /**
      * @ORM\ManyToMany(targetEntity=School::class, mappedBy="users")
      */
     private $schools;
@@ -95,6 +103,12 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity=JoinSchoolRequest::class, mappedBy="applicant", orphanRemoval=true)
      */
     private $joinSchoolRequests;
+
+    /**
+     * @Vich\UploadableField(mapping="user_images", fileNameProperty="avatar")
+     * @var File
+     */
+    private $avatarFile;
 
     public function __construct()
     {
@@ -267,6 +281,18 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): self
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
     /**
      * @return Collection|School[]
      */
@@ -324,6 +350,22 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return File
+     */
+    public function getAvatarFile(): ?File
+    {
+        return $this->avatarFile;
+    }
+
+    /**
+     * @param File $avatarFile
+     */
+    public function setAvatarFile(File $avatarFile): void
+    {
+        $this->avatarFile = $avatarFile;
     }
 
     public function isConfigured(): bool

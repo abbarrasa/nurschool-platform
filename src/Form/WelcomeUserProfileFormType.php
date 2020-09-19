@@ -21,6 +21,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class WelcomeUserProfileFormType extends AbstractType
 {
@@ -41,6 +42,10 @@ class WelcomeUserProfileFormType extends AbstractType
                     new NotBlank()
                 ]
             ])
+            ->add('avatarFile', VichImageType::class, [
+                'label' => 'Avatar',
+                'required' => false
+            ])
             ->add('roles', RoleListType::class, [
                 'label' => 'Roles',
                 'required' => true,
@@ -48,19 +53,6 @@ class WelcomeUserProfileFormType extends AbstractType
                     new NotBlank()
                 ],
             ])
-//            ->add(
-//                'roles', ChoiceType::class, [
-//                    'label' => 'Roles',
-//                    'required' => true,
-//                    'choices' => ['Administrador' => 'ROLE_ADMIN', 'Enfermera' => 'ROLE_NURSE'],
-//                    'expanded' => true,
-//                    'multiple' => true,
-//                    'constraints' => [
-//                        new NotBlank()
-//                    ],
-//                    'help' => 'aadfasdfsdfsdffds'
-//                ]
-//            )
         ;
     }
 

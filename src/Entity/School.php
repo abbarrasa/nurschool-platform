@@ -13,15 +13,25 @@ namespace Nurschool\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Nurschool\Repository\SchoolRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=SchoolRepository::class)
  * @ORM\Table(name="nurschool_school")
+ * @Vich\Uploadable
  */
 class School
 {
+    /**
+     * Hook timestampable behavior
+     * updates createdAt, updatedAt fields
+     */
+    use TimestampableEntity;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -49,6 +59,12 @@ class School
      * @ORM\OneToMany(targetEntity=JoinSchoolRequest::class, mappedBy="school", orphanRemoval=true)
      */
     private $joinSchoolRequests;
+
+    /**
+     * @Vich\UploadableField(mapping="school_images", fileNameProperty="logo")
+     * @var File
+     */
+    private $logoFile;
 
     public function __construct()
     {
@@ -156,5 +172,29 @@ class School
         $this->logo = $logo;
 
         return $this;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getLogoFile(): ?File
+    {
+        return $this->logoFile;
+    }
+
+    /**
+     * @param File $logoFile
+     */
+    public function setLogoFile(File $logoFile): void
+    {
+        $this->logoFile = $logoFile;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($logoFile) {
+            // if 'updatedAt' is not defined in your entity, use another property
+            $this->updatedAt = new \DateTime('now');
+        }
     }
 }
