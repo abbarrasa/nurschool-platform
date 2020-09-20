@@ -130,7 +130,7 @@ class DashboardController extends AbstractDashboardController
         }
 
         if ($this->isGranted('ROLE_ADMIN')) {
-            yield MenuItem::linkToCrud('Schools', 'fa fa-tags', School::class);
+            yield MenuItem::linkToCrud('Schools', 'fa fa-school', School::class);
         }
         // yield MenuItem::linkToCrud('The Label', 'icon class', EntityClass::class);
     }

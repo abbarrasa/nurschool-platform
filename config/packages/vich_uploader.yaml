@@ -5,7 +5,9 @@ vich_uploader:
         user_images:
             uri_prefix: '%nurschool.path.user_images%'
             upload_destination: '%kernel.project_dir%/public%nurschool.path.user_images%'
+            namer: vich_uploader.namer_uniqid
 
         school_images:
             uri_prefix: '%nurschool.path.school_images%'
             upload_destination: '%kernel.project_dir%/public%nurschool.path.school_images%'
+            namer: vich_uploader.namer_uniqid

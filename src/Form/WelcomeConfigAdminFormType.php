@@ -61,7 +61,7 @@ class WelcomeConfigAdminFormType extends AbstractType
                 'choice_label' => function($user) {
                     return "{$user->getLastname()}, {$user->getFirstname()}";
                 },
-                'data' => $this->security->isGranted('ROLE_NURSE') ? $this->security->getUser() : null 
+                'data' => $this->security->isGranted('ROLE_NURSE') ? [$this->security->getUser()] : null
             ])
         ;
     }

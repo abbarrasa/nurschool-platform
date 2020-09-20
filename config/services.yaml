@@ -65,6 +65,11 @@ services:
 #        tags:
 #            - { name: form.type, alias: easyadmin_fileupload }
 
+    Nurschool\Util\AvatarGenerator:
+        arguments:
+            - '%kernel.project_dir%/public%nurschool.path.user_images%'
+            - '@doctrine.orm.entity_manager'
+
     Nurschool\Wizard\Container\DefaultStageContainer:
         arguments:
             $stages: !tagged_iterator wizard_stage

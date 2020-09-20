@@ -24,6 +24,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="nurschool_user")
+ * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  * @Vich\Uploadable
  */
@@ -361,11 +362,28 @@ class User implements UserInterface
     }
 
     /**
-     * @param File $avatarFile
+     * @param File|null $avatarFile
      */
     public function setAvatarFile(File $avatarFile): void
     {
         $this->avatarFile = $avatarFile;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($avatarFile) {
+            // if 'updatedAt' is not defined in your entity, use another property
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function cleanAvatarFile(): void
+    {
+        $this->avatarFile = null;
     }
 
     public function isConfigured(): bool

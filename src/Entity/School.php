@@ -183,7 +183,7 @@ class School
     }
 
     /**
-     * @param File $logoFile
+     * @param File|null $logoFile
      */
     public function setLogoFile(File $logoFile): void
     {

@@ -50,5 +50,9 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
 
     public function setLastLogin(?\DateTimeInterface $datetime);
 
+    public function getAvatar(): ?string;
+
+    public function setAvatar(?string $avatar);
+
     public function isConfigured(): bool;
 }

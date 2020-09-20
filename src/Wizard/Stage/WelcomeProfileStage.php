@@ -15,6 +15,8 @@ namespace Nurschool\Wizard\Stage;
 use Doctrine\ORM\EntityManagerInterface;
 use Nurschool\Event\ChangedRolesEvent;
 use Nurschool\Form\WelcomeUserProfileFormType;
+use Nurschool\Model\UserInterface;
+use Nurschool\Util\AvatarGenerator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -25,6 +27,7 @@ class WelcomeProfileStage implements StageInterface, FormHandlerInterface
     private $security;
     private $formFactory;
     private $entityManager;
+    private $avatarGenerator;
     private $eventDispatcher;
 
     /**
@@ -32,17 +35,20 @@ class WelcomeProfileStage implements StageInterface, FormHandlerInterface
      * @param Security $security
      * @param FormFactoryInterface $formFactory
      * @param EntityManagerInterface $entityManager
+     * @param AvatarGenerator $avatarGenerator
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         Security $security,
         FormFactoryInterface $formFactory,
         EntityManagerInterface $entityManager,
+        AvatarGenerator $avatarGenerator,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->security = $security;
         $this->formFactory = $formFactory;
         $this->entityManager = $entityManager;
+        $this->avatarGenerator = $avatarGenerator;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -73,7 +79,12 @@ class WelcomeProfileStage implements StageInterface, FormHandlerInterface
 
     public function handleFormResult(FormInterface $form): bool
     {
+        /** @var UserInterface $user */
         $user = $form->getData();
+        if (null === $user->getAvatar()) {
+            $this->avatarGenerator->setInitialAvatar($user);
+        }
+
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
