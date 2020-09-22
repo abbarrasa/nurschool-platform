@@ -9,21 +9,29 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Util;
+namespace Nurschool\Manager;
 
 
 use Doctrine\ORM\EntityManagerInterface;
 use Nurschool\Model\UserInterface;
+use Nurschool\File\Util\FileNameTrait;
 use YoHang88\LetterAvatar\LetterAvatar;
 
-class AvatarGenerator
+class AvatarManager
 {
+    use FileNameTrait;
+
     /** @var string */
     private $path;
 
     /** @var EntityManagerInterface */
     private $entityManager;
 
+    /**
+     * AvatarGenerator constructor.
+     * @param string $path
+     * @param EntityManagerInterface $entityManager
+     */
     public function __construct(string $path, EntityManagerInterface $entityManager)
     {
         $this->path = $path;
@@ -31,6 +39,7 @@ class AvatarGenerator
     }
 
     /**
+     * Generate user avatar using name initials letter.
      * @param UserInterface $user
      * @param bool $saveAndFlush
      */
@@ -44,9 +53,8 @@ class AvatarGenerator
         // Square Shape, Size 64px
         $avatar = new LetterAvatar($fullname, 'square', 64);
 
-        // Save Image As PNG/JPEG
-        $filename = \str_replace('.', '', \uniqid('', true)) . '.jpg';
-
+        $filename = $this->getUniqueFileName();
+        // Save Image As JPEG
         if (!$avatar->saveAs(sprintf('%s/%s', $this->path, $filename), LetterAvatar::MIME_TYPE_JPEG)) {
             throw new \RuntimeException('Avatar could not be saved');
         }
@@ -54,8 +62,31 @@ class AvatarGenerator
         $user->setAvatar($filename);
 
         if ($saveAndFlush) {
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
+            $this->saveAndFlush($user);
         }
+    }
+
+    /**
+     * Update user avatar with image from uri
+     * @param string $uri
+     * @param UserInterface $user
+     * @param bool $saveAndFlush
+     */
+    public function setAvatarFromUri(string $uri, UserInterface $user, bool $saveAndFlush = false): void
+    {
+        $filename = $this->getUniqueFileName();
+        file_put_contents(sprintf('%s/%s', $this->path, $filename), file_get_contents($uri));
+
+        $user->setAvatar($filename);
+
+        if ($saveAndFlush) {
+            $this->saveAndFlush($user);
+        }
+    }
+
+    private function saveAndFlush($user)
+    {
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
     }
 }

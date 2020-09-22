@@ -49,6 +49,11 @@ class User implements UserInterface
     private $email;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true, unique=true)
+     */
+    private $googleUid;
+
+    /**
      * @ORM\Column(type="string", length=128, nullable=true)
      */
     private $firstname;
@@ -65,7 +70,7 @@ class User implements UserInterface
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $password;
 
@@ -130,6 +135,18 @@ class User implements UserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getGoogleUid(): ?string
+    {
+        return $this->googleUid;
+    }
+
+    public function setGoogleUid(?string $googleUid): self
+    {
+        $this->googleUid = $googleUid;
 
         return $this;
     }
@@ -203,14 +220,14 @@ class User implements UserInterface
     }
 
     /**
-     * @see UserInterface
+     * @see \Symfony\Component\Security\Core\User\UserInterface
      */
-    public function getPassword(): string
+    public function getPassword()
     {
         return (string) $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
 
@@ -258,7 +275,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function isEnabled(): ?bool
+    public function isEnabled(): bool
     {
         return $this->enabled;
     }

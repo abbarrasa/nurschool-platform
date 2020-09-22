@@ -14,6 +14,7 @@ namespace Nurschool\Security\Util;
 
 use Nurschool\Model\UserInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 trait AuthenticationSuccessTrait
@@ -21,8 +22,12 @@ trait AuthenticationSuccessTrait
     /** @var RouterInterface */
     private $router;
 
-    public function getAuthenticatedResponse(UserInterface $user, string $targetPath = null)
+    public function getAuthenticatedResponse(SessionInterface $session, UserInterface $user, string $targetPath = null)
     {
+        if ($session->has('SendConfirmationEmail')) {
+            return new RedirectResponse($this->router->generate('register_done'));
+        }
+
         if (!$user->isConfigured())  {
             if (!$this->matchWithRoute('verify_email', $targetPath)) {
                 return new RedirectResponse($this->router->generate('welcome'));

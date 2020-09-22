@@ -65,7 +65,10 @@ services:
 #        tags:
 #            - { name: form.type, alias: easyadmin_fileupload }
 
-    Nurschool\Util\AvatarGenerator:
+    Nurschool\File\Uploader\Naming\UniqidNamer:
+        public: true
+
+    Nurschool\Manager\AvatarManager:
         arguments:
             - '%kernel.project_dir%/public%nurschool.path.user_images%'
             - '@doctrine.orm.entity_manager'

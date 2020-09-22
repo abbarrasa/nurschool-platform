@@ -21,6 +21,8 @@ security:
             guard:
                 authenticators:
                     - Nurschool\Security\LoginFormAuthenticator
+                    - Nurschool\Security\GoogleAuthenticator
+                entry_point: Nurschool\Security\LoginFormAuthenticator
             logout:
                 path: logout
                 # where to redirect after logout

@@ -16,7 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Nurschool\Event\ChangedRolesEvent;
 use Nurschool\Form\WelcomeUserProfileFormType;
 use Nurschool\Model\UserInterface;
-use Nurschool\Util\AvatarGenerator;
+use Nurschool\Manager\AvatarManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -35,14 +35,14 @@ class WelcomeProfileStage implements StageInterface, FormHandlerInterface
      * @param Security $security
      * @param FormFactoryInterface $formFactory
      * @param EntityManagerInterface $entityManager
-     * @param AvatarGenerator $avatarGenerator
+     * @param AvatarManager $avatarGenerator
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         Security $security,
         FormFactoryInterface $formFactory,
         EntityManagerInterface $entityManager,
-        AvatarGenerator $avatarGenerator,
+        AvatarManager $avatarGenerator,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->security = $security;

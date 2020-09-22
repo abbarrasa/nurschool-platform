@@ -93,9 +93,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
+        $session = $request->getSession();
         return $this->getAuthenticatedResponse(
+            $session,
             $token->getUser(),
-            $this->getTargetPath($request->getSession(), $providerKey)
+            $this->getTargetPath($session, $providerKey)
         );
     }
 
