@@ -45,7 +45,7 @@ class RequestListener
             if (!$user->isConfigured() &&
                 !$this->startsWith($request->attributes->get('_route'), 'welcome')
             ) {
-//                $event->setResponse(new RedirectResponse($this->urlGenerator->generate('welcome')));
+                $event->setResponse(new RedirectResponse($this->urlGenerator->generate('welcome')));
             }
         }
     }

@@ -11,9 +11,12 @@
 
 namespace Nurschool\Entity;
 
+use Bazinga\GeocoderBundle\Mapping\Annotations as Geocoder;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Nurschool\Entity\Traits\GeocodeableEntity;
+use Nurschool\Model\GeocoderInterface;
 use Nurschool\Repository\SchoolRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
@@ -23,14 +26,21 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Entity(repositoryClass=SchoolRepository::class)
  * @ORM\Table(name="nurschool_school")
  * @Vich\Uploadable
+ * @Geocoder\Geocodeable
  */
-class School
+class School implements GeocoderInterface
 {
     /**
      * Hook timestampable behavior
      * updates createdAt, updatedAt fields
      */
     use TimestampableEntity;
+
+    /**
+     * Hook geocodeable behavior
+     * updates geolocation fields
+     */
+    use GeocodeableEntity;
 
     /**
      * @ORM\Id

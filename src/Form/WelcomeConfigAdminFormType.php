@@ -47,6 +47,12 @@ class WelcomeConfigAdminFormType extends AbstractType
                     new NotBlank()
                 ]
             ])
+            ->add('address', TextType::class, [
+                'label' => 'Address',
+                'constraints' => [
+                    new NotBlank()
+                ]
+            ])
             ->add('logoFile', VichImageType::class, [
                 'label' => 'Logo',
                 'required' => false
