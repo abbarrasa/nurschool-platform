@@ -13,6 +13,9 @@ namespace Nurschool\Model;
 
 interface GeocoderInterface
 {
+    //AIzaSyC5LIzIX6aVOlB5rF5VOQ-CM0AA6nVQhRc
+
+
     /**
      * @return string
      */
