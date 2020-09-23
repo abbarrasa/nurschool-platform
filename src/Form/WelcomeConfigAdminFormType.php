@@ -22,8 +22,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Optional;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class WelcomeConfigAdminFormType extends AbstractType
@@ -69,7 +71,7 @@ class WelcomeConfigAdminFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => School::class,
+            'data_class' => School::class
         ]);
     }
 }

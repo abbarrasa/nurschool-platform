@@ -22,8 +22,12 @@
     {{ form_row(form.logoFile) }}
     {{ form_row(form.nurses) }}
 
+    <a class="btn btn-primary" href="{{ path('welcome_stage', { 'stage': 'complete' }) }}">
+        <span class="btn-label">Salta</span>
+    </a>
+
     <button class="btn btn-primary" type="submit" value="next">
-        <span class="btn-label">Next</span>
+        <span class="btn-label">Continuar</span>
     </button>
 
     {{ form_end(form) }}

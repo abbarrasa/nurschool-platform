@@ -20,11 +20,15 @@ use Symfony\Component\Security\Core\Security;
 
 class RequestListener
 {
+    /** @var Security */
+    protected $security;
+
     /** @var UrlGeneratorInterface */
     protected $urlGenerator;
 
     public function __construct(Security $security, UrlGeneratorInterface $urlGenerator)
     {
+        $this->security = $security;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -37,16 +41,17 @@ class RequestListener
 
         $request = $event->getRequest();
         /** @var UserInterface $user */
-        if (null !== ($user = $request->getUser())) {
+        if (null !== ($user = $this->security->getUser())) {
             if (!$user->isConfigured() &&
                 !$this->startsWith($request->attributes->get('_route'), 'welcome')
             ) {
-                $event->setResponse(new RedirectResponse($this->urlGenerator->generate('welcome')));
+//                $event->setResponse(new RedirectResponse($this->urlGenerator->generate('welcome')));
             }
         }
     }
 
-    private function startsWith($haystack, $needle) {
+    private function startsWith($haystack, $needle)
+    {
         return substr_compare($haystack, $needle, 0, strlen($needle)) === 0;
     }
 }

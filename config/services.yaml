@@ -61,15 +61,12 @@ services:
             - '@router'
             - '%config_mailer%'
 
-#    EasyCorp\Bundle\EasyAdminBundle\Form\Type\FileUploadType:
-#        tags:
-#            - { name: form.type, alias: easyadmin_fileupload }
-
     Nurschool\File\Uploader\Naming\UniqidNamer:
         public: true
 
     Nurschool\Manager\AvatarManager:
         arguments:
+            - '%nurschool.path.user_images%'
             - '%kernel.project_dir%/public%nurschool.path.user_images%'
             - '@doctrine.orm.entity_manager'
 
@@ -80,6 +77,10 @@ services:
     Nurschool\EventListener\LoginListener:
         tags:
             - { name: kernel.event_listener, event: security.interactive_login }
+
+    Nurschool\EventListener\RequestListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }
 
     Nurschool\EventListener\ExceptionListener:
         tags:

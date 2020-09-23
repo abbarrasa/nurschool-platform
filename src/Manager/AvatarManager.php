@@ -22,19 +22,24 @@ class AvatarManager
     use FileNameTrait;
 
     /** @var string */
-    private $path;
+    private $uriPrefix;
+
+    /** @var string */
+    private $detinationPath;
 
     /** @var EntityManagerInterface */
     private $entityManager;
 
     /**
      * AvatarGenerator constructor.
-     * @param string $path
+     * @param string $uriPrefix
+     * @param string $detinationPath
      * @param EntityManagerInterface $entityManager
      */
-    public function __construct(string $path, EntityManagerInterface $entityManager)
+    public function __construct(string $uriPrefix, string $detinationPath, EntityManagerInterface $entityManager)
     {
-        $this->path = $path;
+        $this->uriPrefix = $uriPrefix;
+        $this->detinationPath = $detinationPath;
         $this->entityManager = $entityManager;
     }
 
@@ -55,7 +60,7 @@ class AvatarManager
 
         $filename = $this->getUniqueFileName();
         // Save Image As JPEG
-        if (!$avatar->saveAs(sprintf('%s/%s', $this->path, $filename), LetterAvatar::MIME_TYPE_JPEG)) {
+        if (!$avatar->saveAs(\sprintf('%s/%s', $this->detinationPath, $filename), LetterAvatar::MIME_TYPE_JPEG)) {
             throw new \RuntimeException('Avatar could not be saved');
         }
 
@@ -75,13 +80,27 @@ class AvatarManager
     public function setAvatarFromUri(string $uri, UserInterface $user, bool $saveAndFlush = false): void
     {
         $filename = $this->getUniqueFileName();
-        file_put_contents(sprintf('%s/%s', $this->path, $filename), file_get_contents($uri));
+        \file_put_contents(\sprintf('%s/%s', $this->detinationPath, $filename), \file_get_contents($uri));
 
         $user->setAvatar($filename);
 
         if ($saveAndFlush) {
             $this->saveAndFlush($user);
         }
+    }
+
+    /**
+     * Get user avatar url
+     * @param UserInterface $user
+     * @return string|null
+     */
+    public function getAvatarUrl(UserInterface $user): ?string
+    {
+        if (null === ($avatar = $user->getAvatar())) {
+            return null;
+        }
+
+        return \sprintf('%s/%s', $this->uriPrefix, $avatar);
     }
 
     private function saveAndFlush($user)

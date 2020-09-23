@@ -2,6 +2,7 @@
 
 namespace Nurschool\Controller\CRUD;
 
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Nurschool\Entity\School;
@@ -22,7 +23,13 @@ class SchoolCrudController extends AbstractCrudController
 //            TextField::new('title'),
 //            TextEditorField::new('description'),
             TextField::new('name'),
-            ImageField::new('logoFile')->setFormType(VichImageType::class)
+            ImageField::new('logo')
+                ->setBasePath($this->getParameter('nurschool.path.school_images'))
+                ->hideOnForm(),
+            ImageField::new('logoFile')
+                ->setFormType(VichImageType::class)
+                ->onlyOnForms()
+
         ];
     }
 }

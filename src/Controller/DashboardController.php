@@ -4,12 +4,15 @@ namespace Nurschool\Controller;
 
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
+use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use EasyCorp\Bundle\EasyAdminBundle\Security\Permission;
 use Nurschool\Entity\Enquiry;
 use Nurschool\Entity\School;
 use Nurschool\EventListener\WelcomeStageContainer;
 use Nurschool\Form\WelcomeUserProfileFormType;
 use Nurschool\Mailer\MailerInterface;
+use Nurschool\Manager\AvatarManager;
 use Nurschool\Model\UserInterface;
 use Nurschool\Security\EmailVerifier;
 use Nurschool\Wizard\Container\StageContainerInterface;
@@ -27,6 +30,14 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
  */
 class DashboardController extends AbstractDashboardController
 {
+    /** @var AvatarManager */
+    protected $avatarManger;
+
+    public function __construct(AvatarManager $avatarManager)
+    {
+        $this->avatarManger = $avatarManager;
+    }
+
     /**
      * @Route("", name="dashboard")
      * @return Response
@@ -104,7 +115,6 @@ class DashboardController extends AbstractDashboardController
      */
     public function resendConfirmationEmail(EmailVerifier $emailVerifier, MailerInterface $mailer): Response
     {
-        /** @var UserInterface $user */
         $user = $this->getUser();
         // generate a signed url and email it to the user
         $signatureComponents = $emailVerifier->generateSignatureConfirmation('verify_email', $user);
@@ -134,4 +144,20 @@ class DashboardController extends AbstractDashboardController
         }
         // yield MenuItem::linkToCrud('The Label', 'icon class', EntityClass::class);
     }
+
+    public function configureUserMenu(\Symfony\Component\Security\Core\User\UserInterface $user): UserMenu
+    {
+        $userMenuItems = [MenuItem::linkToLogout('__ea__user.sign_out', 'fa-sign-out')];
+        if ($this->isGranted(Permission::EA_EXIT_IMPERSONATION)) {
+            $userMenuItems[] = MenuItem::linkToExitImpersonation('__ea__user.exit_impersonation', 'fa-user-lock');
+        }
+
+        return UserMenu::new()
+            ->displayUserName()
+            ->displayUserAvatar()
+            ->setName(method_exists($user, '__toString') ? (string) $user : $user->getUsername())
+            ->setAvatarUrl( $this->avatarManger->getAvatarUrl($user))
+            ->setMenuItems($userMenuItems);
+    }
+
 }
