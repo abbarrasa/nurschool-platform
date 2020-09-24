@@ -33,17 +33,17 @@ trait GeocodeableEntity
      * @Geocoder\Longitude()
      * @ORM\Column(type="float")
      */
-    protected $longitud;
+    protected $longitude;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    protected $province;
+    protected $firstAdminLevel;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $city;
+    protected $secondAdminLevel;
 
     /**
      * @return string
@@ -86,56 +86,18 @@ trait GeocodeableEntity
     /**
      * @return float
      */
-    public function getLongitud()
+    public function getLongitude()
     {
-        return $this->longitud;
+        return $this->longitude;
     }
 
     /**
-     * @param float $longitud
+     * @param float $longitude
      * @return $this
      */
-    public function setLongitud(float $longitud)
+    public function setLongitude(float $longitude)
     {
-        $this->longitud = $longitud;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getProvince()
-    {
-        return $this->province;
-    }
-
-    /**
-     * @param string $province
-     * @return $this
-     */
-    public function setProvince(string $province)
-    {
-        $this->province = $province;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCity()
-    {
-        return $this->city;
-    }
-
-    /**
-     * @param string $city
-     * @return $this
-     */
-    public function setCity(string $city)
-    {
-        $this->city = $city;
+        $this->longitude = $longitude;
 
         return $this;
     }

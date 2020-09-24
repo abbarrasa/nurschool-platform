@@ -16,7 +16,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Nurschool\Entity\Traits\GeocodeableEntity;
-use Nurschool\Model\GeocoderInterface;
+use Nurschool\Model\LocationInterface;
 use Nurschool\Repository\SchoolRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
@@ -28,7 +28,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @Vich\Uploadable
  * @Geocoder\Geocodeable
  */
-class School implements GeocoderInterface
+class School implements LocationInterface
 {
     /**
      * Hook timestampable behavior
@@ -40,7 +40,7 @@ class School implements GeocoderInterface
      * Hook geocodeable behavior
      * updates geolocation fields
      */
-    use GeocodeableEntity;
+//    use GeocodeableEntity;
 
     /**
      * @ORM\Id
@@ -69,6 +69,12 @@ class School implements GeocoderInterface
      * @ORM\OneToMany(targetEntity=JoinSchoolRequest::class, mappedBy="school", orphanRemoval=true)
      */
     private $joinSchoolRequests;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Locality::class, inversedBy="schools")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $locality;
 
     /**
      * @Vich\UploadableField(mapping="school_images", fileNameProperty="logo")
@@ -168,6 +174,21 @@ class School implements GeocoderInterface
                 $joinSchoolRequest->setSchool(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getLocality()
+    {
+        return $this->locality;
+    }
+
+    public function setLocality($locality)
+    {
+        $this->locality = $locality;
 
         return $this;
     }

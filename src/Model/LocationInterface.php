@@ -11,7 +11,7 @@
 
 namespace Nurschool\Model;
 
-interface GeocoderInterface
+interface LocationInterface
 {
     /**
      * @return string
@@ -36,30 +36,20 @@ interface GeocoderInterface
     /**
      * @return float
      */
-    public function getLongitud();
+    public function getLongitude();
 
     /**
-     * @param float $longitud
+     * @param float $longitude
      */
-    public function setLongitud(float $longitud);
+    public function setLongitude(float $longitude);
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getProvince();
+    public function getLocality();
 
     /**
-     * @param string $province
+     * @param mixed $locality
      */
-    public function setProvince(string $province);
-
-    /**
-     * @return string
-     */
-    public function getCity();
-
-    /**
-     * @param string $city
-     */
-    public function setCity(string $city);
+    public function setLocality($locality);
 }
