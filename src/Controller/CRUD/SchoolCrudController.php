@@ -23,6 +23,8 @@ class SchoolCrudController extends AbstractCrudController
 //            TextField::new('title'),
 //            TextEditorField::new('description'),
             TextField::new('name'),
+            TextField::new('address')
+                ->onlyOnForms(),
             ImageField::new('logo')
                 ->setBasePath($this->getParameter('nurschool.path.school_images'))
                 ->hideOnForm(),

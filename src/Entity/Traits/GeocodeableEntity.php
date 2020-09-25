@@ -36,16 +36,6 @@ trait GeocodeableEntity
     protected $longitude;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    protected $firstAdminLevel;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    protected $secondAdminLevel;
-
-    /**
      * @return string
      */
     public function getAddress()

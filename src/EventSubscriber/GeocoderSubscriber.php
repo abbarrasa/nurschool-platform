@@ -19,6 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\UnitOfWork;
+use Geocoder\Location;
 use Geocoder\Provider\Provider;
 use Geocoder\Query\GeocodeQuery;
 use Nurschool\Entity\AdminLevel;
@@ -68,9 +69,9 @@ class GeocoderSubscriber implements EventSubscriber
             /** @var ClassMetadata $metadata */
             $metadata = $this->driver->loadMetadataFromObject($entity);
 
-            $this->geocodeEntity($metadata, $uow, $em, $entity);
+            $this->geocodeEntity($metadata, $em, $entity);
 
-            $this->recomputeSingleEntityChangeSet($uow, $em, $entity);
+            $this->recomputeEntityChangeSet($uow, $em, $entity);
         }
 
         foreach ($uow->getScheduledEntityUpdates() as $entity) {
@@ -85,15 +86,14 @@ class GeocoderSubscriber implements EventSubscriber
                 continue;
             }
 
-            $this->geocodeEntity($metadata, $uow, $em, $entity);
+            $this->geocodeEntity($metadata, $em, $entity);
 
-            $this->recomputeSingleEntityChangeSet($uow, $em, $entity);
+            $this->recomputeEntityChangeSet($uow, $em, $entity);
         }
     }
 
     /**
      * @param ClassMetadata $metadata
-//     * @param UnitOfWork $unitOfWork
      * @param EntityManagerInterface $entityManager
      * @param $entity
      * @throws \Geocoder\Exception\Exception
@@ -121,40 +121,9 @@ class GeocoderSubscriber implements EventSubscriber
                 return;
             }
 
-            $countryName = $result->getCountry()->getName();
-            $countryCode = $result->getCountry()->getCode();
-            if (null === ($country = $entityManager->getRepository(Country::class)->findByName($countryName))) {
-                $country = new Country($countryName, $countryCode);
-                $entityManager->persist($country);
-//                $unitOfWork->recomputeSingleEntityChangeSet(
-//                    $entityManager->getClassMetadata(get_class($country)),
-//                    $country
-//                );
-            }
-
-            $adminLevels = $result->getAdminLevels();
-            $parent = null;
-            do {
-                $adminLevel = $adminLevels->first();
-                $level = $adminLevel->getLevel();
-                $name = $adminLevel->getName();
-                if (null === ($adminLevelEntity = $entityManager->getRepository(AdminLevel::class)->findOneByLevelAndName($level, $name, $country))) {
-                    $code = $adminLevel->getCode();
-                    $adminLevelEntity = new AdminLevel($level, $name, $code);
-                    $adminLevelEntity->setCountry($country);
-                    $adminLevelEntity->setParent($parent);
-                    $entityManager->persist($adminLevelEntity);
-                }
-                $parent = $adminLevel;
-                $adminLevels = $adminLevels->slice(1);
-            } while(!empty($adminLevels));
-
-            $localityName = $result->getLocality();
-            if (null === ($locality = $entityManager->getRepository(Locality::class)->findOneByName($localityName, $adminLevel))) {
-                $locality = new Locality($localityName);
-                $locality->setAdminLevel($adminLevel);
-                $entityManager->persist($locality);
-            }
+            $country = $this->geocodeCountry($result, $entityManager);
+            $lastAdminLevel = $this->geocodeAdminLevels($result, $country, $entityManager);
+            $locality = $this->geocodeLocality($result, $lastAdminLevel, $entityManager);
 
             $entity->setLocality($locality);
         }
@@ -177,11 +146,108 @@ class GeocoderSubscriber implements EventSubscriber
         return isset($changeSet[$metadata->addressProperty->getName()]);
     }
 
-    private function recomputeSingleEntityChangeSet(UnitOfWork $unitOfWork, EntityManager $entityManager, object $entity): void
+    /**
+     * @param Location $location
+     * @param EntityManagerInterface $entityManager
+     * @return Country
+     */
+    private function geocodeCountry(Location $location, EntityManagerInterface $entityManager): Country
+    {
+        $name = $location->getCountry()->getName();
+        $code = $location->getCountry()->getCode();
+        if (null === ($country = $entityManager->getRepository(Country::class)->findOneByName($name))) {
+            $country = new Country($name, $code);
+            $entityManager->persist($country);
+        }
+
+        return $country;
+    }
+
+    /**
+     * @param Location $location
+     * @param Country $country
+     * @param EntityManagerInterface $entityManager
+     * @return AdminLevel
+     */
+    private function geocodeAdminLevels(Location $location, Country $country, EntityManagerInterface $entityManager): AdminLevel
+    {
+        $list = \array_reverse($location->getAdminLevels()->slice(0));
+        $parent = null;
+        do {
+            $item = \array_pop($list);
+            $level = $item->getLevel();
+            $name = $item->getName();
+            if (null === ($lastAdminLevel = $entityManager->getRepository(AdminLevel::class)->findOneByLevelAndName($level, $name, $country))) {
+                $code = $item->getCode();
+                $lastAdminLevel = new AdminLevel($level, $name, $code);
+                $lastAdminLevel->setCountry($country);
+                $lastAdminLevel->setParent($parent);
+                $entityManager->persist($lastAdminLevel);
+            }
+            $parent = $lastAdminLevel;
+        } while(!empty($list));
+
+        return $lastAdminLevel;
+    }
+
+    /**
+     * @param Location $location
+     * @param AdminLevel $adminLevel
+     * @param EntityManagerInterface $entityManager
+     * @return Locality
+     */
+    private function geocodeLocality(Location $location, AdminLevel $adminLevel, EntityManagerInterface $entityManager): Locality
+    {
+        $name = $location->getLocality();
+        if (null === ($locality = $entityManager->getRepository(Locality::class)->findOneByName($name, $adminLevel))) {
+            $locality = new Locality($name);
+            $locality->setAdminLevel($adminLevel);
+            $entityManager->persist($locality);
+        }
+
+        return $locality;
+    }
+
+    /**
+     * @param UnitOfWork $unitOfWork
+     * @param EntityManager $entityManager
+     * @param object $entity
+     */
+    private function recomputeEntityChangeSet(UnitOfWork $unitOfWork, EntityManager $entityManager, object $entity): void
     {
         $unitOfWork->recomputeSingleEntityChangeSet(
             $entityManager->getClassMetadata(get_class($entity)),
             $entity
         );
+
+        if ($entity instanceof LocationInterface) {
+            $locality = $entity->getLocality();
+            $unitOfWork->computeChangeSet(
+                $entityManager->getClassMetadata(get_class($locality)),
+                $locality
+            );
+
+            $adminLevel = $locality->getAdminLevel();
+            $parent = $adminLevel->getParent();
+            while(null !== $parent) {
+                $unitOfWork->computeChangeSet(
+                    $entityManager->getClassMetadata(get_class($parent)),
+                    $parent
+                );
+
+                $parent = $parent->getParent();
+            }
+
+            $unitOfWork->computeChangeSet(
+                $entityManager->getClassMetadata(get_class($adminLevel)),
+                $adminLevel
+            );
+
+            $country = $adminLevel->getCountry();
+            $unitOfWork->computeChangeSet(
+                $entityManager->getClassMetadata(get_class($country)),
+                $country
+            );
+        }
     }
 }

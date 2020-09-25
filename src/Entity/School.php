@@ -40,7 +40,7 @@ class School implements LocationInterface
      * Hook geocodeable behavior
      * updates geolocation fields
      */
-//    use GeocodeableEntity;
+    use GeocodeableEntity;
 
     /**
      * @ORM\Id
@@ -179,14 +179,14 @@ class School implements LocationInterface
     }
 
     /**
-     * @see UserInterface
+     * @see LocationInterface
      */
-    public function getLocality()
+    public function getLocality(): Locality
     {
         return $this->locality;
     }
 
-    public function setLocality($locality)
+    public function setLocality(Locality $locality): self
     {
         $this->locality = $locality;
 

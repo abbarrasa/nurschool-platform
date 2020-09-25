@@ -6,6 +6,7 @@ namespace Nurschool\EventSubscriber;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
 use Nurschool\Event\RegisteredUserEvent;
 use Nurschool\Model\UserInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class EasyAdminSubscriber implements EventSubscriberInterface
@@ -17,11 +18,11 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function sendConfirmationEmail(BeforeEntityPersistedEvent $event, $eventName, EventDispatcherInterface $dispatcher)
+    public function sendConfirmationEmail(AfterEntityPersistedEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
         $entity = $event->getEntityInstance();
 
-        if (!($entity instanceof UserInterface)) {
+        if (!$entity instanceof UserInterface) {
             return;
         }
 

@@ -11,6 +11,8 @@
 
 namespace Nurschool\Model;
 
+use Nurschool\Entity\Locality;
+
 interface LocationInterface
 {
     /**
@@ -44,12 +46,12 @@ interface LocationInterface
     public function setLongitude(float $longitude);
 
     /**
-     * @return mixed
+     * @return Locality
      */
     public function getLocality();
 
     /**
-     * @param mixed $locality
+     * @param Locality $locality
      */
-    public function setLocality($locality);
+    public function setLocality(Locality $locality);
 }
