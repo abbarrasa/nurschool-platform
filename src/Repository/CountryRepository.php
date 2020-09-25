@@ -19,6 +19,15 @@ class CountryRepository extends ServiceEntityRepository
         parent::__construct($registry, Country::class);
     }
 
+    /**
+     * @param string $name
+     * @return Country|null
+     */
+    public function findOneByName(string $name): ?Country
+    {
+        return $this->findOneBy(['name' => $name]);
+    }
+
     // /**
     //  * @return Country[] Returns an array of Country objects
     //  */

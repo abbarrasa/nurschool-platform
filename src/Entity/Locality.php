@@ -36,8 +36,9 @@ class Locality
      */
     private $schools;
 
-    public function __construct()
+    public function __construct(string $name)
     {
+        $this->name = $name;
         $this->schools = new ArrayCollection();
     }
 

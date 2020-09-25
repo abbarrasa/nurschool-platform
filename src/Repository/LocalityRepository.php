@@ -2,6 +2,7 @@
 
 namespace Nurschool\Repository;
 
+use Nurschool\Entity\AdminLevel;
 use Nurschool\Entity\Locality;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,6 +18,16 @@ class LocalityRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Locality::class);
+    }
+
+    /**
+     * @param string $name
+     * @param AdminLevel $adminLevel
+     * @return Locality|null
+     */
+    public function findOneByName(string $name, AdminLevel $adminLevel): ?Locality
+    {
+        return $this->findOneBy(['name' => $name, 'adminLevel' => $adminLevel]);
     }
 
     // /**

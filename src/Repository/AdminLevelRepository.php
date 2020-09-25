@@ -5,6 +5,7 @@ namespace Nurschool\Repository;
 use Nurschool\Entity\AdminLevel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Nurschool\Entity\Country;
 
 /**
  * @method AdminLevel|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,9 +20,9 @@ class AdminLevelRepository extends ServiceEntityRepository
         parent::__construct($registry, AdminLevel::class);
     }
 
-    public function findByLevelAndName(int $level, string $name): AdminLevel
+    public function findOneByLevelAndName(int $level, string $name, Country $country): ?AdminLevel
     {
-        return $this->findOneBy(['level' => $level, 'name' => $name]);
+        return $this->findOneBy(['level' => $level, 'name' => $name, 'country' => $country]);
     }
 
     // /**

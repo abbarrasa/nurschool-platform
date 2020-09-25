@@ -21,7 +21,7 @@ class Country
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $name;
 
@@ -35,8 +35,10 @@ class Country
      */
     private $adminLevels;
 
-    public function __construct()
+    public function __construct(string $name, string $code = null)
     {
+        $this->name = $name;
+        $this->code = $code;
         $this->adminLevels = new ArrayCollection();
     }
 
