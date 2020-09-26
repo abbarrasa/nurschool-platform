@@ -142,7 +142,7 @@ class School implements LocationInterface
     /**
      * @return Collection|User[]
      */
-    public function getNursers(): Collection
+    public function getNurses(): Collection
     {
         return $this->users->filter(function(User $u) { return $u->hasRole('ROLE_NURSE'); });
     }
