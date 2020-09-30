@@ -1,0 +1,42 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block page_title 'Welcome to EasyAdmin 3' %}
+
+{% block page_content %}
+    <style>
+        p { max-width: 600px; }
+    </style>
+
+    <p>
+        <strong>Welcome to Nurschool!</strong>
+    </p>
+
+    <p>
+        You must config your user account.
+    </p>
+
+    {% form_theme profileForm '@EasyAdmin/crud/form_theme.html.twig' %}
+    {{ form_start(profileForm) }}
+    {{ form_row(profileForm.firstname) }}
+    {{ form_row(profileForm.lastname) }}
+    {{ form_row(profileForm.avatarFile) }}
+
+    <button class="btn btn-primary" type="submit" value="next">
+        <span class="btn-label">Guardar</span>
+    </button>
+
+    {{ form_end(profileForm) }}
+
+    {% form_theme changePasswordForm '@EasyAdmin/crud/form_theme.html.twig' %}
+    {{ form_start(changePasswordForm) }}
+    {{ form_row(changePasswordForm.plainPassword) }}
+
+    <button class="btn btn-primary" type="submit" value="next">
+        <span class="btn-label">Cambiar contraseña</span>
+    </button>
+
+    {{ form_end(changePasswordForm) }}
+
+
+{% endblock %}

@@ -60,10 +60,16 @@ class School implements LocationInterface
     private $logo;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="schools")
-     * @ORM\JoinTable(name="nurschool_school_user")
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="managedSchools")
+     * @ORM\JoinTable(name="nurschool_school_user_admin")
      */
-    private $users;
+    private $admins;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="schools")
+     * @ORM\JoinTable(name="nurschool_school_user_nurse")
+     */
+    private $nurses;
 
     /**
      * @ORM\OneToMany(targetEntity=JoinSchoolRequest::class, mappedBy="school", orphanRemoval=true)
@@ -84,7 +90,8 @@ class School implements LocationInterface
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+        $this->admins = new ArrayCollection();
+        $this->nurses = new ArrayCollection();
         $this->joinSchoolRequests = new ArrayCollection();
     }
 
@@ -108,35 +115,29 @@ class School implements LocationInterface
     /**
      * @return Collection|User[]
      */
-    public function getUsers(): Collection
+    public function getAdmins(): Collection
     {
-        return $this->users;
+        return $this->admins;
     }
 
-    public function addUser(User $user): self
+    public function addAdmin(User $user): self
     {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
+        if ($user->hasRole('ROLE_ADMIN')) {
+            if (!$this->admins->contains($user)) {
+                $this->admins[] = $user;
+            }
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): self
+    public function removeAdmin(User $admin): self
     {
-        if ($this->users->contains($user)) {
-            $this->users->removeElement($user);
+        if ($this->admins->contains($admin)) {
+            $this->admins->removeElement($admin);
         }
 
         return $this;
-    }
-
-    /**
-     * @return Collection|User[]
-     */
-    public function getAdministrators(): Collection
-    {
-        return $this->users->filter(function(User $u) { return $u->hasRole('ROLE_ADMIN'); });
     }
 
     /**
@@ -144,7 +145,27 @@ class School implements LocationInterface
      */
     public function getNurses(): Collection
     {
-        return $this->users->filter(function(User $u) { return $u->hasRole('ROLE_NURSE'); });
+        return $this->nurses;
+    }
+
+    public function addNurse(User $user): self
+    {
+        if ($user->hasRole('ROLE_NURSE')) {
+            if (!$this->nurses->contains($user)) {
+                $this->nurses[] = $user;
+            }
+        }
+
+        return $this;
+    }
+
+    public function removeNurse(User $nurse): self
+    {
+        if ($this->nurses->contains($nurse)) {
+            $this->nurses->removeElement($nurse);
+        }
+
+        return $this;
     }
 
     /**

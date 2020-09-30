@@ -9,8 +9,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use EasyCorp\Bundle\EasyAdminBundle\Security\Permission;
 use Nurschool\Entity\Enquiry;
 use Nurschool\Entity\School;
+use Nurschool\Entity\User;
 use Nurschool\EventListener\WelcomeStageContainer;
-use Nurschool\Form\WelcomeUserProfileFormType;
 use Nurschool\Mailer\MailerInterface;
 use Nurschool\Manager\AvatarManager;
 use Nurschool\Model\UserInterface;
@@ -22,8 +22,6 @@ use Nurschool\Wizard\Wizard;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 /**
  * @Route("/dashboard")
@@ -142,12 +140,17 @@ class DashboardController extends AbstractDashboardController
         if ($this->isGranted('ROLE_ADMIN')) {
             yield MenuItem::linkToCrud('Schools', 'fa fa-school', School::class);
         }
+
+        yield MenuItem::linkToCrud('Users', 'fa fa-users', User::class);
         // yield MenuItem::linkToCrud('The Label', 'icon class', EntityClass::class);
     }
 
     public function configureUserMenu(\Symfony\Component\Security\Core\User\UserInterface $user): UserMenu
     {
-        $userMenuItems = [MenuItem::linkToLogout('__ea__user.sign_out', 'fa-sign-out')];
+        $userMenuItems = [
+            MenuItem::linktoRoute('My profile', 'fa fa-id-card', 'user_profile'),
+            MenuItem::linkToLogout('__ea__user.sign_out', 'fa-sign-out')
+        ];
         if ($this->isGranted(Permission::EA_EXIT_IMPERSONATION)) {
             $userMenuItems[] = MenuItem::linkToExitImpersonation('__ea__user.exit_impersonation', 'fa-user-lock');
         }

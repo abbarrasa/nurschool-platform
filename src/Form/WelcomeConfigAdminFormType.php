@@ -59,7 +59,6 @@ class WelcomeConfigAdminFormType extends AbstractType
             ])
             ->add('nurses', EntityType::class, [
                 'label' => 'Nurses',
-                'mapped' => false,
                 'required' => false,
                 'multiple' => true,
                 'class' => User::class,

@@ -72,12 +72,7 @@ class WelcomeConfigAdminStage implements StageInterface, FormHandlerInterface
     {
         /** @var School $school */
         $school = $form->getData();
-        $school->addUser($this->security->getUser());
-        $nurses = $form->get('nurses')->getData();
-
-        foreach($nurses as $nurse) {
-            $school->addUser($nurse);
-        }
+        $school->addAdmin($this->security->getUser());
 
         $this->entityManager->persist($school);
         $this->entityManager->flush();

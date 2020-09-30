@@ -19,7 +19,7 @@ use Nurschool\Security\EmailVerifier;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class UserEmailSubscriber implements EventSubscriberInterface
+class EmailConfirmationSubscriber implements EventSubscriberInterface
 {
     /** @var EmailVerifier  */
     protected $emailVerifier;

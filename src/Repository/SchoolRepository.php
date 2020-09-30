@@ -5,6 +5,7 @@ namespace Nurschool\Repository;
 use Nurschool\Entity\School;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Nurschool\Entity\User;
 
 /**
  * @method School|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,16 @@ class SchoolRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, School::class);
+    }
+
+    public function getQueryByUserAdmin(User $user)
+    {
+        return $this
+            ->createQueryBuilder('s')
+            ->leftJoin('s.admins', 'a')
+            ->where('a = :user')
+            ->setParameter('user', $user)
+        ;
     }
 
     // /**

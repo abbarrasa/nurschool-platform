@@ -38,7 +38,7 @@ class EasyAdminSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $entity->addUser($this->security->getUser());
+        $entity->addAdmin($this->security->getUser());
     }
 
     public function sendConfirmationEmail(AfterEntityPersistedEvent $event, $eventName, EventDispatcherInterface $dispatcher)

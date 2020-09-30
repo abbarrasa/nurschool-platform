@@ -101,7 +101,12 @@ class User implements UserInterface
     private $avatar;
 
     /**
-     * @ORM\ManyToMany(targetEntity=School::class, mappedBy="users")
+     * @ORM\ManyToMany(targetEntity=School::class, mappedBy="admins")
+     */
+    private $managedSchools;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=School::class, mappedBy="nurses")
      */
     private $schools;
 
@@ -118,6 +123,7 @@ class User implements UserInterface
 
     public function __construct()
     {
+        $this->managedSchools = new ArrayCollection();
         $this->schools = new ArrayCollection();
         $this->joinSchoolRequests = new ArrayCollection();
     }
@@ -314,6 +320,36 @@ class User implements UserInterface
     /**
      * @return Collection|School[]
      */
+    public function getManagedSchools(): Collection
+    {
+        return $this->managedSchools;
+    }
+
+    public function addManagedSchool(School $managedSchool): self
+    {
+        if ($this->hasRole('ROLE_ADMIN')) {
+            if (!$this->managedSchools->contains($managedSchool)) {
+                $this->managedSchools[] = $managedSchool;
+                $managedSchool->addAdmin($this);
+            }
+        }
+
+        return $this;
+    }
+
+    public function removeManagedSchool(School $managedSchool): self
+    {
+        if ($this->managedSchools->contains($managedSchool)) {
+            $this->managedSchools->removeElement($managedSchool);
+            $managedSchool->removeAdmin($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|School[]
+     */
     public function getSchools(): Collection
     {
         return $this->schools;
@@ -321,9 +357,11 @@ class User implements UserInterface
 
     public function addSchool(School $school): self
     {
-        if (!$this->schools->contains($school)) {
-            $this->schools[] = $school;
-            $school->addUser($this);
+        if ($this->hasRole('ROLE_NURSE')) {
+            if (!$this->schools->contains($school)) {
+                $this->schools[] = $school;
+                $school->addNurse($this);
+            }
         }
 
         return $this;
@@ -333,7 +371,7 @@ class User implements UserInterface
     {
         if ($this->schools->contains($school)) {
             $this->schools->removeElement($school);
-            $school->removeUser($this);
+            $school->removeNurse($this);
         }
 
         return $this;
@@ -409,7 +447,11 @@ class User implements UserInterface
             $this->isEnabled() &&
             $this->isVerified() &&
             $this->hasAnyRole() &&
-            (!$this->getSchools()->isEmpty() || !$this->getJoinSchoolRequests()->isEmpty())
+            (
+                !$this->getManagedSchools()->isEmpty() ||
+                !$this->getSchools()->isEmpty() ||
+                !$this->getJoinSchoolRequests()->isEmpty()
+            )
         ;
     }
 }
