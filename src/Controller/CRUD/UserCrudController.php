@@ -2,33 +2,17 @@
 
 namespace Nurschool\Controller\CRUD;
 
-use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
-use EasyCorp\Bundle\EasyAdminBundle\Event\AfterCrudActionEvent;
-use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityUpdatedEvent;
-use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeCrudActionEvent;
-use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityUpdatedEvent;
-use EasyCorp\Bundle\EasyAdminBundle\Exception\ForbiddenActionException;
-use EasyCorp\Bundle\EasyAdminBundle\Exception\InsufficientEntityPermissionException;
-use EasyCorp\Bundle\EasyAdminBundle\Factory\EntityFactory;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
-use EasyCorp\Bundle\EasyAdminBundle\Security\Permission;
 use Nurschool\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use Nurschool\Event\RegisteredUserEvent;
 use Nurschool\Event\UserProfileEvent;
 use Nurschool\Form\ChangePasswordFormType;
 use Nurschool\Form\ProfileFormType;
 use Nurschool\Model\UserInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -61,33 +45,84 @@ class UserCrudController extends AbstractCrudController
 
     /**
      * @Route("/dashboard/profile", name="user_profile")
+     * @param AdminContext $context
      * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
+     * @param UserPasswordEncoderInterface $passwordEncoder
      * @return Response
      */
-    public function profile(Request $request, EventDispatcherInterface $eventDispatcher): Response
+    public function profile(AdminContext $context, Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $user = $this->getUser();
+        $tabsConfig = $this->buildProfileTabsConfig();
 
         $profileForm = $this->createForm(ProfileFormType::class, $user);
-        $event = new UserProfileEvent($request, $profileForm);
-        $eventDispatcher->dispatch($event, UserProfileEvent::UPDATE_USER_PROFILE);
+        $profileForm->handleRequest($request);
+        if ($profileForm->isSubmitted()) {
+            if ($profileForm->isValid()) {
+                /** @var UserInterface $user */
+                $user = $profileForm->getData();
 
-        if (null !== ($response = $event->getResponse())) {
-            return $response;
+                $this->saveUser($user);
+                $this->addFlash('success', 'Has modificado tus datos correctamente.');
+            }
+
+            $tabsConfig['change-password']['active'] = false;
+            $tabsConfig['profile']['active'] = true;
+            $tabsConfig['profile']['errors'] = $profileForm->getErrors(true)->count();
         }
 
         $changePasswordForm = $this->createForm(ChangePasswordFormType::class, $user);
-        $event = new UserProfileEvent($request, $changePasswordForm);
-        $eventDispatcher->dispatch($event, UserProfileEvent::CHANGE_USER_PASSWORD);
+        $changePasswordForm->handleRequest($request);
+        if ($changePasswordForm->isSubmitted()) {
+            if ($changePasswordForm->isValid()) {
+                /** @var UserInterface $user */
+                $user = $changePasswordForm->getData();
+                // encode the plain password
+                $user->setPassword(
+                    $this->passwordEncoder->encodePassword(
+                        $user,
+                        $changePasswordForm->get('plainPassword')->getData()
+                    )
+                );
 
-        if (null !== ($response = $event->getResponse())) {
-            return $response;
+                $this->saveUser($user);
+                $this->addFlash('success', 'Has modificado tu contraseña correctamente.');
+            }
+
+            $tabsConfig['profile']['active'] = false;
+            $tabsConfig['change-password']['active'] = true;
+            $tabsConfig['change-password']['errors'] = $changePasswordForm->getErrors(true)->count();
         }
 
         return $this->render('@EasyAdmin/user/profile.html.twig', [
             'profileForm' => $profileForm->createView(),
-            'changePasswordForm' => $changePasswordForm->createView()
+            'changePasswordForm' => $changePasswordForm->createView(),
+            'tabs_config' => $tabsConfig
         ]);
+    }
+
+    private function saveUser($user)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
+    }
+
+    private function buildProfileTabsConfig(): array
+    {
+        return [
+            'profile' => [
+                'label' => 'Mis datos',
+                'id' => 'profile',
+                'active' => true,
+                'errors' => 0
+            ],
+            'change-password' => [
+                'label' => 'Cambiar contraseña',
+                'id' => 'change-password',
+                'active' => false,
+                'errors' => 0
+            ]
+        ];
     }
 }

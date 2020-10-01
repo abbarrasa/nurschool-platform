@@ -1,42 +1,56 @@
 {# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
 {% extends '@EasyAdmin/page/content.html.twig' %}
 
-{% block page_title 'Welcome to EasyAdmin 3' %}
+{% block page_title 'My profile' %}
 
 {% block page_content %}
-    <style>
-        p { max-width: 600px; }
-    </style>
 
-    <p>
-        <strong>Welcome to Nurschool!</strong>
-    </p>
+    <div class="col-12">
+        <div class="nav-tabs-custom form-tabs">
+            <ul class="nav nav-tabs">
+                {% for tab_name, tab_config in tabs_config %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if tab_config.active %}active{% endif %}" href="#{{ tab_config['id'] }}" id="{{ tab_config['id'] }}-tab" data-toggle="tab">
+                            {{ tab_config['label']|trans(domain = ea.i18n.translationDomain) }}
+                            {%- if tab_config.errors > 0 -%}
+                                <span class="badge badge-danger" title="{{ 'form.tab.error_badge_title'|trans({'%count%': tab_config.errors}, 'EasyAdminBundle') }}">
+                                    {{- tab_config.errors -}}
+                                </span>
+                            {%- endif -%}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
 
-    <p>
-        You must config your user account.
-    </p>
+            <div class="tab-content">
+                <div id="profile" class="tab-pane{% if tabs_config['profile'].active %} active{% endif %}">
+                    {% form_theme profileForm '@EasyAdmin/crud/form_theme.html.twig' %}
+                    {{ form_start(profileForm, { 'action': app.request.requestUri }) }}
+                    {{ form_row(profileForm.firstname) }}
+                    {{ form_row(profileForm.lastname) }}
+                    {{ form_row(profileForm.avatarFile) }}
 
-    {% form_theme profileForm '@EasyAdmin/crud/form_theme.html.twig' %}
-    {{ form_start(profileForm) }}
-    {{ form_row(profileForm.firstname) }}
-    {{ form_row(profileForm.lastname) }}
-    {{ form_row(profileForm.avatarFile) }}
+                    <button class="btn btn-primary" type="submit" value="next">
+                        <span class="btn-label">Guardar</span>
+                    </button>
 
-    <button class="btn btn-primary" type="submit" value="next">
-        <span class="btn-label">Guardar</span>
-    </button>
+                    {{ form_end(profileForm) }}
+                </div>
 
-    {{ form_end(profileForm) }}
+                <div id="change-password" class="tab-pane{% if tabs_config['change-password'].active %} active{% endif %}">
+                    {% form_theme changePasswordForm '@EasyAdmin/crud/form_theme.html.twig' %}
+                    {{ form_start(changePasswordForm, { 'action': app.request.requestUri }) }}
+                    {{ form_row(changePasswordForm.plainPassword) }}
 
-    {% form_theme changePasswordForm '@EasyAdmin/crud/form_theme.html.twig' %}
-    {{ form_start(changePasswordForm) }}
-    {{ form_row(changePasswordForm.plainPassword) }}
+                    <button class="btn btn-primary" type="submit" value="next">
+                        <span class="btn-label">Cambiar contraseña</span>
+                    </button>
 
-    <button class="btn btn-primary" type="submit" value="next">
-        <span class="btn-label">Cambiar contraseña</span>
-    </button>
+                    {{ form_end(changePasswordForm) }}
+                </div>
 
-    {{ form_end(changePasswordForm) }}
-
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
