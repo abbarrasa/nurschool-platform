@@ -121,6 +121,11 @@ class User implements UserInterface
      */
     private $avatarFile;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Invitation::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $invitation;
+
     public function __construct()
     {
         $this->managedSchools = new ArrayCollection();
@@ -453,5 +458,22 @@ class User implements UserInterface
                 !$this->getJoinSchoolRequests()->isEmpty()
             )
         ;
+    }
+
+    public function getInvitation(): ?Invitation
+    {
+        return $this->invitation;
+    }
+
+    public function setInvitation(Invitation $invitation): self
+    {
+        $this->invitation = $invitation;
+
+        // set the owning side of the relation if necessary
+        if ($invitation->getUser() !== $this) {
+            $invitation->setUser($this);
+        }
+
+        return $this;
     }
 }

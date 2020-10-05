@@ -88,11 +88,17 @@ class School implements LocationInterface
      */
     private $logoFile;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Invitation::class, mappedBy="school")
+     */
+    private $invitations;
+
     public function __construct()
     {
         $this->admins = new ArrayCollection();
         $this->nurses = new ArrayCollection();
         $this->joinSchoolRequests = new ArrayCollection();
+        $this->invitations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -248,5 +254,33 @@ class School implements LocationInterface
             // if 'updatedAt' is not defined in your entity, use another property
             $this->updatedAt = new \DateTime('now');
         }
+    }
+
+    /**
+     * @return Collection|Invitation[]
+     */
+    public function getInvitations(): Collection
+    {
+        return $this->invitations;
+    }
+
+    public function addInvitation(Invitation $invitation): self
+    {
+        if (!$this->invitations->contains($invitation)) {
+            $this->invitations[] = $invitation;
+            $invitation->addSchool($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvitation(Invitation $invitation): self
+    {
+        if ($this->invitations->contains($invitation)) {
+            $this->invitations->removeElement($invitation);
+            $invitation->removeSchool($this);
+        }
+
+        return $this;
     }
 }

@@ -12,11 +12,14 @@
 namespace Nurschool\Form;
 
 use Nurschool\Entity\User;
+use Nurschool\Form\Type\InvitationType;
 use Nurschool\Validator\Constraints\Password;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
@@ -53,13 +56,24 @@ class RegistrationFormType extends AbstractType
 //                    ]),
                 ],
             ])
+            ->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
+                /** @var User $user */
+                $user = $event->getData();
+                if (null == $user->getInvitation()) {
+                    $form = $event->getForm();
+                    $form->add('invitation', InvitationType::class, [
+                        'label' => 'Code'
+                    ]);
+                }
+            })
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'data_class' => User::class,
+        $resolver
+            ->setDefaults([
+                'data_class' => User::class,
         ]);
     }
 }
