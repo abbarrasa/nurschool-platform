@@ -13,11 +13,14 @@ namespace Nurschool\Form;
 
 
 use Nurschool\Entity\User;
+use Nurschool\Form\Type\InvitationType;
 use Nurschool\Form\Type\RoleListType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
@@ -46,13 +49,20 @@ class WelcomeUserProfileFormType extends AbstractType
                 'label' => 'Avatar',
                 'required' => false
             ])
-            ->add('roles', RoleListType::class, [
-                'label' => 'Roles',
-                'required' => true,
-                'constraints' => [
-                    new NotBlank()
-                ],
-            ])
+            ->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
+                /** @var User $user */
+                $user = $event->getData();
+                if (!$user->hasAnyRole()) {
+                    $form = $event->getForm();
+                    $form->add('roles', RoleListType::class, [
+                        'label' => 'Roles',
+                        'required' => true,
+                        'constraints' => [
+                            new NotBlank()
+                        ],
+                    ]);
+                }
+            })
         ;
     }
 

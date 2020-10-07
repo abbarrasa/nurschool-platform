@@ -64,7 +64,8 @@ class WelcomeProfileStage implements StageInterface, FormHandlerInterface
 
     public function isNecessary(): bool
     {
-        return !$this->security->getUser()->hasAnyRole();
+        return true;
+//        return !$this->security->getUser()->hasAnyRole();
     }
 
     public function getTemplateParams(): array

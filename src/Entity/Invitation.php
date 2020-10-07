@@ -4,6 +4,7 @@ namespace Nurschool\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Nurschool\Repository\InvitationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,6 +14,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Invitation
 {
+    /**
+     * Hook timestampable behavior
+     * updates createdAt, updatedAt fields
+     */
+    use TimestampableEntity;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -44,6 +51,11 @@ class Invitation
      * @ORM\Column(type="boolean")
      */
     private $sent = false;
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
 
     /**
      * @ORM\ManyToMany(targetEntity=School::class, inversedBy="invitations")
@@ -99,18 +111,6 @@ class Invitation
         return $this;
     }
 
-    public function getSent(): ?bool
-    {
-        return $this->sent;
-    }
-
-    public function setSent(bool $sent): self
-    {
-        $this->sent = $sent;
-
-        return $this;
-    }
-
     public function getFirstname(): ?string
     {
         return $this->firstname;
@@ -131,6 +131,30 @@ class Invitation
     public function setLastname(string $lastname): self
     {
         $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function isSent(): ?bool
+    {
+        return $this->sent;
+    }
+
+    public function setSent(bool $sent): self
+    {
+        $this->sent = $sent;
+
+        return $this;
+    }
+
+    public function getRoles(): ?array
+    {
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
 
         return $this;
     }

@@ -2,11 +2,15 @@
 
 namespace Nurschool\Controller\CRUD;
 
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
 use Nurschool\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use Nurschool\Event\UserProfileEvent;
@@ -24,6 +28,36 @@ class UserCrudController extends AbstractCrudController
     public static function getEntityFqcn(): string
     {
         return User::class;
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        $actions
+            ->update(Crud::PAGE_INDEX, Action::NEW, function(Action $action) {
+                return $action
+                    ->linkToUrl(
+                        $this->get(CrudUrlGenerator::class)
+                            ->build()
+                            ->setController(InvitationCrudController::class)
+                            ->setAction(Action::NEW)
+                            ->generateUrl()
+                    );
+            })
+//
+//            ->add(
+//                Crud::PAGE_NEW,
+//                Action::new(Action::NEW, 'New', null)
+//                    ->linkToUrl(
+//                        $this->get(CrudUrlGenerator::class)
+//                            ->build()
+//                            ->setController(InvitationCrudController::class)
+//                            ->setAction(Action::NEW)
+//                            ->generateUrl()
+//                    )
+//            )
+        ;
+
+        return $actions;
     }
 
     public function configureFields(string $pageName): iterable

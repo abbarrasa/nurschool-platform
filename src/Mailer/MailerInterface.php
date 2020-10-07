@@ -20,4 +20,5 @@ interface MailerInterface
 {
     public function sendConfirmationEmail(UserInterface $user, VerifyEmailSignatureComponents $signatureComponents/*string $signedUrl, \DateTimeInterface $expiresAt*/);
     public function sendResettingPasswordEmail(UserInterface $user, ResetPasswordToken $resetToken, int $tokenLifetime);
+    public function sendInvitationEmail(Invitation $invitation);
 }

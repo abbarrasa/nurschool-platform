@@ -89,7 +89,7 @@ class School implements LocationInterface
     private $logoFile;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Invitation::class, mappedBy="school")
+     * @ORM\ManyToMany(targetEntity=Invitation::class, mappedBy="schools")
      */
     private $invitations;
 

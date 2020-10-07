@@ -19,6 +19,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RoleListType extends AbstractType
 {
+    public static function getRoleList(): array
+    {
+        return [
+            'Administrador' => 'ROLE_ADMIN',
+            'Enfermera' => 'ROLE_NURSE'
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -28,9 +36,7 @@ class RoleListType extends AbstractType
             // make expanded default value
             'expanded' => true,
             'multiple' => true,
-            'choices' => function (Options $options, $parentChoices) {
-                return ['Administrador' => 'ROLE_ADMIN', 'Enfermera' => 'ROLE_NURSE'];
-            },
+            'choices' => self::getRoleList(),
             'choice_translation_domain' => static function (Options $options, $value) {
                 // if choice_translation_domain is true, then it's the same as translation_domain
                 if (true === $value) {

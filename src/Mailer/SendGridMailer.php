@@ -72,6 +72,19 @@ class SendGridMailer implements MailerInterface
         return $this->sendMessage($email);
     }
 
+    public function sendInvitationEmail(Invitation $invitation)
+    {
+        $templateId = $this->getTemplateId('invitation');
+        $from = $this->getFrom('admin');
+        $url = $this->urlGenerator->generate('invitation', ['code' => $invitation->getCode()]);
+        $email = $this->createMessage($from, $invitation->getEmail(), ' ', $templateId);
+        $email->addDynamicTemplateData('firstname', $invitation->getFirstname());
+        $email->addDynamicTemplateData('url', $url);
+
+        return $this->sendMessage($email);
+    }
+
+
     /**
      * Creates an email with SendGrid API
      * @param $from
