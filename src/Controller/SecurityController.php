@@ -54,11 +54,38 @@ class SecurityController extends AbstractController
      * After going to Google, you're redirected back here
      * because this is the "redirect_route" you configured
      * in config/packages/knpu_oauth2_client.yaml
+     */
+    public function connectGoogleCheck()
+    {
+        throw new \LogicException('This method can be blank - it will be intercepted by the Google Authenticator in onAuthenticationSuccess method.');
+    }
+
+    /**
+     * @Route("/connect/facebook", name="connect_facebook_start")
      *
-     * @param Request $request
+     * Link to this controller to start the "connect" process to Facebook
+     *
+     * @param ClientRegistry $clientRegistry
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function connectGoogleCheck(Request $request/*, ClientRegistry $clientRegistry*/)
+    public function facebookConnect(ClientRegistry $clientRegistry)
+    {
+        return $clientRegistry
+            ->getClient('facebook')
+            ->redirect([
+                'public_profile', 'email' // the scopes you want to access
+            ])
+            ;
+    }
+
+    /**
+     * @Route("/connect/facebook/check", name="connect_facebook_check")
+     *
+     * After going to Facebook, you're redirected back here
+     * because this is the "redirect_route" you configured
+     * in config/packages/knpu_oauth2_client.yaml
+     */
+    public function connectFacebookCheck()
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the Google Authenticator in onAuthenticationSuccess method.');
     }

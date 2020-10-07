@@ -9,20 +9,17 @@
  * file that was distributed with this source code.
  */
 
+
 namespace Nurschool\Security;
+
 
 use Doctrine\ORM\EntityManagerInterface;
 use Nurschool\Entity\User;
-use Nurschool\Event\Oauth2UserRegisteredEvent;
 use Nurschool\Event\RegisteredUserEvent;
-use Nurschool\Model\UserManagerInterface;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
-use KnpU\OAuth2ClientBundle\Client\Provider\GoogleClient;
+use KnpU\OAuth2ClientBundle\Client\Provider\FacebookClient;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use League\OAuth2\Client\Provider\GoogleUser;
-use Nurschool\Security\Util\AuthenticationSuccessTrait;
-use Nurschool\Manager\AvatarManager;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use League\OAuth2\Client\Provider\FacebookUser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,13 +27,10 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class GoogleAuthenticator extends SocialAuthenticator
+class FacebookAuthenticator extends SocialAuthenticator
 {
-    use TargetPathTrait;
-    use AuthenticationSuccessTrait;
-
     /** @var ClientRegistry */
     private $clientRegistry;
 
@@ -46,14 +40,13 @@ class GoogleAuthenticator extends SocialAuthenticator
     /** @var AvatarManager */
     private $avatarManager;
 
-    /** @var UrlGeneratorInterface */
     private $urlGenerator;
 
-    /** @var EventDispatcherInterface */
+    /** @var EventDispatcherInterface  */
     private $eventDispatcher;
 
     /**
-     * GoogleAuthenticator constructor.
+     * FacebookAuthenticator constructor.
      * @param ClientRegistry $clientRegistry
      * @param EntityManagerInterface $entityManager
      * @param AvatarManager $avatarManager
@@ -81,7 +74,7 @@ class GoogleAuthenticator extends SocialAuthenticator
     public function supports(Request $request)
     {
         // continue ONLY if the current ROUTE matches the check ROUTE
-        return $request->attributes->get('_route') === 'connect_google_check';
+        return $request->attributes->get('_route') === 'connect_facebook_check';
     }
 
     /**
@@ -101,14 +94,14 @@ class GoogleAuthenticator extends SocialAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        /** @var GoogleUser $googleUser */
-        $googleUser = $this->getClient()->fetchUserFromToken($credentials);
+        /** @var FacebookUser $facebookUser */
+        $facebookUser = $this->getClient()->fetchUserFromToken($credentials);
         // 1) have they logged in with Google before? Easy!
         $repository = $this->entityManager->getRepository(User::class);
-        $user = $repository->findOneBy(['googleUid' => $googleUser->getId()]);
+        $user = $repository->findOneBy(['facebookUid' => $facebookUser->getId()]);
         if (!$user) {
             // 2) do we have  a matching user by email?
-            $email = $googleUser->getEmail();
+            $email = $facebookUser->getEmail();
             $user = $repository->findOneBy(['email' => $email]);
             // 3) Maybe you just want to "register" them by creating
             // a User object
@@ -116,12 +109,12 @@ class GoogleAuthenticator extends SocialAuthenticator
                 $user = new User();
                 $user
                     ->setEmail($email)
-                    ->setGoogleUid($googleUser->getId())
-                    ->setFirstname($googleUser->getFirstName())
-                    ->setLastname($googleUser->getLastName())
+                    ->setGoogleUid($facebookUser->getId())
+                    ->setFirstname($facebookUser->getFirstName())
+                    ->setLastname($facebookUser->getLastName())
                 ;
 
-                if (null !== ($uri = $googleUser->getAvatar())) {
+                if (null !== ($uri = $facebookUser->getPictureUrl())) {
                     $this->avatarManager->setAvatarFromUri($uri, $user);
                 }
 
@@ -131,13 +124,13 @@ class GoogleAuthenticator extends SocialAuthenticator
                 // Launch an event when user account is created
                 $this->eventDispatcher->dispatch(new RegisteredUserEvent($user), RegisteredUserEvent::NAME);
             } else {
-                $user->setGoogleUid($googleUser->getId());
+                $user->setFacebookUid($facebookUser->getId());
 
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
             }
         }
-
+         
         return $userProvider->loadUserByUsername($user->getUsername());
     }
 
@@ -206,10 +199,11 @@ class GoogleAuthenticator extends SocialAuthenticator
     }
 
     /**
-     * @return GoogleClient
+     * @return FacebookClient
      */
     private function getClient()
     {
-        return $this->clientRegistry->getClient('google');
+        // "facebook" is the key used in config/packages/knpu_oauth2_client.yaml
+        return $this->clientRegistry->getClient('facebook');
     }
 }

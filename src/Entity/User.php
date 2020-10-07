@@ -51,6 +51,11 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255, nullable=true, unique=true)
      */
+    private $facebookUid;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, unique=true)
+     */
     private $googleUid;
 
     /**
@@ -146,6 +151,18 @@ class User implements UserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getFacebookUid(): ?string
+    {
+        return $this->facebookUid;
+    }
+
+    public function setFacebookUid(?string $facebookUid): self
+    {
+        $this->facebookUid = $facebookUid;
 
         return $this;
     }
