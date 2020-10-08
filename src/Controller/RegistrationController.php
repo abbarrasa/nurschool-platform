@@ -71,13 +71,29 @@ class RegistrationController extends AbstractController
      * Register an user via invitation.
      * @Route("/invitation/{code}", name="invitation")
      * @param Request $request
-     * @param string $code
+     * @param string|null $code
      * @return Response
      */
-    public function invitation(Request $request, string $code): Response
+    public function invitation(Request $request, string $code = null): Response
     {
+        if ($code) {
+            // We store the invitation code in session and remove it from the URL, to avoid the
+            // URL being loaded in a browser and potentially leaking the code to 3rd party
+            // JavaScript.
+            $this->storeCodeInSession($request, $code);
+
+            return $this->redirectToRoute('invitation');
+        }
+
+        if (null === ($code = $this->getCodeFromSession($request))) {
+            throw $this->createNotFoundException('No invitation code found in the URL or in the session.');
+        }
+
         $repository = $this->getDoctrine()->getRepository(Invitation::class);
-        $invitation = $repository->findOneBy(['code' => $code]);
+        if (null === ($invitation = $repository->findOneBy(['code' => $code]))) {
+            throw $this->createNotFoundException('No invitation found for this code.');
+        }
+
         $user = new User();
         $user->setInvitation($invitation);
 
@@ -88,6 +104,7 @@ class RegistrationController extends AbstractController
             $user->setFirstname($user->getInvitation()->getFirstname());
             $user->setLastname($user->getInvitation()->getLastname());
             $user->setRoles($user->getInvitation()->getRoles());
+            $user->setIsVerified(true);
 
             // encode the plain password
             $user->setPassword(
@@ -101,7 +118,8 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('register_done');
+            $this->addFlash('success', 'Your registration has been successful.');
+            return $this->redirectToRoute('welcome');
         }
 
         return $this->render('registration/invitation.html.twig', [
@@ -166,30 +184,13 @@ class RegistrationController extends AbstractController
         return $this->redirectToRoute('welcome');
     }
 
-    private function processRegistrationForm(FormInterface $form): ?Response
+    private function storeCodeInSession(Request $request, string $code): void
     {
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var User $user */
-            $user = $form->getData();
+        $request->getSession()->set('InvitationPublicCode', $code);
+    }
 
-            // encode the plain password
-            $user->setPassword(
-                $this->passwordEncoder->encodePassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            // Launch an event when user account is created
-            $this->eventDispatcher->dispatch(new RegisteredUserEvent($user), RegisteredUserEvent::NAME);
-
-            return $this->redirectToRoute('register_done');
-        }
-
-        return null;
+    private function getCodeFromSession(Request $request): ?string
+    {
+        $request->getSession()->get('InvitationPublicCode');
     }
 }

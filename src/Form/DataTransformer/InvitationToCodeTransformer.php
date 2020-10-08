@@ -60,10 +60,7 @@ class InvitationToCodeTransformer implements \Symfony\Component\Form\DataTransfo
 
         return $this->entityManager
             ->getRepository(Invitation::class)
-            ->findOneBy(array(
-                'code' => $value,
-                'user' => null,
-            ))
+            ->findByCode($value)
         ;
     }
 }

@@ -19,6 +19,14 @@ class InvitationRepository extends ServiceEntityRepository
         parent::__construct($registry, Invitation::class);
     }
 
+    public function findByCode(string $code): ?Invitation
+    {
+        return $this->findOneBy([
+            'code' => $code,
+            'user' => null
+        ]);
+    }
+
     // /**
     //  * @return Invitation[] Returns an array of Invitation objects
     //  */
