@@ -15,6 +15,8 @@ parameters:
             template: '%env(resolve:SENDGRID_CONFIRMATION_TEMPLATE_ID)%'
         resetting:
             template: '%env(resolve:SENDGRID_RESETTING_TEMPLATE_ID)%'
+        invitation:
+            template: '%env(resolve:SENDGRID_INVITATION_TEMPLATE_ID)%'
 
 services:
     # default configuration for services in *this* file
@@ -65,26 +67,6 @@ services:
             - '@router'
             - '%config_mailer%'
 
-    Nurschool\File\Uploader\Naming\UniqidNamer:
-        public: true
-
-    Nurschool\Manager\AvatarManager:
-        arguments:
-            - '%nurschool.path.user_images%'
-            - '%kernel.project_dir%/public%nurschool.path.user_images%'
-            - '@doctrine.orm.entity_manager'
-
-    Nurschool\Wizard\Container\DefaultStageContainer:
-        arguments:
-            $stages: !tagged_iterator wizard_stage
-
-    Nurschool\EventSubscriber\GeocoderSubscriber:
-        arguments:
-            - '@bazinga_geocoder.provider.google_maps'
-            - '@Bazinga\GeocoderBundle\Mapping\Driver\AnnotationDriver'
-        tags:
-            - doctrine.event_subscriber
-
     Nurschool\EventListener\LoginListener:
         tags:
             - { name: kernel.event_listener, event: security.interactive_login }
@@ -96,3 +78,27 @@ services:
     Nurschool\EventListener\ExceptionListener:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
+
+    Nurschool\EventSubscriber\GeocoderSubscriber:
+        arguments:
+            - '@bazinga_geocoder.provider.google_maps'
+            - '@Bazinga\GeocoderBundle\Mapping\Driver\AnnotationDriver'
+        tags:
+            - doctrine.event_subscriber
+
+    Nurschool\File\Uploader\Naming\UniqidNamer:
+        public: true
+
+    Nurschool\Generator\InvitationCodeGenerator:
+        arguments: [ '%env(resolve:APP_SECRET)%']
+
+    Nurschool\Manager\AvatarManager:
+        arguments:
+            - '@Nurschool\Generator\DefaultAvatarGenerator'
+            - '%nurschool.path.user_images%'
+            - '%kernel.project_dir%/public%nurschool.path.user_images%'
+            - '@doctrine.orm.entity_manager'
+
+    Nurschool\Wizard\Container\DefaultStageContainer:
+        arguments:
+            $stages: !tagged_iterator wizard_stage

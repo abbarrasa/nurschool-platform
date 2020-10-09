@@ -13,6 +13,7 @@ namespace Nurschool\Manager;
 
 
 use Doctrine\ORM\EntityManagerInterface;
+use Nurschool\Generator\AvatarGeneratorInterface;
 use Nurschool\Model\UserInterface;
 use Nurschool\File\Util\FileNameTrait;
 use YoHang88\LetterAvatar\LetterAvatar;
@@ -21,25 +22,30 @@ class AvatarManager
 {
     use FileNameTrait;
 
+    /** @var AvatarGeneratorInterface */
+    private $avatarGenerator;
+
     /** @var string */
     private $uriPrefix;
 
     /** @var string */
-    private $detinationPath;
+    private $destinationPath;
 
     /** @var EntityManagerInterface */
     private $entityManager;
 
     /**
-     * AvatarGenerator constructor.
+     * AvatarManager constructor.
+     * @param AvatarGeneratorInterface $avatarGenerator
      * @param string $uriPrefix
-     * @param string $detinationPath
+     * @param string $destinationPath
      * @param EntityManagerInterface $entityManager
      */
-    public function __construct(string $uriPrefix, string $detinationPath, EntityManagerInterface $entityManager)
+    public function __construct(AvatarGeneratorInterface $avatarGenerator, string $uriPrefix, string $destinationPath, EntityManagerInterface $entityManager)
     {
+        $this->avatarGenerator = $avatarGenerator;
         $this->uriPrefix = $uriPrefix;
-        $this->detinationPath = $detinationPath;
+        $this->destinationPath = $destinationPath;
         $this->entityManager = $entityManager;
     }
 
@@ -55,16 +61,7 @@ class AvatarManager
             $fullname = $user->getEmail();
         }
 
-        // Square Shape, Size 64px
-        $avatar = new LetterAvatar($fullname, 'square', 64);
-
-        $filename = $this->getUniqueFileName();
-        // Save Image As JPEG
-        if (!$avatar->saveAs(\sprintf('%s/%s', $this->detinationPath, $filename), LetterAvatar::MIME_TYPE_JPEG)) {
-            throw new \RuntimeException('Avatar could not be saved');
-        }
-
-        $user->setAvatar($filename);
+        $user->setAvatar($this->avatarGenerator->createAvatar($this->destinationPath, $fullname));
 
         if ($saveAndFlush) {
             $this->saveAndFlush($user);
@@ -79,10 +76,7 @@ class AvatarManager
      */
     public function setAvatarFromUri(string $uri, UserInterface $user, bool $saveAndFlush = false): void
     {
-        $filename = $this->getUniqueFileName();
-        \file_put_contents(\sprintf('%s/%s', $this->detinationPath, $filename), \file_get_contents($uri));
-
-        $user->setAvatar($filename);
+        $user->setAvatar($this->avatarGenerator->createAvatarFromFile($this->destinationPath, $uri));
 
         if ($saveAndFlush) {
             $this->saveAndFlush($user);

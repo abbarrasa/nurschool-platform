@@ -4,7 +4,7 @@ namespace Nurschool\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Nurschool\Entity\Traits\CodableEntity;
 use Nurschool\Repository\InvitationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,10 +15,10 @@ use Doctrine\ORM\Mapping as ORM;
 class Invitation
 {
     /**
-     * Hook timestampable behavior
-     * updates createdAt, updatedAt fields
+     * Hook codeable behavior
+     * manages a code field
      */
-    use TimestampableEntity;
+    use CodableEntity;
 
     /**
      * @ORM\Id
@@ -26,11 +26,6 @@ class Invitation
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="string", length=8)
-     */
-    private $code;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -78,25 +73,11 @@ class Invitation
     public function __construct()
     {
         $this->schools = new ArrayCollection();
-        // generate identifier only once, here a 8 characters length code
-        $this->code = substr(md5(uniqid(rand(), true)), 0, 8);
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getCode(): ?string
-    {
-        return $this->code;
-    }
-
-    public function setCode(string $code): self
-    {
-        $this->code = $code;
-
-        return $this;
     }
 
     public function getEmail(): ?string
