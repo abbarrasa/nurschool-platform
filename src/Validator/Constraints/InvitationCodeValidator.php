@@ -14,6 +14,7 @@ namespace Nurschool\Validator\Constraints;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Nurschool\Entity\Invitation;
+use Nurschool\Security\InvitationHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -21,22 +22,31 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class InvitationCodeValidator extends ConstraintValidator
 {
-    /** @var RequestStack */
-    private $requestStack;
+//    /** @var RequestStack */
+//    private $requestStack;
+//
+//    /** @var EntityManagerInterface */
+//    private $entityManager;
 
-    /** @var EntityManagerInterface */
-    private $entityManager;
+    private $helper;
 
-    /**
-     * InvitationCodeValidator constructor.
-     * @param RequestStack $requestStack
-     * @param EntityManagerInterface $entityManager
-     */
-    public function __construct(RequestStack $requestStack, EntityManagerInterface $entityManager)
+    public function __construct(InvitationHelper $helper)
     {
-        $this->requestStack = $requestStack;
-        $this->entityManager = $entityManager;
+        $this->helper = $helper;
     }
+
+
+//    /**
+//     * InvitationCodeValidator constructor.
+//     * @param RequestStack $requestStack
+//     * @param EntityManagerInterface $entityManager
+//     */
+
+//    public function __construct(RequestStack $requestStack, EntityManagerInterface $entityManager)
+//    {
+//        $this->requestStack = $requestStack;
+//        $this->entityManager = $entityManager;
+//    }
 
     public function validate($value, Constraint $constraint)
     {
@@ -53,26 +63,27 @@ class InvitationCodeValidator extends ConstraintValidator
         }
 
         $code = $value instanceof Invitation ? $value->getCode() : $value;
-        if ($code != $this->requestStack->getCurrentRequest()->attributes->get($constraint->parameter)) {
-            $this
-                ->context
-                ->buildViolation($constraint->invalidMessage)
-                ->addViolation()
-            ;
-        }
 
-        $invitation = $this->entityManager
-            ->getRepository(Invitation::class)
-            ->findByCode($code)
-        ;
+//        if ($code != $this->requestStack->getCurrentRequest()->attributes->get($constraint->parameter)) {
+//            $this
+//                ->context
+//                ->buildViolation($constraint->invalidMessage)
+//                ->addViolation()
+//            ;
+//        }
 
-        if (null === $invitation) {
-            $this
-                ->context
-                ->buildViolation($constraint->invalidMessage)
-                ->addViolation()
-            ;
-        }
+//        $invitation = $this->entityManager
+//            ->getRepository(Invitation::class)
+//            ->findByCode($code)
+//        ;
+
+//        if (null === $invitation) {
+//            $this
+//                ->context
+//                ->buildViolation($constraint->invalidMessage)
+//                ->addViolation()
+//            ;
+//        }
     }
 
 }

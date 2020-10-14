@@ -22,6 +22,15 @@ trait AuthenticationSuccessTrait
     /** @var RouterInterface */
     private $router;
 
+    /**
+     * @required
+     * @param RouterInterface $router
+     */
+    public function setRouter(RouterInterface $router)
+    {
+        $this->router = $router;
+    }
+
     public function getAuthenticatedResponse(SessionInterface $session, UserInterface $user, string $targetPath = null)
     {
         if ($session->has('SendConfirmationEmail')) {
@@ -39,15 +48,6 @@ trait AuthenticationSuccessTrait
         }
         
         return new RedirectResponse($this->router->generate('dashboard'));
-    }
-
-    /**
-     * @required
-     * @param RouterInterface $router
-     */
-    public function setRouter(RouterInterface $router)
-    {
-        $this->router = $router;
     }
 
     /**

@@ -13,6 +13,7 @@ namespace Nurschool\Mailer;
 
 
 use Nurschool\Mailer\Exception\ConfigMailerException;
+use Nurschool\Model\TokenComponents;
 use Nurschool\Model\UserInterface;
 use OG\SendGridBundle\Provider\SendGridProvider;
 use SendGrid\Mail\Mail;
@@ -72,11 +73,11 @@ class SendGridMailer implements MailerInterface
         return $this->sendMessage($email);
     }
 
-    public function sendInvitationEmail(Invitation $invitation)
+    public function sendInvitationEmail(Invitation $invitation, TokenComponents $tokenComponents)
     {
         $templateId = $this->getTemplateId('invitation');
         $from = $this->getFrom('admin');
-        $url = $this->urlGenerator->generate('invitation', ['code' => $invitation->getCode()]);
+        $url = $this->urlGenerator->generate('invitation', ['code' => $tokenComponents->getToken()]);
         $email = $this->createMessage($from, $invitation->getEmail(), ' ', $templateId);
         $email->addDynamicTemplateData('firstname', $invitation->getFirstname());
         $email->addDynamicTemplateData('url', $url);

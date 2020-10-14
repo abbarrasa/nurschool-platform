@@ -22,7 +22,15 @@ class InvitationRepository extends ServiceEntityRepository
     public function findByCode(string $code): ?Invitation
     {
         return $this->findOneBy([
-            'code' => $code,
+            'selector' => $code,
+            'user' => null
+        ]);
+    }
+
+    public function findBySelector(string $selector): ?Invitation
+    {
+        return $this->findOneBy([
+            'selector' => $selector,
             'user' => null
         ]);
     }

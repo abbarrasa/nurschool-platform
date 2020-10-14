@@ -2,13 +2,11 @@
 
 namespace Nurschool\Controller\CRUD;
 
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Nurschool\Entity\Invitation;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use Nurschool\Field\RoleListField;
-use Nurschool\Form\Type\RoleListType;
 
 class InvitationCrudController extends AbstractCrudController
 {

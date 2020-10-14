@@ -4,7 +4,8 @@ namespace Nurschool\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Nurschool\Entity\Traits\CodableEntity;
+use Nurschool\Entity\Traits\TokenableEntity;
+use Nurschool\Model\TokenableInterface;
 use Nurschool\Repository\InvitationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,13 +13,13 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass=InvitationRepository::class)
  * @ORM\Table(name="nurschool_invitation")
  */
-class Invitation
+class Invitation implements TokenableInterface
 {
     /**
-     * Hook codeable behavior
-     * manages a code field
+     * Hook tokenable behavior
+     * updates fields to manage tokens
      */
-    use CodableEntity;
+    use TokenableEntity;
 
     /**
      * @ORM\Id
@@ -31,6 +32,11 @@ class Invitation
      * @ORM\Column(type="string", length=255)
      */
     private $email;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $code;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -72,12 +78,32 @@ class Invitation
 
     public function __construct()
     {
+        $this->code = substr(md5(uniqid(rand(), true)), 0, 6);
         $this->schools = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string $code
+     * @return $this
+     */
+    public function setCode(string $code): self
+    {
+        $this->code = $code;
+
+        return $this;
     }
 
     public function getEmail(): ?string

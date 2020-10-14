@@ -14,7 +14,9 @@
         {{ form_row(registrationForm.plainPassword, {
             label: 'Password'
         }) }}
-        {{ form_row(registrationForm.invitation) }}
+        {{ form_row(registrationForm.invitation, {
+            attr: { readonly: true }
+        }) }}
         {{ form_row(registrationForm.agreeTerms) }}
 
         <button type="submit" class="btn">Register</button>

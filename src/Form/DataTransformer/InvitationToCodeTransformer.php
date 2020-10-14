@@ -14,19 +14,21 @@ namespace Nurschool\Form\DataTransformer;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Nurschool\Entity\Invitation;
+use Nurschool\Repository\InvitationRepository;
+use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 /**
- * Transforms an Invitation to an invitation code.
+ * Transforms an invitation to an invitation code.
  */
-class InvitationToCodeTransformer implements \Symfony\Component\Form\DataTransformerInterface
+class InvitationToCodeTransformer implements DataTransformerInterface
 {
-    protected $entityManager;
+    protected $repository;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(InvitationRepository $repository)
     {
-        $this->entityManager = $entityManager;
+        $this->repository = $repository;
     }
 
     /**
@@ -58,9 +60,6 @@ class InvitationToCodeTransformer implements \Symfony\Component\Form\DataTransfo
             throw new UnexpectedTypeException($value, 'string');
         }
 
-        return $this->entityManager
-            ->getRepository(Invitation::class)
-            ->findByCode($value)
-        ;
+        return $this->repository->findByCode($value);
     }
 }

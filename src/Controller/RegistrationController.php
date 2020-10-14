@@ -2,12 +2,14 @@
 
 namespace Nurschool\Controller;
 
+use Nurschool\Controller\Traits\RegistrationControllerTrait;
 use Nurschool\Entity\Invitation;
 use Nurschool\Entity\User;
 use Nurschool\Event\RegisteredUserEvent;
 use Nurschool\Form\RegistrationFormType;
 use Nurschool\Manager\AvatarManager;
 use Nurschool\Security\EmailVerifier;
+use Nurschool\Security\InvitationHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
@@ -19,6 +21,8 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
+    use RegistrationControllerTrait;
+
     /** @var UserPasswordEncoderInterface */
     private $passwordEncoder;
 
@@ -69,41 +73,39 @@ class RegistrationController extends AbstractController
 
     /**
      * Register an user via invitation.
-     * @Route("/invitation/{code}", name="invitation")
+     * @Route("/invitation/{token}", name="invitation")
      * @param Request $request
-     * @param string|null $code
+     * @param InvitationHelper $helper
+     * @param string|null $token
      * @return Response
      */
-    public function invitation(Request $request, string $code = null): Response
+    public function invitation(Request $request, InvitationHelper $helper, string $token = null): Response
     {
-        if ($code) {
+        if ($token) {
             // We store the invitation code in session and remove it from the URL, to avoid the
             // URL being loaded in a browser and potentially leaking the code to 3rd party
             // JavaScript.
-            $this->storeCodeInSession($request, $code);
+            $this->storeInvitationTokenInSession($token);
 
             return $this->redirectToRoute('invitation');
         }
 
-        if (null === ($code = $this->getCodeFromSession($request))) {
-            throw $this->createNotFoundException('No invitation code found in the URL or in the session.');
+        if (null === ($token = $this->getInvitationTokenFromSession())) {
+            throw $this->createNotFoundException('No invitation token found in the URL or in the session.');
         }
 
-        $repository = $this->getDoctrine()->getRepository(Invitation::class);
-        if (null === ($invitation = $repository->findOneBy(['code' => $code]))) {
-            throw $this->createNotFoundException('No invitation found for this code.');
-        }
-
+        $invitation = $helper->validateTokenAndFetchInvitation($token);
         $user = new User();
+        $user->setEmail($invitation->getEmail());
+        $user->setFirstname($invitation->getFirstname());
+        $user->setLastname($invitation->getLastname());
+        $user->setRoles($invitation->getRoles());
         $user->setInvitation($invitation);
 
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setFirstname($user->getInvitation()->getFirstname());
-            $user->setLastname($user->getInvitation()->getLastname());
-            $user->setRoles($user->getInvitation()->getRoles());
             $user->setIsVerified(true);
 
             // encode the plain password
@@ -118,8 +120,10 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            $this->cleanSessionAfterRegistration();
+
             $this->addFlash('success', 'Your registration has been successful.');
-            return $this->redirectToRoute('welcome');
+            return $this->redirectToRoute('register_done');
         }
 
         return $this->render('registration/invitation.html.twig', [
@@ -135,22 +139,24 @@ class RegistrationController extends AbstractController
      */
     public function registerDone(Request $request)
     {
-        $session = $request->getSession();
-        $email = $session->get('SendConfirmationEmail');
-        $expiresAt = $session->get('SendConfirmationTokenExpiresAt');
+        if (!$this->checkConfirmationEmailInSession()) {
+            return $this->redirectToRoute('dashboard');
+        }
 
+        $email = $this->getConfirmationEmailFromSession();
         if (empty($email)) {
             return $this->redirectToRoute('register');
         }
 
-        $session->remove('SendConfirmationEmail');
-        $session->remove('SendConfirmationTokenExpiresAt');
         $entityManager = $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
 
         if (null === $user) {
             return $this->redirectToRoute('login');
         }
+
+        $expiresAt = $this->getConfirmationTokenExpiresAtFromSession();
+        $this->cleanSessionAfterConfirmation();
 
         return $this->render('registration/done.html.twig', [
             'user' => $user,
@@ -182,15 +188,5 @@ class RegistrationController extends AbstractController
         $this->addFlash('success', 'Your email address has been verified.');
 
         return $this->redirectToRoute('welcome');
-    }
-
-    private function storeCodeInSession(Request $request, string $code): void
-    {
-        $request->getSession()->set('InvitationPublicCode', $code);
-    }
-
-    private function getCodeFromSession(Request $request): ?string
-    {
-        $request->getSession()->get('InvitationPublicCode');
     }
 }

@@ -89,7 +89,7 @@ services:
     Nurschool\File\Uploader\Naming\UniqidNamer:
         public: true
 
-    Nurschool\Generator\InvitationCodeGenerator:
+    Nurschool\Generator\TokenGenerator:
         arguments: [ '%env(resolve:APP_SECRET)%']
 
     Nurschool\Manager\AvatarManager:

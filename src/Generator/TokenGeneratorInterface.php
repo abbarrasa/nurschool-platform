@@ -12,9 +12,9 @@
 namespace Nurschool\Generator;
 
 
-interface InvitationCodeGeneratorInterface
-{
-    public function createCode(): string;
+use Nurschool\Model\TokenComponents;
 
-    public function createToken(\DateTimeInterface $expiresAt, string $code);
+interface TokenGeneratorInterface
+{
+    public function createToken(string $data, \DateTimeInterface $expiresAt = null, string $verifier = null): TokenComponents;
 }

@@ -15,16 +15,20 @@ namespace Nurschool\EventSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use Nurschool\Event\InvitedUserEvent;
 use Nurschool\Mailer\MailerInterface;
+use Nurschool\Security\InvitationHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class EmailInvitationSubscriber implements EventSubscriberInterface
 {
+    protected $helper;
+
     protected $mailer;
 
     protected $entityManager;
 
-    public function __construct(MailerInterface $mailer, EntityManagerInterface $entityManager)
+    public function __construct(InvitationHelper $helper, MailerInterface $mailer, EntityManagerInterface $entityManager)
     {
+        $this->helper = $helper;
         $this->mailer = $mailer;
         $this->entityManager = $entityManager;
     }
@@ -43,7 +47,11 @@ class EmailInvitationSubscriber implements EventSubscriberInterface
     {
         $invitation = $event->getInvitation();
 
-        $this->mailer->sendInvitationEmail($invitation);
+        $tokenComponents = $this->helper->generateInvitationToken($invitation);
+        $invitation->setSelector($tokenComponents->getSelector());
+        $invitation->setExpiresAt($tokenComponents->getExpiresAt());
+
+        $this->mailer->sendInvitationEmail($invitation, $tokenComponents);
 
         $invitation->setSent(true);
         $this->entityManager->persist($invitation);
