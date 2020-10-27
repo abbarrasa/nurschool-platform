@@ -12,15 +12,11 @@
 namespace Nurschool\Entity\Traits;
 
 
+use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\ORM\Mapping as ORM;
+
 trait TokenableEntity
 {
-    public static $_SELECTOR_LENGTH = 20;
-
-    /**
-     * @ORM\Column(type="string", length=20)
-     */
-    protected $selector;
-
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
@@ -28,21 +24,9 @@ trait TokenableEntity
     protected $requestedAt;
 
     /**
-     * @ORM\Column(type="datetime_inmutable, nullable=true")
+     * @ORM\Column(type="datetime_immutable", nullable=true)
      */
     protected $expiresAt;
-
-    public function getSelector(): string
-    {
-        return $this->selector;
-    }
-
-    public function setSelector(string $selector)
-    {
-        $this->selector = $selector;
-
-        return $this;
-    }
 
     public function getRequestedAt(): \DateTimeInterface
     {

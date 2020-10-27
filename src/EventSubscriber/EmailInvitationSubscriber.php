@@ -48,9 +48,6 @@ class EmailInvitationSubscriber implements EventSubscriberInterface
         $invitation = $event->getInvitation();
 
         $tokenComponents = $this->helper->generateInvitationToken($invitation);
-        $invitation->setSelector($tokenComponents->getSelector());
-        $invitation->setExpiresAt($tokenComponents->getExpiresAt());
-
         $this->mailer->sendInvitationEmail($invitation, $tokenComponents);
 
         $invitation->setSent(true);

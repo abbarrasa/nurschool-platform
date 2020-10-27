@@ -49,23 +49,28 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    gedmo.listener.timestampable:
-        class: Gedmo\Timestampable\TimestampableListener
-        tags:
-            - { name: doctrine.event_subscriber, connection: default }
-        calls:
-            - [ setAnnotationReader, [ "@annotation_reader" ] ]
-
-    Bazinga\GeocoderBundle\Mapping\Driver\AnnotationDriver:
-        arguments:
-            - '@annotations.reader'
-
     nurschool.mailer:
         class: Nurschool\Mailer\SendGridMailer
         arguments:
             - '@og_send_grid.provider'
             - '@router'
             - '%config_mailer%'
+
+    Gedmo\Timestampable\TimestampableListener:
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ '@annotation_reader' ] ]
+
+    Gedmo\Blameable\BlameableListener:
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ '@annotation_reader' ] ]
+
+    Bazinga\GeocoderBundle\Mapping\Driver\AnnotationDriver:
+        arguments:
+            - '@annotations.reader'
 
     Nurschool\EventListener\LoginListener:
         tags:
@@ -89,7 +94,7 @@ services:
     Nurschool\File\Uploader\Naming\UniqidNamer:
         public: true
 
-    Nurschool\Generator\TokenGenerator:
+    Nurschool\Generator\InvitationTokenGenerator:
         arguments: [ '%env(resolve:APP_SECRET)%']
 
     Nurschool\Manager\AvatarManager:

@@ -12,6 +12,7 @@
 namespace Nurschool\Mailer;
 
 
+use Nurschool\Entity\Invitation;
 use Nurschool\Model\TokenComponents;
 use Nurschool\Model\UserInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;

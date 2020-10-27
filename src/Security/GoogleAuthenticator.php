@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Nurschool\Entity\User;
 use Nurschool\Event\Oauth2UserRegisteredEvent;
 use Nurschool\Event\RegisteredUserEvent;
+use Nurschool\Manager\UserManager;
 use Nurschool\Model\UserManagerInterface;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
 use KnpU\OAuth2ClientBundle\Client\Provider\GoogleClient;
@@ -40,8 +41,8 @@ class GoogleAuthenticator extends SocialAuthenticator
     /** @var ClientRegistry */
     private $clientRegistry;
 
-    /** @var EntityManagerInterface */
-    private $entityManager;
+    /** @var UserManager */
+    private $userManager;
 
     /** @var AvatarManager */
     private $avatarManager;
@@ -55,20 +56,20 @@ class GoogleAuthenticator extends SocialAuthenticator
     /**
      * GoogleAuthenticator constructor.
      * @param ClientRegistry $clientRegistry
-     * @param EntityManagerInterface $entityManager
+     * @param UserManager $userManager
      * @param AvatarManager $avatarManager
      * @param UrlGeneratorInterface $urlGenerator
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         ClientRegistry $clientRegistry,
-        EntityManagerInterface $entityManager,
+        UserManager $userManager,
         AvatarManager $avatarManager,
         UrlGeneratorInterface $urlGenerator,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->clientRegistry = $clientRegistry;
-        $this->entityManager = $entityManager;
+        $this->userManager = $userManager;
         $this->avatarManager = $avatarManager;
         $this->urlGenerator = $urlGenerator;
         $this->eventDispatcher = $eventDispatcher;
@@ -104,16 +105,15 @@ class GoogleAuthenticator extends SocialAuthenticator
         /** @var GoogleUser $googleUser */
         $googleUser = $this->getClient()->fetchUserFromToken($credentials);
         // 1) have they logged in with Google before? Easy!
-        $repository = $this->entityManager->getRepository(User::class);
-        $user = $repository->findOneBy(['googleUid' => $googleUser->getId()]);
+        $user = $this->userManager->findByGoogleUid($googleUser->getId());
         if (!$user) {
             // 2) do we have  a matching user by email?
             $email = $googleUser->getEmail();
-            $user = $repository->findOneBy(['email' => $email]);
+            $user = $this->userManager->findByEmail($email);
             // 3) Maybe you just want to "register" them by creating
             // a User object
             if (!$user) {
-                $user = new User();
+                $user = $this->userManager->createUser();
                 $user
                     ->setEmail($email)
                     ->setGoogleUid($googleUser->getId())
@@ -125,16 +125,13 @@ class GoogleAuthenticator extends SocialAuthenticator
                     $this->avatarManager->setAvatarFromUri($uri, $user);
                 }
 
-                $this->entityManager->persist($user);
-                $this->entityManager->flush();
+                $this->userManager->save($user);
 
                 // Launch an event when user account is created
                 $this->eventDispatcher->dispatch(new RegisteredUserEvent($user), RegisteredUserEvent::NAME);
             } else {
                 $user->setGoogleUid($googleUser->getId());
-
-                $this->entityManager->persist($user);
-                $this->entityManager->flush();
+                $this->userManager->save($user);
             }
         }
 

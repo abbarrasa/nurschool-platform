@@ -19,38 +19,37 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RoleListType extends AbstractType
 {
-    public static function getRoleList(): array
-    {
-        return [
-            'Administrador' => 'ROLE_ADMIN',
-            'Enfermera' => 'ROLE_NURSE'
-        ];
-    }
+    private const ROLE_LIST = [
+        'Administrador' => 'ROLE_ADMIN',
+        'Enfermera' => 'ROLE_NURSE'
+    ];
 
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            // make expanded default value
-            'expanded' => true,
-            'multiple' => true,
-            'choices' => self::getRoleList(),
-            'choice_translation_domain' => static function (Options $options, $value) {
-                // if choice_translation_domain is true, then it's the same as translation_domain
-                if (true === $value) {
-                    $value = $options['translation_domain'];
-                }
+        $resolver
+            ->setDefaults([
+                // make expanded default value
+                'expanded' => true,
+                'multiple' => true,
+                'choices' => self::ROLE_LIST,
+                'choice_translation_domain' => static function (Options $options, $value) {
+                    // if choice_translation_domain is true, then it's the same as translation_domain
+                    if (true === $value) {
+                        $value = $options['translation_domain'];
+                    }
 
-                if (null === $value) {
-                    return 'Nurschool';
-                }
+                    if (null === $value) {
+                        return 'Nurschool';
+                    }
 
-                return $value;
-            },
-            'help' => 'aadfasdfsdfsdffds'
-        ]);
+                    return $value;
+                },
+                'help' => 'aadfasdfsdfsdffds'
+            ])
+        ;
     }
 
 

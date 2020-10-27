@@ -56,7 +56,7 @@ class SchoolCrudController extends AbstractCrudController
             AssociationField::new('nurses')
                 ->onlyOnForms()
                 ->setFormTypeOption('query_builder', function (EntityRepository $er) {
-                    return $er->findByRole('ROLE_NURSE');
+                    return $er->queryByRole('ROLE_NURSE');
                 })
                 ->setFormTypeOption('choice_label', function($user) {
                     return "{$user->getLastname()}, {$user->getFirstname()}";

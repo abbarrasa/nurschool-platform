@@ -18,16 +18,24 @@ class TokenComponents
     private $expiresAt;
 
     /** @var string */
+    private $verifier;
+
+    /** @var string */
     private $selector;
 
     /** @var string */
     private $token;
 
 
-    public function __construct(string $token, string $selector, \DateTimeInterface $expiresAt = null)
-    {
+    public function __construct(
+        string $token,
+        string $selector,
+        string $verifier,
+        \DateTimeInterface $expiresAt = null
+    ) {
         $this->token = $token;
         $this->selector = $selector;
+        $this->verifier = $verifier;
         $this->expiresAt = $expiresAt;
     }
 
@@ -64,6 +72,22 @@ class TokenComponents
     }
 
     /**
+     * @return string
+     */
+    public function getVerifier(): string
+    {
+        return $this->verifier;
+    }
+
+    /**
+     * @param string $verifier
+     */
+    public function setVerifier(string $verifier): void
+    {
+        $this->verifier = $verifier;
+    }
+
+    /**
      * @return \DateTimeInterface|null
      */
     public function getExpiresAt()
@@ -77,5 +101,15 @@ class TokenComponents
     public function setExpiresAt(?\DateTimeInterface $expiresAt)
     {
         $this->expiresAt = $expiresAt;
+    }
+
+    /**
+     * The public token consists of a concatenated hashed selector string
+     * and a random non-hashed verifier string.
+     * @return string
+     */
+    public function getPublicToken(): string
+    {
+        return $this->selector.$this->verifier.$this->token;
     }
 }

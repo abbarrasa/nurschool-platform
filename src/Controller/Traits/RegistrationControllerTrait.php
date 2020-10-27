@@ -56,7 +56,7 @@ trait RegistrationControllerTrait
 
     private function getInvitationTokenFromSession(): ?string
     {
-        $this->session->get('InvitationPublicToken');
+        return $this->session->get('InvitationPublicToken');
     }
 
     private function cleanSessionAfterRegistration(): void

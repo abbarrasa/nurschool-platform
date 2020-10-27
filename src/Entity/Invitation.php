@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Nurschool\Entity\Traits\TokenableEntity;
 use Nurschool\Model\TokenableInterface;
 use Nurschool\Repository\InvitationRepository;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -65,14 +66,14 @@ class Invitation implements TokenableInterface
     private $schools;
 
     /**
+     * @Gedmo\Blameable(on="create")
      * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(name="host_user_id", referencedColumnName="id")
      */
     private $host;
 
     /**
      * @ORM\OneToOne(targetEntity=User::class, inversedBy="invitation", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 

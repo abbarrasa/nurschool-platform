@@ -13,6 +13,7 @@ namespace Nurschool\Security;
 
 
 use Nurschool\Entity\Invitation;
+use Nurschool\Generator\InvitationTokenGenerator;
 use Nurschool\Generator\TokenGeneratorInterface;
 use Nurschool\Model\TokenComponents;
 use Nurschool\Repository\InvitationRepository;
@@ -21,16 +22,13 @@ use Nurschool\Security\Exception\InvalidInvitationTokenException;
 
 class InvitationHelper
 {
-    /** @var string */
-    protected $signingKey;
-
     /**
      * How long a token is valid in seconds
      * @var int
      */
     protected $tokenLifetime;
 
-    /** @var TokenGeneratorInterface */
+    /** @var InvitationTokenGenerator */
     protected $tokenGenerator;
 
     /** @var InvitationRepository */
@@ -38,13 +36,11 @@ class InvitationHelper
 
     /**
      * InvitationHelper constructor.
-     * @param string $signingKey
-     * @param TokenGeneratorInterface $tokenGenerator
+     * @param InvitationTokenGenerator $tokenGenerator
      * @param InvitationRepository $repository
      */
-    public function __construct(string $signingKey, TokenGeneratorInterface $tokenGenerator, InvitationRepository $repository)
+    public function __construct(InvitationTokenGenerator $tokenGenerator, InvitationRepository $repository)
     {
-        $this->signingKey = $signingKey;
         $this->tokenGenerator = $tokenGenerator;
         $this->repository = $repository;
     }
@@ -59,9 +55,9 @@ class InvitationHelper
     }
 
     /**
-     * Generates a valid token for an invitation.
      * @param Invitation $invitation
      * @return TokenComponents
+     * @throws \Exception
      */
     public function generateInvitationToken(Invitation $invitation): TokenComponents
     {
@@ -72,7 +68,10 @@ class InvitationHelper
             $expiresAt = null;
         }
 
-        return $this->tokenGenerator->createToken($invitation->getCode(), $expiresAt);
+        //Set the expiration date of invitation
+        $invitation->setExpiresAt($expiresAt);
+
+        return $this->tokenGenerator->createToken($invitation);
     }
 
     /**
@@ -82,10 +81,9 @@ class InvitationHelper
      * @throws ExpiredInvitationTokenException
      * @throws InvalidInvitationTokenException
      */
-    public function validateTokenAndFetchInvitation(string $token): Invitation
+    public function validateTokenAndFetchInvitation(string $publicToken): Invitation
     {
-        $selector = \substr($token, 0, Invitation::$_SELECTOR_LENGTH);
-
+        $selector = \substr($publicToken, 0, InvitationTokenGenerator::SELECTOR_LENGTH);
         if (null === ($invitation = $this->repository->findBySelector($selector))) {
             throw new InvalidInvitationTokenException('The invitation link is invalid.');
         }
@@ -94,14 +92,12 @@ class InvitationHelper
             throw new ExpiredInvitationTokenException('The link in your invitation email is expired.');
         }
 
-        $verifierToken = $this->tokenGenerator->createToken(
-            $invitation->getCode(),
-            $invitation->getExpiresAt(),
-            \substr($token, Invitation::$_SELECTOR_LENGTH)
-        );
+        $verifier = \substr($publicToken, InvitationTokenGenerator::SELECTOR_LENGTH, InvitationTokenGenerator::VERIFIER_LENGTH);
+        $verifierToken = $this->tokenGenerator->createToken($invitation, $verifier);
+        $token = \substr($publicToken, InvitationTokenGenerator::SELECTOR_LENGTH + InvitationTokenGenerator::VERIFIER_LENGTH);
 
         if (false === \hash_equals($token, $verifierToken->getToken())) {
-            throw new InvalidInvitationTokenException('The invitation link is invalid.');
+            throw new InvalidInvitationTokenException('The invitation link has an invalid token.');
         }
 
         return $invitation;

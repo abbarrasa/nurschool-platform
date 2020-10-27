@@ -5,6 +5,7 @@ namespace Nurschool\Repository;
 use Nurschool\Entity\Invitation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Invitation|null find($id, $lockMode = null, $lockVersion = null)
@@ -29,10 +30,23 @@ class InvitationRepository extends ServiceEntityRepository
 
     public function findBySelector(string $selector): ?Invitation
     {
-        return $this->findOneBy([
-            'selector' => $selector,
-            'user' => null
-        ]);
+        $queryBuilder = $this->createQueryBuilder('i');
+        return $queryBuilder
+            ->where('MD5(i.code) = :selector')
+            ->andWhere($queryBuilder->expr()->isNull('i.user'))
+            ->getParameter('selector', $selector)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    public function findCodeById(int $id): ?string
+    {
+        if (null === ($invitation = $this->find($id))) {
+            return null;
+        }
+
+        return $invitation->getCode();
     }
 
     // /**

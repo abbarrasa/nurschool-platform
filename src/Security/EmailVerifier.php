@@ -3,6 +3,7 @@
 namespace Nurschool\Security;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Nurschool\Manager\UserManager;
 use Nurschool\Model\UserInterface;
 use Symfony\Component\HttpFoundation\Request;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
@@ -12,12 +13,12 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 class EmailVerifier
 {
     private $verifyEmailHelper;
-    private $entityManager;
+    private $userManager;
 
-    public function __construct(VerifyEmailHelperInterface $helper, EntityManagerInterface $manager)
+    public function __construct(VerifyEmailHelperInterface $helper, UserManager $userManager)
     {
         $this->verifyEmailHelper = $helper;
-        $this->entityManager = $manager;
+        $this->userManager = $userManager;
     }
 
     /**
@@ -44,8 +45,6 @@ class EmailVerifier
         $this->verifyEmailHelper->validateEmailConfirmation($request->getUri(), $user->getId(), $user->getEmail());
 
         $user->setIsVerified(true);
-
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+        $this->userManager->save($user);
     }
 }

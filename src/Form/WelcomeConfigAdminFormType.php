@@ -63,7 +63,7 @@ class WelcomeConfigAdminFormType extends AbstractType
                 'multiple' => true,
                 'class' => User::class,
                 'query_builder' => function (EntityRepository $er) {
-                    return $er->findByRole('ROLE_NURSE');
+                    return $er->queryByRole('ROLE_NURSE');
                 },
                 'choice_label' => function($user) {
                     return "{$user->getLastname()}, {$user->getFirstname()}";

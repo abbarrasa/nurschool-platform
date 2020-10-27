@@ -16,6 +16,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use Nurschool\Event\UserProfileEvent;
 use Nurschool\Form\ChangePasswordFormType;
 use Nurschool\Form\ProfileFormType;
+use Nurschool\Manager\UserManager;
 use Nurschool\Model\UserInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,18 +44,6 @@ class UserCrudController extends AbstractCrudController
                             ->generateUrl()
                     );
             })
-//
-//            ->add(
-//                Crud::PAGE_NEW,
-//                Action::new(Action::NEW, 'New', null)
-//                    ->linkToUrl(
-//                        $this->get(CrudUrlGenerator::class)
-//                            ->build()
-//                            ->setController(InvitationCrudController::class)
-//                            ->setAction(Action::NEW)
-//                            ->generateUrl()
-//                    )
-//            )
         ;
 
         return $actions;
@@ -81,10 +70,13 @@ class UserCrudController extends AbstractCrudController
      * @Route("/dashboard/profile", name="user_profile")
      * @param AdminContext $context
      * @param Request $request
+     * @param UserManager $userManager
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @return Response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function profile(AdminContext $context, Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function profile(AdminContext $context, Request $request, UserManager $userManager, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $user = $this->getUser();
         $tabsConfig = $this->buildProfileTabsConfig();
@@ -93,10 +85,7 @@ class UserCrudController extends AbstractCrudController
         $profileForm->handleRequest($request);
         if ($profileForm->isSubmitted()) {
             if ($profileForm->isValid()) {
-                /** @var UserInterface $user */
-                $user = $profileForm->getData();
-
-                $this->saveUser($user);
+                $userManager->save($user);
                 $this->addFlash('success', 'Has modificado tus datos correctamente.');
             }
 
@@ -109,17 +98,13 @@ class UserCrudController extends AbstractCrudController
         $changePasswordForm->handleRequest($request);
         if ($changePasswordForm->isSubmitted()) {
             if ($changePasswordForm->isValid()) {
-                /** @var UserInterface $user */
-                $user = $changePasswordForm->getData();
-                // encode the plain password
-                $user->setPassword(
+                $userManager->upgradePassword(
+                    $user,
                     $this->passwordEncoder->encodePassword(
                         $user,
                         $changePasswordForm->get('plainPassword')->getData()
                     )
                 );
-
-                $this->saveUser($user);
                 $this->addFlash('success', 'Has modificado tu contraseña correctamente.');
             }
 
@@ -133,13 +118,6 @@ class UserCrudController extends AbstractCrudController
             'changePasswordForm' => $changePasswordForm->createView(),
             'tabs_config' => $tabsConfig
         ]);
-    }
-
-    private function saveUser($user)
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($user);
-        $entityManager->flush();
     }
 
     private function buildProfileTabsConfig(): array

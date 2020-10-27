@@ -14,6 +14,7 @@ namespace Nurschool\Validator\Constraints;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Nurschool\Entity\Invitation;
+use Nurschool\Repository\InvitationRepository;
 use Nurschool\Security\InvitationHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraint;
@@ -22,18 +23,26 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class InvitationCodeValidator extends ConstraintValidator
 {
+    /** @var InvitationRepository */
+    private $repository;
+
+    public function __construct(InvitationRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
 //    /** @var RequestStack */
 //    private $requestStack;
 //
 //    /** @var EntityManagerInterface */
 //    private $entityManager;
 
-    private $helper;
+//    private $helper;
 
-    public function __construct(InvitationHelper $helper)
-    {
-        $this->helper = $helper;
-    }
+//    public function __construct(InvitationHelper $helper)
+//    {
+//        $this->helper = $helper;
+//    }
 
 
 //    /**
@@ -48,22 +57,38 @@ class InvitationCodeValidator extends ConstraintValidator
 //        $this->entityManager = $entityManager;
 //    }
 
+
     public function validate($value, Constraint $constraint)
     {
         if (!$constraint instanceof InvitationCode) {
             throw new UnexpectedTypeException($constraint, InvitationCode::class);
         }
 
+        if (!$value instanceof Invitation) {
+            throw new UnexpectedTypeException($value, Invitation::class);
+        }
+
         if (empty($value)) {
             $this
                 ->context
                 ->buildViolation($constraint->requiredMessage)
+                ->atPath('code')
                 ->addViolation()
             ;
         }
 
-        $code = $value instanceof Invitation ? $value->getCode() : $value;
+        //Check invitation code from database
+        if ($value->getCode() != $this->repository->findCodeById($value->getId())) {
+            $this
+                ->context
+                ->buildViolation($constraint->invalidMessage)
+                ->atPath('code')
+                ->addViolation()
+            ;
+        }
 
+//        $code = $value instanceof Invitation ? $value->getCode() : $value;
+//
 //        if ($code != $this->requestStack->getCurrentRequest()->attributes->get($constraint->parameter)) {
 //            $this
 //                ->context

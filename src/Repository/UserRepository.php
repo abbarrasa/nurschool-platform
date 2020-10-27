@@ -22,6 +22,11 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         parent::__construct($registry, User::class);
     }
 
+    public function createUser(): User
+    {
+        return new User();
+    }
+
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      * @param UserInterface $user
@@ -36,17 +41,25 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
 
         $user->setPassword($newEncodedPassword);
-        $this->_em->persist($user);
-        $this->_em->flush();
+        $this->save($user);
     }
 
-    public function findByRole(string $role)
+    public function queryByRole(string $role)
     {
         return $this->createQueryBuilder('u')
             ->where('u.roles LIKE :role')
             ->setParameter('role', "%{$role}%")
             ->orderBy('u.lastname', 'ASC')
         ;
+    }
+
+    public function save(User $user, bool $andFlush = true): void
+    {
+        $this->_em->persist($user);
+
+        if ($andFlush) {
+            $this->_em->flush();
+        }
     }
 
     // /**

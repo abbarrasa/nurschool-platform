@@ -8,6 +8,7 @@ use Nurschool\Entity\User;
 use Nurschool\Event\RegisteredUserEvent;
 use Nurschool\Form\RegistrationFormType;
 use Nurschool\Manager\AvatarManager;
+use Nurschool\Manager\UserManager;
 use Nurschool\Security\EmailVerifier;
 use Nurschool\Security\InvitationHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,14 +24,21 @@ class RegistrationController extends AbstractController
 {
     use RegistrationControllerTrait;
 
+    /** @var UserManager */
+    private $userManager;
+
     /** @var UserPasswordEncoderInterface */
     private $passwordEncoder;
 
     /** @var EventDispatcherInterface  */
     private $eventDispatcher;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        UserManager $userManager,
+        UserPasswordEncoderInterface $passwordEncoder,
+        EventDispatcherInterface $eventDispatcher
+    ) {
+        $this->userManager = $userManager;
         $this->passwordEncoder = $passwordEncoder;
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -43,7 +51,7 @@ class RegistrationController extends AbstractController
      */
     public function register(Request $request): Response
     {
-        $user = new User();
+        $user = $this->userManager->createUser();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
@@ -73,11 +81,13 @@ class RegistrationController extends AbstractController
 
     /**
      * Register an user via invitation.
-     * @Route("/invitation/{token}", name="invitation")
+     * @Route("/register/invitation/{token}", name="invitation")
      * @param Request $request
      * @param InvitationHelper $helper
      * @param string|null $token
      * @return Response
+     * @throws \Nurschool\Security\Exception\ExpiredInvitationTokenException
+     * @throws \Nurschool\Security\Exception\InvalidInvitationTokenException
      */
     public function invitation(Request $request, InvitationHelper $helper, string $token = null): Response
     {
@@ -95,13 +105,7 @@ class RegistrationController extends AbstractController
         }
 
         $invitation = $helper->validateTokenAndFetchInvitation($token);
-        $user = new User();
-        $user->setEmail($invitation->getEmail());
-        $user->setFirstname($invitation->getFirstname());
-        $user->setLastname($invitation->getLastname());
-        $user->setRoles($invitation->getRoles());
-        $user->setInvitation($invitation);
-
+        $user = $this->userManager->createUserFromInvitation($invitation);
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
@@ -116,10 +120,7 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
+            $this->userManager->save($user);
             $this->cleanSessionAfterRegistration();
 
             $this->addFlash('success', 'Your registration has been successful.');

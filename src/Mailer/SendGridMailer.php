@@ -12,6 +12,7 @@
 namespace Nurschool\Mailer;
 
 
+use Nurschool\Entity\Invitation;
 use Nurschool\Mailer\Exception\ConfigMailerException;
 use Nurschool\Model\TokenComponents;
 use Nurschool\Model\UserInterface;
@@ -65,7 +66,11 @@ class SendGridMailer implements MailerInterface
     {
         $templateId = $this->getTemplateId('resetting');
         $from = $this->getFrom('admin');
-        $url = $this->urlGenerator->generate('reset_password', ['token' => $resetToken->getToken()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $url = $this->urlGenerator->generate(
+            'reset_password',
+            ['token' => $resetToken->getToken()],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
         $email = $this->createMessage($from, $user->getEmail(), ' ', $templateId);
         $email->addDynamicTemplateData('url', $url);
         $email->addDynamicTemplateData('tokenLifetime', date('g', $tokenLifetime));
@@ -77,7 +82,11 @@ class SendGridMailer implements MailerInterface
     {
         $templateId = $this->getTemplateId('invitation');
         $from = $this->getFrom('admin');
-        $url = $this->urlGenerator->generate('invitation', ['code' => $tokenComponents->getToken()]);
+        $url = $this->urlGenerator->generate(
+            'invitation',
+            ['token' => $tokenComponents->getPublicToken()],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
         $email = $this->createMessage($from, $invitation->getEmail(), ' ', $templateId);
         $email->addDynamicTemplateData('firstname', $invitation->getFirstname());
         $email->addDynamicTemplateData('url', $url);

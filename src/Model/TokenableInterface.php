@@ -14,17 +14,13 @@ namespace Nurschool\Model;
 
 interface TokenableInterface
 {
-    public function getSelector(): string;
-
-    public function setSelector(string $selector);
-
-    public function getRequestedAt(): \DateTimeInterface;
+    public function getRequestedAt(): ?\DateTimeInterface;
 
     public function setRequestedAt(\DateTimeInterface $requestedAt);
 
-    public function getExpiresAt(): \DateTimeInterface;
+    public function getExpiresAt(): ?\DateTimeInterface;
 
-    public function setExpiresAt(\DateTimeInterface $expiresAt);
+    public function setExpiresAt(?\DateTimeInterface $expiresAt);
 
     public function isExpired(): bool;
 }
