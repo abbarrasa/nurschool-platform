@@ -59,7 +59,7 @@ class RegistrationFormType extends AbstractType
             ->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
                 /** @var User $user */
                 $user = $event->getData();
-                if (null == $user->getInvitation()) {
+                if (null !== $user->getInvitation()) {
                     $form = $event->getForm();
                     $form->add('invitation', InvitationType::class, [
                         'label' => 'Code'

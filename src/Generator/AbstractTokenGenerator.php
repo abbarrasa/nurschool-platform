@@ -14,7 +14,7 @@ namespace Nurschool\Generator;
 
 use Nurschool\Model\TokenComponents;
 
-abstract class AbstractTokenGenerator implements TokenGeneratorInterface
+abstract class AbstractTokenGenerator
 {
     /** @var string */
     protected $signingKey;

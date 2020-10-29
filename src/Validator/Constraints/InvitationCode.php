@@ -19,7 +19,6 @@ use Symfony\Component\Validator\Constraint;
  */
 class InvitationCode extends Constraint
 {
-    public $parameter = 'code';
     public $requiredMessage = 'invitation.code.required';
     public $invalidMessage = 'invitation.code.invalid';
 }

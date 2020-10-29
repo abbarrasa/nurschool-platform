@@ -14,6 +14,7 @@ namespace Nurschool\Form\Type;
 
 use Nurschool\Entity\Invitation;
 use Nurschool\Form\DataTransformer\InvitationToCodeTransformer;
+use Nurschool\Validator\Constraints\InvitationCode;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -46,10 +47,10 @@ class InvitationType extends AbstractType
     {
         $resolver
             ->setDefaults([
-                'data_class' => Invitation::class,
                 'required' => true,
                 'constraints' => [
-                    new NotBlank()
+                    new NotBlank(),
+                    new InvitationCode()
                 ]
         ]);
     }

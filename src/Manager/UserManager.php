@@ -34,11 +34,13 @@ class UserManager
     public function createUserFromInvitation(Invitation $invitation): UserInterface
     {
         $user = $this->createUser();
-        $user->setEmail($invitation->getEmail());
-        $user->setFirstname($invitation->getFirstname());
-        $user->setLastname($invitation->getLastname());
-        $user->setRoles($invitation->getRoles());
-        $user->setInvitation($invitation);
+        $user
+            ->setInvitation($invitation)
+            ->setEmail($invitation->getEmail())
+            ->setFirstname($invitation->getFirstname())
+            ->setLastname($invitation->getLastname())
+            ->setRoles($invitation->getRoles())
+        ;
 
         foreach($invitation->getSchools() as $school) {
             foreach($invitation->getRoles() as $role) {

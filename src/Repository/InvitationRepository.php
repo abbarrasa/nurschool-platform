@@ -23,18 +23,22 @@ class InvitationRepository extends ServiceEntityRepository
     public function findByCode(string $code): ?Invitation
     {
         return $this->findOneBy([
-            'selector' => $code,
+            'code' => $code,
             'user' => null
         ]);
     }
 
+    /**
+     * @param string $selector
+     * @return Invitation|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function findBySelector(string $selector): ?Invitation
     {
         $queryBuilder = $this->createQueryBuilder('i');
         return $queryBuilder
             ->where('MD5(i.code) = :selector')
-            ->andWhere($queryBuilder->expr()->isNull('i.user'))
-            ->getParameter('selector', $selector)
+            ->setParameter('selector', $selector)
             ->getQuery()
             ->getOneOrNullResult()
         ;

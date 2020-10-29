@@ -86,29 +86,5 @@ class InvitationCodeValidator extends ConstraintValidator
                 ->addViolation()
             ;
         }
-
-//        $code = $value instanceof Invitation ? $value->getCode() : $value;
-//
-//        if ($code != $this->requestStack->getCurrentRequest()->attributes->get($constraint->parameter)) {
-//            $this
-//                ->context
-//                ->buildViolation($constraint->invalidMessage)
-//                ->addViolation()
-//            ;
-//        }
-
-//        $invitation = $this->entityManager
-//            ->getRepository(Invitation::class)
-//            ->findByCode($code)
-//        ;
-
-//        if (null === $invitation) {
-//            $this
-//                ->context
-//                ->buildViolation($constraint->invalidMessage)
-//                ->addViolation()
-//            ;
-//        }
     }
-
 }

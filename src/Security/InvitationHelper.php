@@ -76,16 +76,21 @@ class InvitationHelper
 
     /**
      * Validates a token and returns associated invitation.
-     * @param string $token
+     * @param string $publicToken
      * @return Invitation
      * @throws ExpiredInvitationTokenException
      * @throws InvalidInvitationTokenException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function validateTokenAndFetchInvitation(string $publicToken): Invitation
     {
         $selector = \substr($publicToken, 0, InvitationTokenGenerator::SELECTOR_LENGTH);
         if (null === ($invitation = $this->repository->findBySelector($selector))) {
             throw new InvalidInvitationTokenException('The invitation link is invalid.');
+        }
+
+        if (null !== $invitation->getUser()) {
+            throw new InvalidInvitationTokenException('The invitation link is already used.');
         }
 
         if ($invitation->isExpired()) {
