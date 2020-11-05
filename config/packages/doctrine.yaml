@@ -20,4 +20,4 @@ doctrine:
         dql:
             string_functions:
                 # Match agains should have the path to the Md5 class created in the previous step
-                MD5: Nurschool\DQL\Md5
+                MD5: Nurschool\Doctrine\DQL\Md5

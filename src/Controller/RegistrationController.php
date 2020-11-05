@@ -82,14 +82,22 @@ class RegistrationController extends AbstractController
     /**
      * Register an user via invitation.
      * @Route("/register/invitation/{token}", name="invitation")
+    /**
      * @param Request $request
      * @param InvitationHelper $helper
+     * @param AvatarManager $avatarManager
      * @param string|null $token
      * @return Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Nurschool\Security\Exception\ExpiredInvitationTokenException
      * @throws \Nurschool\Security\Exception\InvalidInvitationTokenException
      */
-    public function invitation(Request $request, InvitationHelper $helper, string $token = null): Response
+    public function invitation(
+        Request $request,
+        InvitationHelper $helper,
+        AvatarManager $avatarManager,
+        string $token = null
+    ): Response
     {
         if ($token) {
             // We store the invitation code in session and remove it from the URL, to avoid the
@@ -110,8 +118,6 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setIsVerified(true);
-
             // encode the plain password
             $user->setPassword(
                 $this->passwordEncoder->encodePassword(
@@ -120,7 +126,9 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            $this->userManager->save($user);
+            // sets random avatar and saves user
+            $avatarManager->setInitialAvatar($user, true);
+
             $this->cleanSessionAfterRegistration();
 
             $this->addFlash('success', 'Your registration has been successful.');
@@ -141,7 +149,7 @@ class RegistrationController extends AbstractController
     public function registerDone(Request $request)
     {
         if (!$this->checkConfirmationEmailInSession()) {
-            return $this->redirectToRoute('dashboard');
+            return $this->redirectToRoute('welcome');
         }
 
         $email = $this->getConfirmationEmailFromSession();

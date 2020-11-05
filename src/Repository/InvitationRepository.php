@@ -20,6 +20,10 @@ class InvitationRepository extends ServiceEntityRepository
         parent::__construct($registry, Invitation::class);
     }
 
+    /**
+     * @param string $code
+     * @return Invitation|null
+     */
     public function findByCode(string $code): ?Invitation
     {
         return $this->findOneBy([
@@ -44,6 +48,10 @@ class InvitationRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * @param int $id
+     * @return string|null
+     */
     public function findCodeById(int $id): ?string
     {
         if (null === ($invitation = $this->find($id))) {
@@ -52,33 +60,4 @@ class InvitationRepository extends ServiceEntityRepository
 
         return $invitation->getCode();
     }
-
-    // /**
-    //  * @return Invitation[] Returns an array of Invitation objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Invitation
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

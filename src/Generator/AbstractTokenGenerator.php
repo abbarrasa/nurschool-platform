@@ -19,18 +19,38 @@ abstract class AbstractTokenGenerator
     /** @var string */
     protected $signingKey;
 
-    abstract public function createToken($data, string $verifier = null): TokenComponents;
-
     public function __construct(string $signingKey)
     {
         $this->signingKey = $signingKey;
     }
 
+    /**
+     * Creates a token for a data.
+     *
+     * @param $data
+     * @param string|null $verifier
+     * @return TokenComponents
+     */
+    abstract public function createToken($data, string $verifier = null): TokenComponents;
+
+    /**
+     * Gets hashed data to create a token. Hashed data is signed.
+     *
+     * @param string $data
+     * @return string
+     */
     protected function getHashedToken(string $data): string
     {
         return \base64_encode(\hash_hmac('sha256', $data, $this->signingKey));
     }
 
+    /**
+     * Get a random encoded string.
+     *
+     * @param int $length
+     * @return string
+     * @throws \Exception
+     */
     protected function getRandomAlphaNumStr(int $length): string
     {
         $string = '';

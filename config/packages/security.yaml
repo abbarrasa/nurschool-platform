@@ -18,6 +18,9 @@ security:
             anonymous: lazy
             provider: user_provider
             user_checker: Nurschool\Security\UserChecker
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 2592000 # 30 days in seconds
             guard:
                 authenticators:
                     - Nurschool\Security\LoginFormAuthenticator

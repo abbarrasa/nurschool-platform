@@ -20,6 +20,9 @@ class InvitationTokenGenerator extends AbstractTokenGenerator
     public const SELECTOR_LENGTH = 32;
     public const VERIFIER_LENGTH = 20;
 
+    /**
+     * @inherits
+     */
     public function createToken($data, string $verifier = null): TokenComponents
     {
         if (!$data instanceof Invitation) {

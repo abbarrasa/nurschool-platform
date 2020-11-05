@@ -55,6 +55,7 @@ class InvitationHelper
     }
 
     /**
+     * Generates an invitation token.
      * @param Invitation $invitation
      * @return TokenComponents
      * @throws \Exception
@@ -76,6 +77,7 @@ class InvitationHelper
 
     /**
      * Validates a token and returns associated invitation.
+     *
      * @param string $publicToken
      * @return Invitation
      * @throws ExpiredInvitationTokenException

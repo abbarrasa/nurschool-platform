@@ -31,22 +31,22 @@ class AvatarManager
     /** @var string */
     private $destinationPath;
 
-    /** @var EntityManagerInterface */
-    private $entityManager;
+    /** @var UserManager */
+    private $userManager;
 
     /**
      * AvatarManager constructor.
      * @param AvatarGeneratorInterface $avatarGenerator
+     * @param UserManager $userManager
      * @param string $uriPrefix
      * @param string $destinationPath
-     * @param EntityManagerInterface $entityManager
      */
-    public function __construct(AvatarGeneratorInterface $avatarGenerator, string $uriPrefix, string $destinationPath, EntityManagerInterface $entityManager)
+    public function __construct(AvatarGeneratorInterface $avatarGenerator, UserManager $userManager, string $uriPrefix, string $destinationPath)
     {
         $this->avatarGenerator = $avatarGenerator;
         $this->uriPrefix = $uriPrefix;
         $this->destinationPath = $destinationPath;
-        $this->entityManager = $entityManager;
+        $this->userManager = $userManager;
     }
 
     /**
@@ -64,7 +64,7 @@ class AvatarManager
         $user->setAvatar($this->avatarGenerator->createAvatar($this->destinationPath, $fullname));
 
         if ($saveAndFlush) {
-            $this->saveAndFlush($user);
+            $this->userManager->save($user);
         }
     }
 
@@ -77,9 +77,8 @@ class AvatarManager
     public function setAvatarFromUri(string $uri, UserInterface $user, bool $saveAndFlush = false): void
     {
         $user->setAvatar($this->avatarGenerator->createAvatarFromFile($this->destinationPath, $uri));
-
         if ($saveAndFlush) {
-            $this->saveAndFlush($user);
+            $this->userManager->save($user);
         }
     }
 
@@ -95,11 +94,5 @@ class AvatarManager
         }
 
         return \sprintf('%s/%s', $this->uriPrefix, $avatar);
-    }
-
-    private function saveAndFlush($user)
-    {
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
     }
 }
