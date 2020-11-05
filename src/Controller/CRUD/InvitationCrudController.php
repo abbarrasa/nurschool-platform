@@ -21,10 +21,11 @@ class InvitationCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            EmailField::new('email'),
-            TextField::new('firstname'),
-            TextField::new('lastname'),
+            'email',
+            'firstname',
+            'lastname',
             RoleListField::new('roles')
+                ->renderAsBadges()
                 ->setFormTypeOption('constraints', [new NotNull()]),
             AssociationField::new('schools')
                 ->setRequired(true)
@@ -35,13 +36,6 @@ class InvitationCrudController extends AbstractCrudController
                 ->setFormTypeOption('choice_label', function($school) {
                     return $school->getName();
                 })
-
-
-//            ChoiceField::new('roles')
-//                ->setCustomOption(ChoiceField::OPTION_ALLOW_MULTIPLE_CHOICES, true)
-//                ->setCustomOption(ChoiceField::OPTION_RENDER_EXPANDED, true)
-////                ->setFormType(RoleListType::class)
-//                ->setChoices(RoleListType::getRoleList())
         ];
     }
 }

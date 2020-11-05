@@ -19,7 +19,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RoleListType extends AbstractType
 {
-    private const ROLE_LIST = [
+    public const CHOICES = [
         'Administrador' => 'ROLE_ADMIN',
         'Enfermera' => 'ROLE_NURSE'
     ];
@@ -34,7 +34,7 @@ class RoleListType extends AbstractType
                 // make expanded default value
                 'expanded' => true,
                 'multiple' => true,
-                'choices' => self::ROLE_LIST,
+                'choices' => self::CHOICES,
                 'choice_translation_domain' => static function (Options $options, $value) {
                     // if choice_translation_domain is true, then it's the same as translation_domain
                     if (true === $value) {
@@ -51,7 +51,6 @@ class RoleListType extends AbstractType
             ])
         ;
     }
-
 
     /**
      * {@inheritdoc}

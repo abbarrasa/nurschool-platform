@@ -100,9 +100,9 @@ services:
     Nurschool\Manager\AvatarManager:
         arguments:
             - '@Nurschool\Generator\DefaultAvatarGenerator'
+            - '@Nurschool\Manager\UserManager'
             - '%nurschool.path.user_images%'
             - '%kernel.project_dir%/public%nurschool.path.user_images%'
-            - '@doctrine.orm.entity_manager'
 
     Nurschool\Wizard\Container\DefaultStageContainer:
         arguments:
