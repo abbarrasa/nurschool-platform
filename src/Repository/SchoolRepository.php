@@ -30,6 +30,16 @@ class SchoolRepository extends ServiceEntityRepository
         ;
     }
 
+    public function getQueryByUserNurse(User $user)
+    {
+        return $this
+            ->createQueryBuilder('s')
+            ->leftJoin('s.nurses', 'n')
+            ->where('n = :user')
+            ->setParameter('user', $user)
+        ;
+    }
+
     // /**
     //  * @return School[] Returns an array of School objects
     //  */

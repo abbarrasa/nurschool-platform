@@ -93,12 +93,18 @@ class School implements LocationInterface
      */
     private $invitations;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Student::class, mappedBy="school")
+     */
+    private $students;
+
     public function __construct()
     {
         $this->admins = new ArrayCollection();
         $this->nurses = new ArrayCollection();
         $this->joinSchoolRequests = new ArrayCollection();
         $this->invitations = new ArrayCollection();
+        $this->students = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -279,6 +285,37 @@ class School implements LocationInterface
         if ($this->invitations->contains($invitation)) {
             $this->invitations->removeElement($invitation);
             $invitation->removeSchool($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Student[]
+     */
+    public function getStudents(): Collection
+    {
+        return $this->students;
+    }
+
+    public function addStudent(Student $student): self
+    {
+        if (!$this->students->contains($student)) {
+            $this->students[] = $student;
+            $student->setSchool($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStudent(Student $student): self
+    {
+        if ($this->students->contains($student)) {
+            $this->students->removeElement($student);
+            // set the owning side to null (unless already changed)
+            if ($student->getSchool() === $this) {
+                $student->setSchool(null);
+            }
         }
 
         return $this;

@@ -8,7 +8,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use EasyCorp\Bundle\EasyAdminBundle\Security\Permission;
 use Nurschool\Entity\Enquiry;
+use Nurschool\Entity\Invitation;
 use Nurschool\Entity\School;
+use Nurschool\Entity\Student;
 use Nurschool\Entity\User;
 use Nurschool\EventListener\WelcomeStageContainer;
 use Nurschool\Mailer\MailerInterface;
@@ -139,9 +141,14 @@ class DashboardController extends AbstractDashboardController
 
         if ($this->isGranted('ROLE_ADMIN')) {
             yield MenuItem::linkToCrud('Schools', 'fa fa-school', School::class);
+            yield MenuItem::linkToCrud('Users', 'fa fa-users', User::class);
+//            yield MenuItem::linkToCrud('Invitation', 'fas fa-user-graduate', Invitation::class);
         }
 
-        yield MenuItem::linkToCrud('Users', 'fa fa-users', User::class);
+        if ($this->isGranted('ROLE_NURSE')) {
+            yield MenuItem::linkToCrud('Students', 'fas fa-user-graduate', Student::class);
+        }
+
         // yield MenuItem::linkToCrud('The Label', 'icon class', EntityClass::class);
     }
 
