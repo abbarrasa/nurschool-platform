@@ -4,10 +4,12 @@ namespace Nurschool\Controller\CRUD;
 
 use Doctrine\ORM\EntityRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Nurschool\Entity\Student;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use Nurschool\Form\ContactFormType;
 
 class StudentCrudController extends AbstractCrudController
 {
@@ -29,7 +31,13 @@ class StudentCrudController extends AbstractCrudController
                 })
                 ->setFormTypeOption('choice_label', function($school) {
                     return $school->getName();
-                })
+                }),
+            CollectionField::new('contacts')
+                ->allowAdd()
+                ->allowDelete()
+                ->setEntryIsComplex(true)
+                ->setEntryType(ContactFormType::class)
+                ->setFormTypeOption('by_reference', false)
         ];
     }
 }

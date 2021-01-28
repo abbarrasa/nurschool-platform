@@ -2,6 +2,8 @@
 
 namespace Nurschool\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Nurschool\Repository\StudentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -37,6 +39,16 @@ class Student
      * @ORM\JoinColumn(nullable=false)
      */
     private $school;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Contact::class, inversedBy="students")
+     */
+    private $contacts;
+
+    public function __construct()
+    {
+        $this->contacts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -87,6 +99,32 @@ class Student
     public function setSchool(?School $school): self
     {
         $this->school = $school;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Contact[]
+     */
+    public function getContacts(): Collection
+    {
+        return $this->contacts;
+    }
+
+    public function addContact(Contact $contact): self
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts[] = $contact;
+        }
+
+        return $this;
+    }
+
+    public function removeContact(Contact $contact): self
+    {
+        if ($this->contacts->contains($contact)) {
+            $this->contacts->removeElement($contact);
+        }
 
         return $this;
     }
