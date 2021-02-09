@@ -1,12 +1,19 @@
 <?php
 
+/*
+ * This file is part of the Nurschool project.
+ *
+ * (c) Nurschool <https://github.com/abbarrasa/nurschool>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Nurschool\Repository\Doctrine;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Nurschool\Entity\Discussion;
 use Doctrine\Persistence\ManagerRegistry;
 use Nurschool\Modules\Forum\Repository\DiscussionRepositoryInterface;
-use Nurschool\Repository\Doctrine\Traits\StorageTrait;
 
 /**
  * @method Discussion|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,10 +21,8 @@ use Nurschool\Repository\Doctrine\Traits\StorageTrait;
  * @method Discussion[]    findAll()
  * @method Discussion[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DiscussionDoctrineRepository extends ServiceEntityRepository implements DiscussionRepositoryInterface
+class DiscussionDoctrineRepository extends DoctrineRepository implements DiscussionRepositoryInterface
 {
-    use StorageTrait;
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Discussion::class);

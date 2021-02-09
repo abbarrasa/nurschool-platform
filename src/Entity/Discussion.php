@@ -1,9 +1,18 @@
 <?php
 
+/*
+ * This file is part of the Nurschool project.
+ *
+ * (c) Nurschool <https://github.com/abbarrasa/nurschool>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Nurschool\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Nurschool\Repository\Doctrine\DiscussionRepository;
+use Nurschool\Repository\Doctrine\DiscussionDoctrineRepository;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
@@ -11,7 +20,7 @@ use Symfony\Component\Uid\Ulid;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=DiscussionRepository::class)
+ * @ORM\Entity(repositoryClass=DiscussionDoctrineRepository::class)
  * @ORM\Table(name="nurschool_discussion")
  */
 class Discussion
