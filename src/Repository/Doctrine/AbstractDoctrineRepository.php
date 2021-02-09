@@ -14,7 +14,7 @@ namespace Nurschool\Repository\Doctrine;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
-abstract class DoctrineRepository extends ServiceEntityRepository
+abstract class AbstractDoctrineRepository extends ServiceEntityRepository
 {
     /**
      * Store an object.

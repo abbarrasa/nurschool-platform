@@ -12,6 +12,7 @@
 namespace Nurschool\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Nurschool\Repository\Doctrine\DiscussionDoctrineRepository;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,9 +26,11 @@ use Symfony\Component\Uid\Ulid;
  */
 class Discussion
 {
+    use TimestampableEntity;
+
     /**
      * @ORM\Id
-     * @ORM\Column(type="ulid", unique=true)
+     * @ORM\Column(type="ulid", unique=true
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UlidGenerator::class)
      */

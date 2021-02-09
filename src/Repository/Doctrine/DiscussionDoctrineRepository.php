@@ -21,7 +21,7 @@ use Nurschool\Modules\Forum\Repository\DiscussionRepositoryInterface;
  * @method Discussion[]    findAll()
  * @method Discussion[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DiscussionDoctrineRepository extends DoctrineRepository implements DiscussionRepositoryInterface
+class DiscussionDoctrineRepository extends AbstractDoctrineRepository implements DiscussionRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
