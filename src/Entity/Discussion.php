@@ -16,6 +16,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Nurschool\Repository\Doctrine\DiscussionDoctrineRepository;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
 use Symfony\Component\Uid\Ulid;
 
@@ -23,6 +24,7 @@ use Symfony\Component\Uid\Ulid;
  * @ApiResource()
  * @ORM\Entity(repositoryClass=DiscussionDoctrineRepository::class)
  * @ORM\Table(name="nurschool_discussion")
+ * @UniqueEntity(fields={"email"})
  */
 class Discussion
 {
@@ -37,7 +39,7 @@ class Discussion
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=128)
      */
     private $title;
 
