@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Repository\Doctrine;
+namespace Nurschool\Core\Infrastructure\Repository\Doctrine;
 
-use Nurschool\Entity\Discussion;
+use Nurschool\Core\Domain\Repository\DiscussionRepositoryInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Nurschool\Modules\Forum\Repository\DiscussionRepositoryInterface;
+use Nurschool\Core\Infrastructure\Entity\Discussion;
 
 /**
  * @method Discussion|null find($id, $lockMode = null, $lockVersion = null)

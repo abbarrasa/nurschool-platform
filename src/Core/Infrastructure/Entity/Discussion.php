@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Entity;
+namespace Nurschool\Core\Infrastructure\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Nurschool\Repository\Doctrine\DiscussionDoctrineRepository;
+use Nurschool\Core\Infrastructure\Repository\Doctrine\DiscussionDoctrineRepository;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;

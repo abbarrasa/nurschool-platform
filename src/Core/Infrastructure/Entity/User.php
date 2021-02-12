@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Entity;
+namespace Nurschool\Core\Infrastructure\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Nurschool\Repository\Doctrine\UserAbstractDoctrineRepository;
+use Nurschool\Core\Infrastructure\Repository\Doctrine\UserDoctrineRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;

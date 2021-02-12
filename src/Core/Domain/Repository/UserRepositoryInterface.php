@@ -9,10 +9,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Modules\User\Repository;
+namespace Nurschool\Core\Domain\Repository;
 
-
-use Nurschool\Repository\RepositoryInterface;
 
 interface UserRepositoryInterface extends RepositoryInterface
 {

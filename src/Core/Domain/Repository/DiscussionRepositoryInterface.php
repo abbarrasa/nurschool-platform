@@ -9,10 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Domain\Model\Modules\Forum\Repository;
-
-
-use Nurschool\Repository\RepositoryInterface;
+namespace Nurschool\Core\Domain\Repository;
 
 interface DiscussionRepositoryInterface extends RepositoryInterface
 {

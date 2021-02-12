@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Domain\Model;
+namespace Nurschool\Core\Domain\Repository;
 
 
 interface RepositoryInterface
