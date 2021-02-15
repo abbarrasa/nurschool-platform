@@ -13,20 +13,20 @@ namespace Nurschool\Core\Infrastructure\Email\SendGrid;
 
 
 use Nurschool\Core\Domain\Model\UserInterface;
-use Nurschool\Core\Domain\Service\Email\ConfigurationMailerInterface;
+use Nurschool\Core\Domain\Service\Email\SettingsMailerInterface;
 use Nurschool\Core\Domain\Service\Email\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SendGridMailer implements MailerInterface
 {
-    /** @var ConfigurationMailerInterface */
+    /** @var SettingsMailerInterface */
     private $configurationMailer;
 
     /** @var UrlGeneratorInterface */
     private $urlGenerator;
 
     public function __construct(
-        ConfigurationMailerInterface $configurationMailer,
+        SettingsMailerInterface $configurationMailer,
         UrlGeneratorInterface $urlGenerator
     ) {
         $this->configurationMailer = $configurationMailer;

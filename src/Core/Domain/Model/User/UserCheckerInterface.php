@@ -9,10 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Core\Infrastructure\Email\Exception;
+namespace Nurschool\Core\Domain\Model\User;
 
 
-class ConfigurationMailerException extends \RuntimeException
+use Nurschool\Core\Domain\Model\UserInterface;
+
+interface UserCheckerInterface
 {
+    public function checkPreAuth(UserInterface $user);
+
+    public function checkPostAuth(UserInterface $user);
 
 }

@@ -25,7 +25,7 @@ use Symfony\Component\Uid\Ulid;
  * @ORM\Table(name="nurschool_user")
  * @UniqueEntity(fields={"email"})
  */
-class User implements UserInterface
+class User implements UserInterface, \Symfony\Component\Security\Core\User\UserInterface
 {
     /**
      * @ORM\Id
@@ -59,6 +59,22 @@ class User implements UserInterface
      * @ORM\Column(type="array")
      */
     private $roles = [];
+
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Version
+     */
+    private $version;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $enabled = true;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastLogin;
 
     public function getId(): ?Ulid
     {
@@ -123,5 +139,63 @@ class User implements UserInterface
         $this->roles = $roles;
 
         return $this;
+    }
+
+    public function getVersion(): ?int
+    {
+        return $this->version;
+    }
+
+    public function setVersion(int $version): self
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(bool $enabled): self
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    public function getLastLogin(): ?\DateTimeInterface
+    {
+        return $this->lastLogin;
+    }
+
+    public function setLastLogin(?\DateTimeInterface $lastLogin): self
+    {
+        $this->lastLogin = $lastLogin;
+
+        return $this;
+    }
+
+    public function getUsername(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see \Symfony\Component\Security\Core\User\UserInterface
+     * Not needed when using the "bcrypt" algorithm in security.yaml
+     */
+    public function getSalt()
+    {
+        return null;
+    }
+
+    /**
+     * @see \Symfony\Component\Security\Core\User\UserInterface
+     * Not needed when using the "bcrypt" algorithm in security.yaml
+     */
+    public function eraseCredentials()
+    {
     }
 }

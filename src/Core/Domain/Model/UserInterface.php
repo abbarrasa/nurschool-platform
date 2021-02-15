@@ -37,4 +37,10 @@ interface UserInterface
     public function getRoles(): ?array;
 
     public function setRoles(array $roles);
+
+    public function isEnabled(): bool;
+
+    public function setEnabled(bool $enabled);
+
+    public function getUsername(): string;
 }

@@ -12,9 +12,11 @@
 namespace Nurschool\Core\Domain\Service\Email;
 
 
-interface ConfigurationMailerInterface
+interface SettingsMailerInterface
 {
-    public function loadConfiguration(array $settings);
+    public function loadSettings(array $settings);
 
-    public function getVariable(string $name);
+    public function setSetting(string $name, $value);
+
+    public function getSetting(string $name);
 }
