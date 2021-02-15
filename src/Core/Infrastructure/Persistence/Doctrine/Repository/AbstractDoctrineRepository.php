@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Core\Infrastructure\Repository\Doctrine;
+namespace Nurschool\Core\Infrastructure\Persistence\Doctrine\Repository;
 
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;

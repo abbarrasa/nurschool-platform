@@ -12,7 +12,7 @@
 namespace Nurschool\Core\Infrastructure\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Nurschool\Core\Infrastructure\Repository\Doctrine\UserDoctrineRepository;
+use Nurschool\Core\Infrastructure\Persistence\Doctrine\Repository\UserDoctrineRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
