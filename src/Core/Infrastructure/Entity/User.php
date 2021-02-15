@@ -12,6 +12,7 @@
 namespace Nurschool\Core\Infrastructure\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Nurschool\Core\Domain\Model\UserInterface;
 use Nurschool\Core\Infrastructure\Persistence\Doctrine\Repository\UserDoctrineRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
@@ -24,7 +25,7 @@ use Symfony\Component\Uid\Ulid;
  * @ORM\Table(name="nurschool_user")
  * @UniqueEntity(fields={"email"})
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id

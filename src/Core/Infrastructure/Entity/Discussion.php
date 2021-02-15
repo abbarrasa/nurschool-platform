@@ -13,6 +13,7 @@ namespace Nurschool\Core\Infrastructure\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Nurschool\Core\Domain\Model\DiscussionInterface;
 use Nurschool\Core\Infrastructure\Persistence\Doctrine\Repository\DiscussionDoctrineRepository;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
@@ -26,7 +27,7 @@ use Symfony\Component\Uid\Ulid;
  * @ORM\Table(name="nurschool_discussion")
  * @UniqueEntity(fields={"email"})
  */
-class Discussion
+class Discussion implements DiscussionInterface
 {
     use TimestampableEntity;
 
