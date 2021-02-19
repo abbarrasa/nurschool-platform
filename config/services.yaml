@@ -31,7 +31,8 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-            - '../src/Core/Infrastructure/Entity/'
+            - '../src/User/Infrastructure/Persistence/Doctrine/Entity/'
+            - '../src/Forum/Infrastructure/Persistence/Doctrine/Entity/'
             - '../src/Kernel.php'
             - '../src/Tests/'
 
