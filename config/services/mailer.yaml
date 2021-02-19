@@ -1,0 +1,16 @@
+parameters:
+    nurschool_mailer:
+        sandbox: '%env(bool:SENDGRID_SANDBOX_MODE)%'
+        default:
+            address: '%env(resolve:MAILER_DEFAULT_ADDRESS)%'
+            name: '%env(resolve:MAILER_DEFAULT_NAME)%'
+        confirmation:
+            template: '%env(resolve:SENDGRID_CONFIRMATION_TEMPLATE_ID)%'
+        #        resetting:
+        #            template: '%env(resolve:SENDGRID_RESETTING_TEMPLATE_ID)%'
+        #        invitation:
+        #            template: '%env(resolve:SENDGRID_INVITATION_TEMPLATE_ID)%'
+
+sevices:
+    nurschool.mailer:
+        class: Nurschool\Shared\Infrastructure\Email\SendGrid\SendGridMailer

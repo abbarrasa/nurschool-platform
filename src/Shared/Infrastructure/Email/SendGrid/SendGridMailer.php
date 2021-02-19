@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Core\Infrastructure\Email\SendGrid;
+namespace Nurschool\Shared\Infrastructure\Email\SendGrid;
 
 
 use Nurschool\Shared\Domain\Service\Email\MailerInterface;
