@@ -14,9 +14,25 @@ namespace Nurschool\Shared\Domain\Service\Email;
 
 interface SettingsMailerInterface
 {
+    /**
+     * Loads mailer settings
+     * @param array $settings
+     * @return mixed
+     */
     public function loadSettings(array $settings);
 
+    /**
+     * Sets a mailer setting value
+     * @param string $name
+     * @param $value
+     * @return mixed
+     */
     public function setSetting(string $name, $value);
 
+    /**
+     * Gets a mailer setting value by its name
+     * @param string $name
+     * @return mixed
+     */
     public function getSetting(string $name);
 }
