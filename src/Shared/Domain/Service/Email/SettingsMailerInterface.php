@@ -35,4 +35,10 @@ interface SettingsMailerInterface
      * @return mixed
      */
     public function getSetting(string $name);
+
+    /**
+     * Gets all mailer settings values
+     * @return mixed
+     */
+    public function getAllSettings();
 }

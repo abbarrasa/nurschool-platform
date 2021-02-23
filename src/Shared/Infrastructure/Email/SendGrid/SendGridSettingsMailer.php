@@ -53,7 +53,7 @@ class SendGridSettingsMailer implements SettingsMailerInterface
     public function setSetting(string $name, $value)
     {
         $keys = explode('.', $name);
-        $current = &$array;
+        $current = &$this->settings;
         foreach ($keys as $key) {
             if (!isset($current[$key])) {
                 $current[$key] = [];
@@ -86,6 +86,15 @@ class SendGridSettingsMailer implements SettingsMailerInterface
 
             return $a[$b];
         }, $this->settings);
+    }
+
+    /**
+     * Gets all Sendgrid mailer settings
+     * @return mixed
+     */
+    public function getAllSettings()
+    {
+        return $this->settings;
     }
 
     /**
