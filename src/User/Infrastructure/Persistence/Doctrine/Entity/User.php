@@ -18,6 +18,7 @@ use Nurschool\User\Infrastructure\Persistence\Doctrine\Repository\UserDoctrineRe
 use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Uid\Ulid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
@@ -37,6 +38,7 @@ class User implements UserInterface, \Symfony\Component\Security\Core\User\UserI
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank()
      */
     private $email;
 
