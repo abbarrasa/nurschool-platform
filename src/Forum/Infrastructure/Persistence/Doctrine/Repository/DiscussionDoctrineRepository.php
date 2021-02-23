@@ -22,7 +22,7 @@ use Nurschool\Shared\Infrastructure\Persistence\Doctrine\Repository\AbstractDoct
  * @method Discussion[]    findAll()
  * @method Discussion[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DiscussionDoctrineRepository extends AbstractDoctrineRepository implements DiscussionRepositoryInterface
+final class DiscussionDoctrineRepository extends AbstractDoctrineRepository implements DiscussionRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {

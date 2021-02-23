@@ -22,7 +22,7 @@ use Nurschool\User\Infrastructure\Persistence\Doctrine\Entity\User;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserDoctrineRepository extends AbstractDoctrineRepository implements UserRepositoryInterface
+final class UserDoctrineRepository extends AbstractDoctrineRepository implements UserRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
