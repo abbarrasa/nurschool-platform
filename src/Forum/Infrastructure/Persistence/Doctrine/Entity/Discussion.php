@@ -11,7 +11,6 @@
 
 namespace Nurschool\Forum\Infrastructure\Persistence\Doctrine\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,7 +22,6 @@ use Symfony\Component\Uid\Ulid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass=DiscussionDoctrineRepository::class)
  * @ORM\Table(name="nurschool_discussion")
  * @UniqueEntity(fields={"email"})

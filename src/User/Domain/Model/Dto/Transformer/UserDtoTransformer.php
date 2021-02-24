@@ -17,7 +17,7 @@ use Nurschool\Shared\Domain\Model\Dto\Transformer\AbstractDtoTransformer;
 use Nurschool\User\Domain\Model\Dto\UserDto;
 use Nurschool\User\Domain\Model\UserInterface;
 
-class UserDtoTransformer extends AbstractDtoTransformer
+final class UserDtoTransformer extends AbstractDtoTransformer
 {
     public function transformFromObject($object): UserDto
     {

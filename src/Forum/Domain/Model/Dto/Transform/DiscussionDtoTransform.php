@@ -17,10 +17,10 @@ use Nurschool\Forum\Domain\Model\Dto\DiscussionDto;
 use Nurschool\Shared\Domain\Model\Dto\Exception\UnexpectedTypeException;
 use Nurschool\Shared\Domain\Model\Dto\Transformer\AbstractDtoTransformer;
 
-class DiscussionDtoTransform extends AbstractDtoTransformer
+final class DiscussionDtoTransform extends AbstractDtoTransformer
 {
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function transformFromObject($object): DiscussionDto
     {

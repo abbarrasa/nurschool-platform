@@ -84,13 +84,13 @@ class SendGridMailer implements MailerInterface
         }
     }
 
-    public function sendWelcomeEmail(UserInterface $user)
+    public function sendConfirmationEmail(UserInterface $user)
     {
-        $templateId = $this->settingsMailer->getSetting('welcome.template');
-        $subject = $this->settingsMailer->getSetting('welcome.subject');
+        $templateId = $this->settingsMailer->getSetting('confirmation.template');
+        $subject = $this->settingsMailer->getSetting('confirmation.subject');
         $from = [
-            $this->settingsMailer->getSetting('welcome.address'),
-            $this->settingsMailer->getSetting('welcome.name')
+            $this->settingsMailer->getSetting('confirmation.address'),
+            $this->settingsMailer->getSetting('confirmation.name')
         ];
         $email = $this->createMessage($from, $user->getEmail(), $subject, $templateId);
 //        $email->addDynamicTemplateData('url', $signatureComponents->getSignedUrl());

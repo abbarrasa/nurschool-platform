@@ -6,7 +6,7 @@ parameters:
         redirect_to: '%env(MAILER_REDIRECT_TO)%' # default false
         default_address: '%env(resolve:MAILER_DEFAULT_ADDRESS)%'
         default_name: '%env(resolve:MAILER_DEFAULT_NAME)%'
-        welcome:
+        confirmation:
             template: '%env(resolve:SENDGRID_CONFIRMATION_TEMPLATE_ID)%'
             subject: 'Welcome to Nurschool'
         resetting:

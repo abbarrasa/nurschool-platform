@@ -11,7 +11,6 @@
 
 namespace Nurschool\User\Infrastructure\Persistence\Doctrine\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Nurschool\User\Domain\Model\UserInterface;
 use Nurschool\User\Infrastructure\Persistence\Doctrine\Repository\UserDoctrineRepository;
@@ -21,7 +20,6 @@ use Symfony\Component\Uid\Ulid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass=UserDoctrineRepository::class)
  * @ORM\Table(name="nurschool_user")
  * @UniqueEntity(fields={"email"})

@@ -12,7 +12,7 @@
 namespace Nurschool\Forum\Domain\Model\Dto;
 
 
-class DiscussionDto
+final class DiscussionDto
 {
     public $title;
 

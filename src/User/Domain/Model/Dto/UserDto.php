@@ -12,7 +12,7 @@
 namespace Nurschool\User\Domain\Model\Dto;
 
 
-class UserDto
+final class UserDto
 {
     public $email;
 
