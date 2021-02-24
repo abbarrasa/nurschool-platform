@@ -12,7 +12,7 @@
 namespace Nurschool\Forum\Infrastructure\Persistence\Doctrine\Repository;
 
 use Doctrine\Persistence\ManagerRegistry;
-use Nurschool\Forum\Domain\Model\DiscussionRepositoryInterface;
+use Nurschool\Forum\Domain\Model\Repository\DiscussionRepositoryInterface;
 use Nurschool\Forum\Infrastructure\Persistence\Doctrine\Entity\Discussion;
 use Nurschool\Shared\Infrastructure\Persistence\Doctrine\Repository\AbstractDoctrineRepository;
 

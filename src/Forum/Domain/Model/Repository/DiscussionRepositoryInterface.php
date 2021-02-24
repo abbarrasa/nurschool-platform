@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\User\Domain\Model;
+namespace Nurschool\Forum\Domain\Model\Repository;
 
 
-use Nurschool\Shared\Domain\Model\RepositoryInterface;
+use Nurschool\Shared\Domain\Model\Repository\RepositoryInterface;
 
-interface UserRepositoryInterface extends RepositoryInterface
+interface DiscussionRepositoryInterface extends RepositoryInterface
 {
 
 }

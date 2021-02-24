@@ -9,11 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Forum\Domain\Model;
+namespace Nurschool\User\Domain\Model\Dto;
 
-use Nurschool\Shared\Domain\Model\RepositoryInterface;
 
-interface DiscussionRepositoryInterface extends RepositoryInterface
+class UserDto
 {
+    public $email;
 
+    public $firstname;
+
+    public $lastname;
+
+    public $password;
+
+    public $roles = [];
 }
