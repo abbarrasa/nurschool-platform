@@ -47,3 +47,12 @@ services:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
             - [ setAnnotationReader, [ '@annotation_reader' ] ]
+
+    # serializer configuration
+    Nurschool\Shared\Infrastructure\Serializer\Normalizer\DtoObjectNormalizer:
+        tags:
+            - { name: 'serializer.normalizer', priority: 1 }
+
+    Symfony\Component\Serializer\Normalizer\DateTimeNormalizer:
+        tags:
+            - { name: 'serializer.normalizer', priority: 10 }

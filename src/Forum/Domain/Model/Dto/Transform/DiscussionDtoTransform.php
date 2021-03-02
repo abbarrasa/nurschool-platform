@@ -14,13 +14,14 @@ namespace Nurschool\Forum\Domain\Model\Dto\Transform;
 
 use Nurschool\Forum\Domain\Model\DiscussionInterface;
 use Nurschool\Forum\Domain\Model\Dto\DiscussionDto;
+use Nurschool\Forum\Infrastructure\Persistence\Doctrine\Entity\Discussion;
 use Nurschool\Shared\Domain\Model\Dto\Exception\UnexpectedTypeException;
 use Nurschool\Shared\Domain\Model\Dto\Transformer\AbstractDtoTransformer;
 
 final class DiscussionDtoTransform extends AbstractDtoTransformer
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function transformFromObject($object): DiscussionDto
     {
@@ -35,5 +36,23 @@ final class DiscussionDtoTransform extends AbstractDtoTransformer
         $dto->updatedAt = $object->getUpdatedAt();
 
         return $dto;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function transformFromDto($dto)
+    {
+        if (!$dto instanceof DiscussionDto) {
+            throw new UnexpectedTypeException($dto, DiscussionDto::class);
+        }
+
+        $discussion = new Discussion();
+        $discussion->setTitle($dto->title);
+        $discussion->setSlug($dto->slug);
+        $discussion->setCreatedAt($dto->createdAt);
+        $discussion->setUpdatedAt($dto->updatedAt);
+
+        return $discussion;
     }
 }

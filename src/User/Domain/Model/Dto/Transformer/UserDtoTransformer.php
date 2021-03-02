@@ -16,6 +16,7 @@ use Nurschool\Shared\Domain\Model\Dto\Exception\UnexpectedTypeException;
 use Nurschool\Shared\Domain\Model\Dto\Transformer\AbstractDtoTransformer;
 use Nurschool\User\Domain\Model\Dto\UserDto;
 use Nurschool\User\Domain\Model\UserInterface;
+use Nurschool\User\Infrastructure\Persistence\Doctrine\Entity\User;
 
 final class UserDtoTransformer extends AbstractDtoTransformer
 {
@@ -34,4 +35,23 @@ final class UserDtoTransformer extends AbstractDtoTransformer
 
         return $dto;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function transformFromDto($dto): UserInterface
+    {
+        if (!$dto instanceof UserDto) {
+            throw new UnexpectedTypeException($dto, UserDto::class);
+        }
+
+        $user = new User();
+        $user->setEmail($dto->email);
+        $user->setFirstname($dto->firstname);
+        $user->setLastname($dto->lastname);
+        $user->setRoles($dto->roles);
+
+        return $user;
+    }
+
 }

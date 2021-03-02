@@ -24,5 +24,5 @@ interface RepositoryInterface
 
     public function save($object, bool $andFlush = true);
 
-    public function remove($object, bool $andFlush = true);
+    public function delete($object, bool $andFlush = true);
 }
