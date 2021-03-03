@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\User\Infrastructure\Security;
+namespace Nurschool\User\Infrastructure\Symfony\Security;
 
 
 use Nurschool\User\Domain\Model\Security\UserCheckerInterface;

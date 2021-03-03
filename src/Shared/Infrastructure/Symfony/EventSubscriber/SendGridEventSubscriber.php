@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Shared\Infrastructure\Email\SendGrid\Event;
+namespace Nurschool\Shared\Infrastructure\Symfony\EventSubscriber;
 
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class SendGridEventSubscriber implements EventSubscriberInterface
+class SendGridEventSubscriber implements SendGridEventSubscriberInterface, EventSubscriberInterface
 {
     /**
      * @inheritDoc
@@ -28,15 +28,15 @@ class SendGridEventSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onFailed(SendGridEvent $event): void
+    public function onFailed(SendGridEventInterface $event): void
     {
     }
 
-    public function onStarted(SendGridEvent $event): void
+    public function onStarted(SendGridEventInterface $event): void
     {
     }
 
-    public function onFinished(SendGridEvent $event): void
+    public function onFinished(SendGridEventInterface $event): void
     {
     }
 }

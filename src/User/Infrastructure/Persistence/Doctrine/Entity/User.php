@@ -76,6 +76,11 @@ class User implements UserInterface, \Symfony\Component\Security\Core\User\UserI
      */
     private $lastLogin;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isVerified = false;
+
     public function getId(): ?Ulid
     {
         return $this->id;
@@ -197,5 +202,17 @@ class User implements UserInterface, \Symfony\Component\Security\Core\User\UserI
      */
     public function eraseCredentials()
     {
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
     }
 }
