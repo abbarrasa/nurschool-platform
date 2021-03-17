@@ -9,11 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Forum\Domain\Model;
+namespace Nurschool\Shared\Domain\Model\Dto\Transformer;
 
-use Nurschool\Shared\Domain\Model\RepositoryInterface;
 
-interface DiscussionRepositoryInterface extends RepositoryInterface
+interface DtoTransformerFactoryInterface
 {
-
+    public function createDtoTranformer(string $dtoClassName): DtoTransformerInterface;
 }

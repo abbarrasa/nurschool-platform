@@ -9,17 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Shared\Infrastructure\Email\SendGrid\Event;
+namespace Nurschool\Shared\Infrastructure\Symfony\Event;
 
 use SendGrid\Mail\Mail;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class SendGridEvent extends Event
+class SendGridEvent extends Event implements SendGridEventInterface
 {
-    public const STARTED = 'sendgrid.started';
-    public const FAILED = 'sendgrid.failed';
-    public const FINISHED = 'sendgrid.finished';
-
     /** @var Mail */
     private $mail;
 

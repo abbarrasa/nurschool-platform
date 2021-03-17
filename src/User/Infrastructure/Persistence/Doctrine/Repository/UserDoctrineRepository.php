@@ -13,7 +13,7 @@ namespace Nurschool\User\Infrastructure\Persistence\Doctrine\Repository;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Nurschool\Shared\Infrastructure\Persistence\Doctrine\Repository\AbstractDoctrineRepository;
-use Nurschool\User\Domain\Model\UserRepositoryInterface;
+use Nurschool\User\Domain\Model\Repository\UserRepositoryInterface;
 use Nurschool\User\Infrastructure\Persistence\Doctrine\Entity\User;
 
 /**
@@ -22,7 +22,7 @@ use Nurschool\User\Infrastructure\Persistence\Doctrine\Entity\User;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserDoctrineRepository extends AbstractDoctrineRepository implements UserRepositoryInterface
+final class UserDoctrineRepository extends AbstractDoctrineRepository implements UserRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {

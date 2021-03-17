@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Shared\Domain\Model;
+namespace Nurschool\Shared\Domain\Model\Repository;
 
 
 interface RepositoryInterface
@@ -24,5 +24,5 @@ interface RepositoryInterface
 
     public function save($object, bool $andFlush = true);
 
-    public function remove($object, bool $andFlush = true);
+    public function delete($object, bool $andFlush = true);
 }

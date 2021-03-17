@@ -25,24 +25,23 @@ abstract class AbstractDoctrineRepository extends ServiceEntityRepository
      */
     public function save($object, bool $andFlush = true)
     {
-        $this->getEntityManager()->persist($object);
+        $this->_em->persist($object);
         if ($andFlush) {
-            $this->getEntityManager()->flush();
+            $this->_em->flush();
         }
     }
 
     /**
-     * Remove an object.
      * @param $object
      * @param bool $andFlush
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function remove($object, bool $andFlush = true)
+    public function delete($object, bool $andFlush = true)
     {
-        $this->getEntityManager()->remove($object);
+        $this->_em->remove($object);
         if ($andFlush) {
-            $this->getEntityManager()->flush();
+            $this->_em->flush();
         }
     }
 }

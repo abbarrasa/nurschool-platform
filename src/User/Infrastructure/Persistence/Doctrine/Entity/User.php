@@ -11,16 +11,15 @@
 
 namespace Nurschool\User\Infrastructure\Persistence\Doctrine\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Nurschool\User\Domain\Model\UserInterface;
 use Nurschool\User\Infrastructure\Persistence\Doctrine\Repository\UserDoctrineRepository;
 use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Uid\Ulid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass=UserDoctrineRepository::class)
  * @ORM\Table(name="nurschool_user")
  * @UniqueEntity(fields={"email"})
@@ -37,6 +36,7 @@ class User implements UserInterface, \Symfony\Component\Security\Core\User\UserI
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank()
      */
     private $email;
 
@@ -75,6 +75,11 @@ class User implements UserInterface, \Symfony\Component\Security\Core\User\UserI
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $lastLogin;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isVerified = false;
 
     public function getId(): ?Ulid
     {
@@ -197,5 +202,17 @@ class User implements UserInterface, \Symfony\Component\Security\Core\User\UserI
      */
     public function eraseCredentials()
     {
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
     }
 }

@@ -11,7 +11,6 @@
 
 namespace Nurschool\Forum\Infrastructure\Persistence\Doctrine\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,9 +19,9 @@ use Nurschool\Forum\Domain\Model\DiscussionInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
 use Symfony\Component\Uid\Ulid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass=DiscussionDoctrineRepository::class)
  * @ORM\Table(name="nurschool_discussion")
  * @UniqueEntity(fields={"email"})
@@ -41,6 +40,7 @@ class Discussion implements DiscussionInterface
 
     /**
      * @ORM\Column(type="string", length=128)
+     * @Assert\NotBlank()
      */
     private $title;
 

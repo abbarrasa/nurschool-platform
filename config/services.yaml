@@ -28,8 +28,8 @@ services:
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-    Nurschool\Controller\:
-        resource: '../src/Controller/'
+    Nurschool\Shared\Infrastructure\Symfony\Controller\:
+        resource: '../src/Shared/Infrastructure/Symfony/Controller/'
         tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed
@@ -47,3 +47,12 @@ services:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
             - [ setAnnotationReader, [ '@annotation_reader' ] ]
+
+    # serializer configuration
+    Nurschool\Shared\Infrastructure\Symfony\Serializer\Normalizer\DtoObjectNormalizer:
+        tags:
+            - { name: 'serializer.normalizer', priority: 1 }
+
+    Symfony\Component\Serializer\Normalizer\DateTimeNormalizer:
+        tags:
+            - { name: 'serializer.normalizer', priority: 10 }
