@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\User\Infrastructure\Persistence\Doctrine\Entity;
+namespace Nurschool\Core\Infrastructure\Persistence\Doctrine\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Nurschool\User\Domain\Model\UserInterface;
-use Nurschool\User\Infrastructure\Persistence\Doctrine\Repository\UserDoctrineRepository;
+use Nurschool\Core\Domain\Model\UserInterface;
+use Nurschool\Core\Infrastructure\Persistence\Doctrine\Repository\UserDoctrineRepository;
 use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Uid\Ulid;

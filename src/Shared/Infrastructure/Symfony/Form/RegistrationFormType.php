@@ -1,8 +1,8 @@
 <?php
 
-namespace Nurschool\Form;
+namespace Nurschool\Shared\Infrastructure\Symfony\Form;
 
-use Nurschool\User\Infrastructure\Persistence\Doctrine\Entity\User;
+use Nurschool\Core\Infrastructure\Persistence\Doctrine\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;

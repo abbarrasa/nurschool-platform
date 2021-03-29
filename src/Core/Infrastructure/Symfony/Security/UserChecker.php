@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\User\Infrastructure\Symfony\Security;
+namespace Nurschool\Core\Infrastructure\Symfony\Security;
 
 
-use Nurschool\User\Domain\Model\Security\UserCheckerInterface;
-use Nurschool\User\Domain\Model\UserInterface;
+use Nurschool\Core\Domain\Model\Security\UserCheckerInterface;
+use Nurschool\Core\Domain\Model\UserInterface;
 use Symfony\Component\Security\Core\Exception\DisabledException;
 
 class UserChecker implements UserCheckerInterface

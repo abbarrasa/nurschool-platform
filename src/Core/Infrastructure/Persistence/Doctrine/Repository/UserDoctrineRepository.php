@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\User\Infrastructure\Persistence\Doctrine\Repository;
+namespace Nurschool\Core\Infrastructure\Persistence\Doctrine\Repository;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Nurschool\Shared\Infrastructure\Persistence\Doctrine\Repository\AbstractDoctrineRepository;
-use Nurschool\User\Domain\Model\Repository\UserRepositoryInterface;
-use Nurschool\User\Infrastructure\Persistence\Doctrine\Entity\User;
+use Nurschool\Core\Domain\Model\Repository\UserRepositoryInterface;
+use Nurschool\Core\Infrastructure\Persistence\Doctrine\Entity\User;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)

@@ -12,7 +12,7 @@
 namespace Nurschool\Shared\Domain\Service\Email;
 
 
-use Nurschool\User\Domain\Model\UserInterface;
+use Nurschool\Core\Domain\Model\UserInterface;
 
 interface MailerInterface
 {

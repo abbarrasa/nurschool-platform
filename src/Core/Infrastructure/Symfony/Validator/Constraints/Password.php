@@ -9,21 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\User\Infrastructure\Symfony\Validator\Constraints;
+namespace Nurschool\Core\Infrastructure\Symfony\Validator\Constraints;
 
 
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Class UniqueEmail
- * @package Nurschool\User\Infrastructure\Validator\Constraints
- *
- * @Annotation()
+ * @Annotation
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
  */
-class UniqueEmail extends Constraint
+class Password extends Constraint
 {
-    public const NOT_UNIQUE_ERROR = '33528a26-afc7-468b-9830-ec13d426a3b2';
-
-    public $message = 'user.email.not_unique.';
+    // max length allowed by Symfony for security reasons is 4096
+    public $pattern = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,4096}$/';
+    public $message = 'user.password.invalid';
 }

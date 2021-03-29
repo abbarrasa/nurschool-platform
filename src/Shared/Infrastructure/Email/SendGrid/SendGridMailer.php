@@ -17,7 +17,7 @@ use Nurschool\Shared\Domain\Service\Email\SettingsMailerInterface;
 use Nurschool\Shared\Infrastructure\Email\SendGrid\Event\SendGridEventInterface;
 use Nurschool\Shared\Infrastructure\Email\SendGrid\Exception\SendGridException;
 use Nurschool\Shared\Infrastructure\Symfony\Event\SendGridEvent;
-use Nurschool\User\Domain\Model\UserInterface;
+use Nurschool\Core\Domain\Model\UserInterface;
 use SendGrid\Mail\Mail;
 use SendGrid\Mail\MailSettings;
 use SendGrid\Mail\Personalization;

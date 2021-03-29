@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\User\Domain\Model;
+namespace Nurschool\Core\Domain\Model;
 
 
 use Symfony\Component\Uid\Ulid;

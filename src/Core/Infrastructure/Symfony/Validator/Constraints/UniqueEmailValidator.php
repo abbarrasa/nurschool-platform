@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\User\Infrastructure\Symfony\Validator\Constraints;
+namespace Nurschool\Core\Infrastructure\Symfony\Validator\Constraints;
 
 
-use Nurschool\User\Domain\Model\Repository\UserRepositoryInterface;
+use Nurschool\Core\Domain\Model\Repository\UserRepositoryInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;

@@ -13,8 +13,8 @@ namespace Nurschool\Shared\Infrastructure\Symfony\Controller;
 
 
 use Nurschool\Shared\Domain\Model\Repository\RepositoryInterface;
-use Nurschool\User\Domain\Model\Dto\UserDto;
-use Nurschool\User\Domain\Model\Repository\UserRepositoryInterface;
+use Nurschool\Core\Domain\Model\Dto\UserDto;
+use Nurschool\Core\Domain\Model\Repository\UserRepositoryInterface;
 
 class UserController extends AbstractCrudController
 {

@@ -14,8 +14,8 @@ namespace Nurschool\Shared\Domain\Model\Dto\Transformer;
 
 use Nurschool\Forum\Domain\Model\Dto\DiscussionDto;
 use Nurschool\Forum\Domain\Model\Dto\Transform\DiscussionDtoTransform;
-use Nurschool\User\Domain\Model\Dto\Transformer\UserDtoTransformer;
-use Nurschool\User\Domain\Model\Dto\UserDto;
+use Nurschool\Core\Domain\Model\Dto\Transformer\UserDtoTransformer;
+use Nurschool\Core\Domain\Model\Dto\UserDto;
 
 class DtoTransformerFactory implements DtoTransformerFactoryInterface
 {

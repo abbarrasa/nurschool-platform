@@ -2,10 +2,10 @@
 
 namespace Nurschool\Shared\Infrastructure\Symfony\Controller;
 
-use Nurschool\User\Infrastructure\Persistence\Doctrine\Entity\User;
+use Nurschool\Core\Infrastructure\Persistence\Doctrine\Entity\User;
 use Nurschool\Form\RegistrationFormType;
-use Nurschool\User\Infrastructure\Persistence\Doctrine\Repository\UserDoctrineRepository;
-use Nurschool\User\Infrastructure\Symfony\Security\EmailVerifier;
+use Nurschool\Core\Infrastructure\Persistence\Doctrine\Repository\UserDoctrineRepository;
+use Nurschool\Core\Infrastructure\Symfony\Security\EmailVerifier;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

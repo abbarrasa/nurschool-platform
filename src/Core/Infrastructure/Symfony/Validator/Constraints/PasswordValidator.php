@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\User\Infrastructure\Symfony\Validator\Constraints;
+namespace Nurschool\Core\Infrastructure\Symfony\Validator\Constraints;
 
 
 use Symfony\Component\Validator\Constraint;

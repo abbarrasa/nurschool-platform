@@ -9,15 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\User\Domain\Model\Security;
+namespace Nurschool\Core\Domain\Model\Repository;
 
 
-use Nurschool\User\Domain\Model\UserInterface;
+use Nurschool\Shared\Domain\Model\Repository\RepositoryInterface;
 
-interface UserCheckerInterface
+interface UserRepositoryInterface extends RepositoryInterface
 {
-    public function checkPreAuth(UserInterface $user);
-
-    public function checkPostAuth(UserInterface $user);
 
 }

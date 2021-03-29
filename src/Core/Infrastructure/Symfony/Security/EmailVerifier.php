@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\User\Infrastructure\Symfony\Security;
+namespace Nurschool\Core\Infrastructure\Symfony\Security;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Nurschool\Shared\Domain\Service\Email\MailerInterface;
-use Nurschool\User\Domain\Model\UserInterface;
+use Nurschool\Core\Domain\Model\UserInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;

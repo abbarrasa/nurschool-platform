@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\User\Domain\Model\Dto\Transformer;
+namespace Nurschool\Core\Domain\Model\Dto\Transformer;
 
 
 use Nurschool\Shared\Domain\Model\Dto\Exception\UnexpectedTypeException;
 use Nurschool\Shared\Domain\Model\Dto\Transformer\AbstractDtoTransformer;
-use Nurschool\User\Domain\Model\Dto\UserDto;
-use Nurschool\User\Domain\Model\UserInterface;
-use Nurschool\User\Infrastructure\Persistence\Doctrine\Entity\User;
+use Nurschool\Core\Domain\Model\Dto\UserDto;
+use Nurschool\Core\Domain\Model\UserInterface;
+use Nurschool\Core\Infrastructure\Persistence\Doctrine\Entity\User;
 
 final class UserDtoTransformer extends AbstractDtoTransformer
 {
