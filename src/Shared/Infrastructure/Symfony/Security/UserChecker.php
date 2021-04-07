@@ -25,7 +25,7 @@ class UserChecker implements UserCheckerInterface
         }
 
         if (!$user->isEnabled()) {
-            $ex = new DisabledException('User account is disabled.');
+            $ex = new DisabledException('Core account is disabled.');
             $ex->setUser($user);
             throw $ex;
         }

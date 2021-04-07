@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Shared\Infrastructure\Email\SendGrid;
+namespace Nurschool\Shared\Infrastructure\Symfony\Email;
 
 
 use Nurschool\Shared\Domain\Service\Email\SettingsMailerInterface;

@@ -14,9 +14,7 @@ namespace Nurschool\Shared\Infrastructure\Email\SendGrid;
 
 use Nurschool\Shared\Domain\Service\Email\MailerInterface;
 use Nurschool\Shared\Domain\Service\Email\SettingsMailerInterface;
-use Nurschool\Shared\Infrastructure\Email\SendGrid\Event\SendGridEventInterface;
 use Nurschool\Shared\Infrastructure\Email\SendGrid\Exception\SendGridException;
-use Nurschool\Shared\Infrastructure\Symfony\Event\SendGridEvent;
 use Nurschool\Core\Domain\Model\UserInterface;
 use SendGrid\Mail\Mail;
 use SendGrid\Mail\MailSettings;
@@ -38,12 +36,6 @@ class SendGridMailer implements MailerInterface
     /** @var SettingsMailerInterface */
     private $settingsMailer;
 
-    /** @var UrlGeneratorInterface */
-    private $urlGenerator;
-
-    /** @var EventDispatcherInterface */
-    private $eventDispatcher;
-
     /** @var \SendGrid */
     private $provider;
 
@@ -62,18 +54,10 @@ class SendGridMailer implements MailerInterface
     /**
      * SendGridMailer constructor.
      * @param SettingsMailerInterface $settingsMailer
-     * @param UrlGeneratorInterface $urlGenerator
-     * @param EventDispatcherInterface $eventDispatcher
      * @throws \SendGrid\Mail\TypeException
      */
-    public function __construct(
-        SettingsMailerInterface $settingsMailer,
-        UrlGeneratorInterface $urlGenerator,
-        EventDispatcherInterface $eventDispatcher
-    ) {
+    public function __construct(SettingsMailerInterface $settingsMailer) {
         $this->settingsMailer = $settingsMailer;
-        $this->urlGenerator = $urlGenerator;
-        $this->eventDispatcher = $eventDispatcher;
 
         $this->provider = new \SendGrid($this->settingsMailer->getSetting('api_key'));
         if(false !== ($this->redirectTo = $this->settingsMailer->getSetting('redirect_to'))) {
@@ -85,8 +69,9 @@ class SendGridMailer implements MailerInterface
         }
     }
 
-    public function sendConfirmationEmail(UserInterface $user)
+    public function sendConfirmationEmail(UserInterface $user, string $confirmationUrl, \DateTimeInterface $expiresAt)
     {
+
         $templateId = $this->settingsMailer->getSetting('confirmation.template');
         $subject = $this->settingsMailer->getSetting('confirmation.subject');
         $from = [
@@ -193,9 +178,9 @@ class SendGridMailer implements MailerInterface
      */
     protected function sendMessage(Mail $mail): ?string
     {
-        $this->eventDispatcher->dispatch(SendGridEventInterface::STARTED, new SendGridEvent($mail));
+//        $this->eventDispatcher->dispatch(SendGridEventInterface::STARTED, new SendGridEvent($mail));
         if($this->disableDelivery) {
-            $this->eventDispatcher->dispatch(SendGridEventInterface::FINISHED, new SendGridEvent($mail));
+//            $this->eventDispatcher->dispatch(SendGridEventInterface::FINISHED, new SendGridEvent($mail));
             return null;
         }
 
@@ -209,16 +194,17 @@ class SendGridMailer implements MailerInterface
 
             $messageId = $this->getMessageId($response);
 
-            $this->eventDispatcher->dispatch(SendGridEventInterface::FINISHED, new SendGridEvent($mail, $messageId));
+//            $this->eventDispatcher->dispatch(SendGridEventInterface::FINISHED, new SendGridEvent($mail, $messageId));
 
             return $messageId;
 
         } catch (\Exception $e) {
             $this->reverseRedirection($mail);
-            $this->eventDispatcher->dispatch(SendGridEventInterface::FAILED, new SendGridEvent($mail));
+//            $this->eventDispatcher->dispatch(SendGridEventInterface::FAILED, new SendGridEvent($mail));
             if($e instanceof SendGridException) {
                 throw $e;
             }
+
             throw new SendGridException($e->getMessage());
         }
     }

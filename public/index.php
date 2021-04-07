@@ -1,6 +1,6 @@
 <?php
 
-use Nurschool\Kernel;
+use Nurschool\Shared\Infrastructure\Symfony\Kernel;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;

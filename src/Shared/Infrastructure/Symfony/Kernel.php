@@ -1,6 +1,6 @@
 <?php
 
-namespace Nurschool;
+namespace Nurschool\Shared\Infrastructure\Symfony;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

@@ -16,7 +16,7 @@ use Nurschool\Core\Domain\Model\UserInterface;
 
 interface MailerInterface
 {
-    public function sendConfirmationEmail(UserInterface $user);
+    public function sendConfirmationEmail(UserInterface $user, string $confirmationUrl, \DateTimeInterface $expiresAt);
     public function sendResettingPasswordEmail(UserInterface $user);
 
 //    public function sendConfirmationEmail(UserInterface $user, VerifyEmailSignatureComponents $signatureComponents/*string $signedUrl, \DateTimeInterface $expiresAt*/);

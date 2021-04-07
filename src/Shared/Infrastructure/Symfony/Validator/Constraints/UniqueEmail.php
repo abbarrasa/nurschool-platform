@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraint;
 
 /**
  * Class UniqueEmail
- * @package Nurschool\User\Infrastructure\Validator\Constraints
+ * @package Nurschool\Core\Infrastructure\Validator\Constraints
  *
  * @Annotation()
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})

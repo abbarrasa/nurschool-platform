@@ -30,7 +30,7 @@ final class UserDoctrineRepository extends AbstractDoctrineRepository implements
     }
 
     // /**
-    //  * @return User[] Returns an array of User objects
+    //  * @return Core[] Returns an array of Core objects
     //  */
     /*
     public function findByExampleField($value)
@@ -47,7 +47,7 @@ final class UserDoctrineRepository extends AbstractDoctrineRepository implements
     */
 
     /*
-    public function findOneBySomeField($value): ?User
+    public function findOneBySomeField($value): ?Core
     {
         return $this->createQueryBuilder('u')
             ->andWhere('u.exampleField = :val')

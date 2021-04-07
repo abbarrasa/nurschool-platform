@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Core\Infrastructure\Persistence\Doctrine\Entity;
+namespace Nurschool\Core\Infrastructure\Symfony\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Nurschool\Core\Domain\Model\UserInterface;
@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="nurschool_user")
  * @UniqueEntity(fields={"email"})
  */
-class User implements UserInterface, \Symfony\Component\Security\Core\User\UserInterface
+final class User implements UserInterface, \Symfony\Component\Security\Core\User\UserInterface
 {
     /**
      * @ORM\Id
@@ -54,11 +54,6 @@ class User implements UserInterface, \Symfony\Component\Security\Core\User\UserI
      * @ORM\Column(type="text", nullable=true)
      */
     private $password;
-
-    /**
-     * @ORM\Column(type="array")
-     */
-    private $roles = [];
 
     /**
      * @ORM\Column(type="integer")

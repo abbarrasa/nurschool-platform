@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Core\Domain\Model\Dto;
+namespace Nurschool\User\Domain\Model\Dto;
 
 
 use Nurschool\User\Infrastructure\Validator\Constraints\Password;

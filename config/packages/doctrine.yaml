@@ -10,15 +10,9 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         mappings:
-            Nurschool\User\Infrastructure\Persistence\Doctrine\Entity:
+            Nurschool\Shared\Infrastructure\Symfony\Entity:
                 is_bundle: false
                 type: annotation
-                dir: '%kernel.project_dir%/src/User/Infrastructure/Persistence/Doctrine/Entity'
-                prefix: 'Nurschool\User\Infrastructure\Persistence\Doctrine\Entity'
-                alias: Nurschool
-            Nurschool\Forum\Infrastructure\Persistence\Doctrine\Entity:
-                is_bundle: false
-                type: annotation
-                dir: '%kernel.project_dir%/src/Forum/Infrastructure/Persistence/Doctrine/Entity'
-                prefix: 'Nurschool\Forum\Infrastructure\Persistence\Doctrine\Entity'
+                dir: '%kernel.project_dir%/src/Shared/Infrastructure/Symfony/Entity'
+                prefix: 'Nurschool\Shared\Infrastructure\Symfony\Entity'
                 alias: Nurschool
