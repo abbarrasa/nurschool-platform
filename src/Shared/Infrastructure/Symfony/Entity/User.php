@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Core\Infrastructure\Symfony\Entity;
+namespace Nurschool\Shared\Infrastructure\Symfony\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Nurschool\Core\Domain\Model\UserInterface;

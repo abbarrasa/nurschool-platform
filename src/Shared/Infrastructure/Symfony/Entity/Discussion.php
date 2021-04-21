@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Forum\Infrastructure\Persistence\Doctrine\Entity;
+namespace Nurschool\Shared\Infrastructure\Symfony\Entity;
 
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\Mapping\Annotation as Gedmo;

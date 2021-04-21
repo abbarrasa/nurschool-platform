@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Core\Infrastructure\Symfony\Security;
+namespace Nurschool\Shared\Infrastructure\Symfony\Security;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Nurschool\Shared\Domain\Service\Email\MailerInterface;

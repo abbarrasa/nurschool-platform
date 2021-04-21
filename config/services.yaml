@@ -20,9 +20,7 @@ services:
     Nurschool\:
         resource: '../src/'
         exclude:
-            - '../src/Shared/Infrastructure/Symfony/DependencyInjection/'
-            - '../src/Shared/Infrastructure/Symfony/Entity/'
-            - '../src/Shared/Infrastructure/Symfony/Kernel.php'
+            - '../src/Shared/Infrastructure/Symfony/{DependencyInjection,Entity,Kernel.php}'
             - '../src/Tests/'
 
     # controllers are imported separately to make sure services can be injected

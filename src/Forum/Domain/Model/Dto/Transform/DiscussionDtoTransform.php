@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Forum\Domain\Model\Dto\Transform;
+declare(strict_types=1);
 
+namespace Nurschool\Forum\Domain\Model\Dto\Transform;
 
 use Nurschool\Forum\Domain\Model\DiscussionInterface;
 use Nurschool\Forum\Domain\Model\Dto\DiscussionDto;

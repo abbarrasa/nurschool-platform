@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Core\Infrastructure\Symfony\Security;
+namespace Nurschool\Shared\Infrastructure\Symfony\Security;
 
 
 use Nurschool\Core\Domain\Model\Security\UserCheckerInterface;
@@ -25,7 +25,7 @@ class UserChecker implements UserCheckerInterface
         }
 
         if (!$user->isEnabled()) {
-            $ex = new DisabledException('Core account is disabled.');
+            $ex = new DisabledException('User account is disabled.');
             $ex->setUser($user);
             throw $ex;
         }

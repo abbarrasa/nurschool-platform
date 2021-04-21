@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Forum\Domain\Model;
+declare(strict_types=1);
 
+namespace Nurschool\Forum\Domain\Model;
 
 use Symfony\Component\Uid\Ulid;
 

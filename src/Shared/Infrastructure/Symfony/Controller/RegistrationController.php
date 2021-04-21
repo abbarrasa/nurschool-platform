@@ -5,7 +5,7 @@ namespace Nurschool\Shared\Infrastructure\Symfony\Controller;
 use Nurschool\Core\Infrastructure\Persistence\Doctrine\Entity\User;
 use Nurschool\Form\RegistrationFormType;
 use Nurschool\Core\Infrastructure\Persistence\Doctrine\Repository\UserDoctrineRepository;
-use Nurschool\Core\Infrastructure\Symfony\Security\EmailVerifier;
+use Nurschool\Shared\Infrastructure\Symfony\Security\EmailVerifier;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +25,10 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("/register", name="app_register")
+     * @Route("/register", name="nurschool_register")
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @return Response
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
@@ -65,9 +68,9 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("/verify/email", name="app_verify_email")
+     * @Route("/register/confirm", name="nurschool_register_confirm")
      */
-    public function verifyUserEmail(Request $request, UserDoctrineRepository $userDoctrineRepository): Response
+    public function confirm(Request $request, UserDoctrineRepository $userDoctrineRepository): Response
     {
         $id = $request->get('id');
 
@@ -81,7 +84,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_register');
         }
 
-        // validate email confirmation link, sets Core::isVerified=true and persists
+        // validate email confirmation link, sets User::isVerified=true and persists
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $user);
         } catch (VerifyEmailExceptionInterface $exception) {

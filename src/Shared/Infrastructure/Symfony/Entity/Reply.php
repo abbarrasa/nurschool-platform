@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Forum\Infrastructure\Symfony\Entity;
+namespace Nurschool\Shared\Infrastructure\Symfony\Entity;
 
 use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
 use Symfony\Component\Uid\Ulid;

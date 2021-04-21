@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Forum\Domain\Model\Repository;
+declare(strict_types=1);
 
+namespace Nurschool\Forum\Domain\Model\Repository;
 
 use Nurschool\Shared\Domain\Model\Repository\RepositoryInterface;
 
