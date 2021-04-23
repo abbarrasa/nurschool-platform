@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     /**
-     * @Route("/", name="nurschool_home")
+     * @Route("/", name="home")
      * @return Response
      */
     public function home(): Response
