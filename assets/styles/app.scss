@@ -4,24 +4,24 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
 
 // Set your brand colors
-$purple: #8A4D76;
+//$purple: #8A4D76;
+$cyan: #00d1b2;
 $pink: #FA7C91;
-$brown: #757763;
-$beige-light: #D0D1CD;
-$beige-lighter: #EFF0EB;
+//$brown: #757763;
+//$beige-light: #D0D1CD;
+//$beige-lighter: #EFF0EB;
 
 // Update Bulma's global variables
 $family-sans-serif: "Nunito", sans-serif;
-$grey-dark: $brown;
-$grey-light: $beige-light;
-$primary: $purple;
+//$grey-dark: $brown;
+//$grey-light: $beige-light;
+$primary: $cyan;
 $link: $pink;
 
 // Update some of Bulma's component variables
-$body-background-color: $beige-lighter;
-$control-border-width: 1px;
-$input-border-color: transparent;
-$input-shadow: none;
+$input-focus-border-color: $primary;
+$input-focus-box-shadow-color: rgba($primary, 0.25);
 
 // Import Bulma
-@import "~bulma/bulma.sass";
+@import "~bulma/bulma";
+@import "~bulma-checkradio/dist/css/bulma-checkradio";

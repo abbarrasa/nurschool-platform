@@ -10,3 +10,13 @@ import './styles/app.scss';
 
 // start the Stimulus application
 import './bootstrap';
+
+import m from "mithril";
+var element = document.getElementById('mithril')
+if (element) {
+    m.render(element, "<div class=\"notification is-info\">\n" +
+        "  <button class=\"delete\"></button>\n" +
+        "  Hello world!!!\n" +
+        "  I am a <strong>demo</strong>. Show more <a href=\"https://bulma.io/documentation\">here</a>.\n" +
+        "</div>");
+}
