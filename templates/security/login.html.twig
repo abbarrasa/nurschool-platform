@@ -10,24 +10,24 @@
                 {% endif %}
                 <form action="{{ path('login') }}" method="post">
                     <div class="field">
-                        <label for="username">Username:</label>
+                        <label for="username">Email</label>
                         <div class="control">
-                            <input class="input" type="text" id="username" name="email" value="{{ last_username }}" />
+                            <input class="input" type="text" id="username" name="email" value="{{ last_username }}" placeholder="Your email" />
                         </div>
                     </div>
                     <div class="field">
-                        <label for="password">Password:</label>
+                        <label for="password">Password</label>
                         <div class="control">
-                            <input class="input" type="password" id="password" name="password" />
+                            <input class="input" type="password" id="password" name="password" placeholder="Your password" />
                         </div>
                     </div>
                     <div class="field">
-                        <input class="is-checkradio" id="remember_me" type="checkbox" name="remember_me" checked="checked">
+                        <input class="is-checkradio is-link" id="remember_me" type="checkbox" name="remember_me" checked="checked">
                         <label for="remember_me">Keep me logged in</label>
                     </div>
                     <div class="field">
                         <div class="control">
-                            <button class="button is-primary is-outlined" type="submit">Sign in</button>
+                            <button class="button is-link is-outlined" type="submit">Log in</button>
                         </div>
                     </div>
                 </form>

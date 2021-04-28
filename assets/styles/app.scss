@@ -1,27 +1,22 @@
 @charset "utf-8";
 
-// Import a Google Font
-@import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
-
 // Set your brand colors
-//$purple: #8A4D76;
-$cyan: #00d1b2;
+$turquoise: hsl(171, 100%, 41%);
 $pink: #FA7C91;
 //$brown: #757763;
 //$beige-light: #D0D1CD;
 //$beige-lighter: #EFF0EB;
 
 // Update Bulma's global variables
-$family-sans-serif: "Nunito", sans-serif;
-//$grey-dark: $brown;
-//$grey-light: $beige-light;
-$primary: $cyan;
-$link: $pink;
+$primary: $pink;
+$link: $turquoise;
 
 // Update some of Bulma's component variables
-$input-focus-border-color: $primary;
-$input-focus-box-shadow-color: rgba($primary, 0.25);
 
 // Import Bulma
 @import "~bulma/bulma";
 @import "~bulma-checkradio/dist/css/bulma-checkradio";
+
+// Nuschool styles
+label, .button, .navbar-item { font-weight: 500; }
+.navbar { border-bottom: 1px solid $light; }
