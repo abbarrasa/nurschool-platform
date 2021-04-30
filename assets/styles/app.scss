@@ -12,10 +12,11 @@ $primary: $pink;
 $link: $turquoise;
 
 // Update some of Bulma's component variables
+$radius: 0;
 
 // Import Bulma
 @import "~bulma/bulma";
 @import "~bulma-checkradio/dist/css/bulma-checkradio";
 
-// Nuschool styles
+// Nurschool styles
 label, .button, .navbar-item { font-weight: 500; }
