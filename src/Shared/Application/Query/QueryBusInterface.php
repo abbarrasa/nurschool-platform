@@ -18,7 +18,7 @@ interface QueryBusInterface
 {
     /**
      * @param QueryInterface $query
-     * @return mixed
+     * @return Response
      */
-    public function ask(QueryInterface $query);
+    public function ask(QueryInterface $query): Response;
 }

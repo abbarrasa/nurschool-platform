@@ -68,7 +68,7 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("/register/confirm", name="nurschool_register_confirm")
+     * @Route("/register/confirm", name="register_confirm")
      */
     public function confirm(Request $request, UserDoctrineRepository $userDoctrineRepository): Response
     {
