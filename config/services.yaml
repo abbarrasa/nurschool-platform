@@ -15,6 +15,17 @@ services:
         bind:
             $configMailer: '%nurschool_mailer%'
 
+    _instanceof:
+        Nurschool\Shared\Application\Command\CommandHandlerInterface:
+            public: true
+            tags:
+                - { name: messenger.message_handler, bus: messenger.bus.command }
+
+        Nurschool\Shared\Application\Query\QueryHandlerInterface:
+            public: true
+            tags:
+                - { name: messenger.message_handler, bus: messenger.bus.query }
+
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     Nurschool\:

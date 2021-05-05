@@ -12,7 +12,7 @@
 namespace Nurschool\Shared\Infrastructure\Symfony\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Nurschool\Core\Domain\Model\UserInterface;
+use Nurschool\User\Domain\Model\UserInterface;
 use Nurschool\Core\Infrastructure\Persistence\Doctrine\Repository\UserDoctrineRepository;
 use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;

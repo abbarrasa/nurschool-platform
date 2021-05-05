@@ -16,7 +16,7 @@ namespace Nurschool\Shared\Infrastructure\Symfony\Security\Guard\Authenticador;
 
 use Assert\AssertionFailedException;
 use InvalidArgumentException;
-use Nurschool\User\Application\Command\SignIn\SignInCommand;
+use Nurschool\User\Application\Command\Auth\AuthUserCommand;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,7 +62,7 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             $email = $credentials['email'];
             $plainPassword = $credentials['password'];
 
-            $signInCommand = new SignInCommand($email, $plainPassword);
+            $signInCommand = new AuthUserCommand($email, $plainPassword);
 
         } catch(\Exception $exception) {
 

@@ -2,11 +2,10 @@
 
 namespace Nurschool\Shared\Infrastructure\Symfony\Controller;
 
-use Nurschool\Core\Infrastructure\Persistence\Doctrine\Entity\User;
-use Nurschool\Form\RegistrationFormType;
 use Nurschool\Core\Infrastructure\Persistence\Doctrine\Repository\UserDoctrineRepository;
+use Nurschool\Shared\Infrastructure\Symfony\Controller\Traits\ApiAwareTrait;
 use Nurschool\Shared\Infrastructure\Symfony\Security\EmailVerifier;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Nurschool\User\Application\Command\Create\CreateUserCommand;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +16,8 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
+    use ApiAwareTrait;
+
     private $emailVerifier;
 
     public function __construct(EmailVerifier $emailVerifier)
@@ -32,39 +33,53 @@ class RegistrationController extends AbstractController
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
+//        $user = new User();
+//        $form = $this->createForm(RegistrationFormType::class, $user);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $email = $form->get('email')->getData();
+//            $password = $form->get('plainPassword')->getData();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $user->setPassword(
-                $passwordEncoder->encodePassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('admin@nurschool.es', 'Nurchool Mail Bot'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
-            // do anything else you need here, like send an email
-
-            return $this->redirectToRoute('_preview_error');
+        if ($request->isMethod(Request::METHOD_GET)) {
+            return $this->render('registration/register.html.twig');
         }
 
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
+        $email = $request->request->get('email');
+        $password = $request->request->get('password');
+
+        $this->dispatch(new CreateUserCommand($email, $password));
+
+        return $this->render('registration/confirmation.html.twig');
+
+//            // encode the plain password
+//            $user->setPassword(
+//                $passwordEncoder->encodePassword(
+//                    $user,
+//                    $form->get('plainPassword')->getData()
+//                )
+//            );
+//
+//            $entityManager = $this->getDoctrine()->getManager();
+//            $entityManager->persist($user);
+//            $entityManager->flush();
+//
+//            // generate a signed url and email it to the user
+//            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+//                (new TemplatedEmail())
+//                    ->from(new Address('admin@nurschool.es', 'Nurchool Mail Bot'))
+//                    ->to($user->getEmail())
+//                    ->subject('Please Confirm your Email')
+//                    ->htmlTemplate('registration/confirmation_email.html.twig')
+//            );
+//            // do anything else you need here, like send an email
+//
+//            return $this->redirectToRoute('_preview_error');
+//        }
+//
+//        return $this->render('registration/register.html.twig', [
+//            'registrationForm' => $form->createView(),
+//        ]);
     }
 
     /**

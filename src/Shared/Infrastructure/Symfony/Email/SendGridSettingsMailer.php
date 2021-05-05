@@ -105,13 +105,13 @@ class SendGridSettingsMailer implements SettingsMailerInterface
     {
         $resolver
             ->setRequired([
-                'api_key', 'default_address', 'default_name', 'welcome', 'resetting', 'invitation'
+                'api_key', 'default_address', 'default_name', 'confirmation', 'resetting', 'invitation'
             ])
             ->setDefaults([
                 'sandbox' => false,
                 'disable_delivery' => false,
                 'redirect_to' => false,
-                'welcome' => function (OptionsResolver $resolver, Options $parent) {
+                'confirmation' => function (OptionsResolver $resolver, Options $parent) {
                     $resolver
                         ->setRequired('template', 'subject')
                         ->setDefaults([

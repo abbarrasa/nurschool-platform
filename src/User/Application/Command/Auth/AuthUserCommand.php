@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Nurschool\User\Application\Command\SignIn;
+namespace Nurschool\User\Application\Command\Auth;
 
 
 use Nurschool\Shared\Application\Command\CommandInterface;
 use Nurschool\User\Domain\ValueObject\Email;
 
-final class SignInCommand implements CommandInterface
+final class AuthUserCommand implements CommandInterface
 {
     public $email;
 

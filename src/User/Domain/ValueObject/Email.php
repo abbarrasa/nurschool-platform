@@ -35,7 +35,7 @@ final class Email implements \JsonSerializable
      */
     public static function fromString(string $email): self
     {
-        Assertion::email($email, 'Not a valid email');
+//        Assertion::email($email, 'Not a valid email');
 
         return new self($email);
     }
