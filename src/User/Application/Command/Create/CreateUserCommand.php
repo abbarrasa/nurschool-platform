@@ -16,19 +16,19 @@ namespace Nurschool\User\Application\Command\Create;
 
 use Nurschool\Shared\Application\Command\CommandInterface;
 use Nurschool\User\Domain\ValueObject\Email;
+use Nurschool\User\Domain\ValueObject\HashedPassword;
 
 final class CreateUserCommand implements CommandInterface
 {
     /** @var Email */
     private $email;
 
-    /** @var string */
-    private $password;
+    private $hashedPassword;
 
-    public function __construct(string $email, string $password)
+    public function __construct(string $email, string $plainPassword)
     {
         $this->email = Email::fromString($email);
-        $this->password = $password;
+        $this->hashedPassword = HashedPassword::encode($plainPassword);
     }
 
     /**
@@ -48,18 +48,18 @@ final class CreateUserCommand implements CommandInterface
     }
 
     /**
-     * @return string
+     * @return HashedPassword
      */
-    public function getPassword(): string
+    public function getHashedPassword(): HashedPassword
     {
-        return $this->password;
+        return $this->hashedPassword;
     }
 
     /**
-     * @param string $password
+     * @param HashedPassword $hashedPassword
      */
-    public function setPassword(string $password): void
+    public function setHashedPassword(HashedPassword $hashedPassword): void
     {
-        $this->password = $password;
+        $this->hashedPassword = $hashedPassword;
     }
 }
