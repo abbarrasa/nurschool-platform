@@ -14,10 +14,11 @@ declare(strict_types=1);
 namespace Nurschool\User\Application\Command\Create;
 
 
+use Nurschool\Shared\Domain\Model\CreatorInterface;
 use Nurschool\User\Domain\Model\Repository\UserRepositoryInterface;
-use Nurschool\User\Domain\ValueObject\HashedPassword;
+use Nurschool\User\Domain\ValueObject\Credentials;
 
-final class UserCreator
+final class UserCreator implements CreatorInterface
 {
     private $repository;
 
@@ -26,7 +27,7 @@ final class UserCreator
         $this->repository = $repository;
     }
 
-    public function __invoke(Email $email, HashedPassword $hashedPassword)
+    public function __invoke(Credentials $credentials)
     {
         $this->repository->save();
     }

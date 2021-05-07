@@ -17,6 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Nurschool\Shared\Infrastructure\Persistence\Doctrine\Repository\AbstractDoctrineRepository;
 use Nurschool\Shared\Infrastructure\Symfony\Entity\User;
 use Nurschool\User\Domain\Model\Repository\UserRepositoryInterface;
+use Nurschool\User\Domain\ValueObject\Credentials;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -30,6 +31,14 @@ final class UserDoctrineRepository extends AbstractDoctrineRepository implements
     {
         parent::__construct($registry, User::class);
     }
+
+
+    public function create(Credentials $credentials)
+    {
+        $user = new User();
+    }
+
+
 
     // /**
     //  * @return User[] Returns an array of User objects

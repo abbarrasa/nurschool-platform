@@ -12,6 +12,7 @@
 namespace Nurschool\Shared\Infrastructure\Symfony\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Nurschool\User\Domain\ValueObject\Credentials;
 use Nurschool\User\Domain\Model\UserInterface;
 use Nurschool\Core\Infrastructure\Persistence\Doctrine\Repository\UserDoctrineRepository;
 use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
@@ -34,11 +35,8 @@ final class User implements UserInterface, \Symfony\Component\Security\Core\User
      */
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank()
-     */
-    private $email;
+    /** @ORM\Embedded(class="Credentials::class") */
+    private $credentials;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -49,11 +47,6 @@ final class User implements UserInterface, \Symfony\Component\Security\Core\User
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lastname;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $password;
 
     /**
      * @ORM\Column(type="integer")

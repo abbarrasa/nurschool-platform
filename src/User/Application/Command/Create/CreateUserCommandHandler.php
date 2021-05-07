@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Nurschool\User\Application\Command\Create;
 
 use Nurschool\Shared\Application\Command\CommandHandlerInterface;
+use Nurschool\User\Domain\ValueObject\Credentials;
 
 final class CreateUserCommandHandler implements CommandHandlerInterface
 {
@@ -29,8 +30,9 @@ final class CreateUserCommandHandler implements CommandHandlerInterface
     {
         $email = $command->getEmail();
         $hashedPassword = $command->getHashedPassword();
+        $credentials = new Credentials($email, $hashedPassword);
 
-        $this->creator->__invoke($email, $hashedPassword);
+        $this->creator->__invoke($credentials);
 
         //https://www.acceseo.com/que-es-symfony-messenger-y-como-podemos-utilizarlo-en-nuestros-proyectos.html
 //        sleep(30);
