@@ -18,9 +18,9 @@ use Nurschool\Shared\Application\Command\CommandInterface;
 
 final class CommandNotRegisteredException extends \RuntimeException
 {
-    public function __construct(CommandInterface $command)
+    public function __construct(CommandInterface $event)
     {
-        $commandClass = get_class($command);
+        $commandClass = get_class($event);
 
         parent::__construct("The command <$commandClass> hasn't a command handler associated");
     }

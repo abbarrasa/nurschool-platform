@@ -14,21 +14,29 @@ declare(strict_types=1);
 namespace Nurschool\User\Application\Command\Create;
 
 
+use Nurschool\Shared\Application\Event\EventBusInterface;
 use Nurschool\Shared\Domain\Model\CreatorInterface;
+use Nurschool\User\Domain\Model\Event\UserCreated;
 use Nurschool\User\Domain\Model\Repository\UserRepositoryInterface;
 use Nurschool\User\Domain\ValueObject\Credentials;
 
 final class UserCreator implements CreatorInterface
 {
     private $repository;
+    private $eventBus;
 
-    public function __construct(UserRepositoryInterface $repository)
+    public function __construct(UserRepositoryInterface $repository, EventBusInterface $eventBus)
     {
         $this->repository = $repository;
+        $this->eventBus = $eventBus;
     }
 
     public function __invoke(Credentials $credentials)
     {
-        $this->repository->save();
+        $user = $this->repository->create($credentials);
+        $this->repository->save($user);
+
+        $event = new UserCreated($user->getId());
+        $this->eventBus->publish($event);
     }
 }

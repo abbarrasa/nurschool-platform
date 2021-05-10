@@ -9,12 +9,10 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
-
 namespace Nurschool\Shared\Application\Event;
 
 
-interface EventBus
+interface EventHandlerInterface
 {
-    public function publish(DomainEvent ...$events): void;
+
 }
