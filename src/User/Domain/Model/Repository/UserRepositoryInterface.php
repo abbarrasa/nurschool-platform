@@ -15,9 +15,7 @@ namespace Nurschool\User\Domain\Model\Repository;
 
 
 use Nurschool\Shared\Domain\Model\Repository\RepositoryInterface;
-use Nurschool\User\Domain\ValueObject\Credentials;
 
 interface UserRepositoryInterface extends RepositoryInterface
 {
-    public function create(Credentials $credentials);
 }

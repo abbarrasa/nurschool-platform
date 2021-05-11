@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace Nurschool\User\Infrastructure\Persistence\Doctrine\Repository;
 
 use Doctrine\Persistence\ManagerRegistry;
+use Nurschool\Shared\Domain\AggregateRoot;
 use Nurschool\Shared\Infrastructure\Persistence\Doctrine\Repository\AbstractDoctrineRepository;
+use Nurschool\Shared\Infrastructure\Persistence\Doctrine\Repository\EntityInterface;
 use Nurschool\Shared\Infrastructure\Symfony\Entity\User;
 use Nurschool\User\Domain\Model\Repository\UserRepositoryInterface;
 use Nurschool\User\Domain\ValueObject\Credentials;
@@ -31,14 +33,6 @@ final class UserDoctrineRepository extends AbstractDoctrineRepository implements
     {
         parent::__construct($registry, User::class);
     }
-
-
-    public function create(Credentials $credentials)
-    {
-        $user = new User();
-    }
-
-
 
     // /**
     //  * @return User[] Returns an array of User objects
@@ -68,4 +62,13 @@ final class UserDoctrineRepository extends AbstractDoctrineRepository implements
         ;
     }
     */
+
+    public function createEntity(\Nurschool\User\Domain\User $aggregateRoot): EntityInterface
+    {
+        $user = new User();
+
+        return $user;
+    }
+
+
 }

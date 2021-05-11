@@ -19,6 +19,8 @@ use Nurschool\Shared\Domain\Model\CreatorInterface;
 use Nurschool\User\Domain\Model\Event\UserCreated;
 use Nurschool\User\Domain\Model\Repository\UserRepositoryInterface;
 use Nurschool\User\Domain\ValueObject\Credentials;
+use Nurschool\User\Domain\ValueObject\Email;
+use Nurschool\User\Domain\ValueObject\HashedPassword;
 
 final class UserCreator implements CreatorInterface
 {
@@ -31,7 +33,7 @@ final class UserCreator implements CreatorInterface
         $this->eventBus = $eventBus;
     }
 
-    public function __invoke(Credentials $credentials)
+    public function __invoke(Email $email, HashedPassword $hashedPassword)
     {
         $user = $this->repository->create($credentials);
         $this->repository->save($user);

@@ -30,7 +30,6 @@ final class CreateUserCommandHandler implements CommandHandlerInterface
     {
         $email = $command->getEmail();
         $hashedPassword = $command->getHashedPassword();
-        $credentials = new Credentials($email, $hashedPassword);
 
         $this->creator->__invoke($credentials);
 

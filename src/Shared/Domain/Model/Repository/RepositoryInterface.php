@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Nurschool\Shared\Domain\Model\Repository;
 
 
+use Nurschool\Shared\Domain\AggregateRoot;
+
 interface RepositoryInterface
 {
     public function find($id, $lockMode = null, $lockVersion = null);
@@ -24,7 +26,7 @@ interface RepositoryInterface
 
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
 
-    public function save($object, bool $andFlush = true);
+    public function save(AggregateRoot $aggregateRoot, bool $andFlush = true);
 
-    public function delete($object, bool $andFlush = true);
+    public function delete(AggregateRoot $aggregateRoot, bool $andFlush = true);
 }

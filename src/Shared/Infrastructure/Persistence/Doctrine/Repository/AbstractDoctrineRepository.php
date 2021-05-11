@@ -15,33 +15,38 @@ namespace Nurschool\Shared\Infrastructure\Persistence\Doctrine\Repository;
 
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Nurschool\Shared\Domain\AggregateRoot;
 
 abstract class AbstractDoctrineRepository extends ServiceEntityRepository
 {
+    abstract public function createEntity(AggregateRoot $aggregateRoot): EntityInterface;
+
     /**
      * Store an object.
-     * @param $object
+     * @param AggregateRoot $aggregateRoot
      * @param bool $andFlush
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function save($object, bool $andFlush = true)
+    public function save(AggregateRoot $aggregateRoot, bool $andFlush = true)
     {
-        $this->_em->persist($object);
+        $entity = $this->createEntity($aggregateRoot);
+        $this->_em->persist($entity);
         if ($andFlush) {
             $this->_em->flush();
         }
     }
 
     /**
-     * @param $object
+     * @param AggregateRoot $aggregateRoot
      * @param bool $andFlush
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function delete($object, bool $andFlush = true)
+    public function delete(AggregateRoot $aggregateRoot, bool $andFlush = true)
     {
-        $this->_em->remove($object);
+        $entity = $this->createEntity($aggregateRoot);
+        $this->_em->remove($entity);
         if ($andFlush) {
             $this->_em->flush();
         }
