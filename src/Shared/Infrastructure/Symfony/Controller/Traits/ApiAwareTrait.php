@@ -4,51 +4,51 @@
 namespace Nurschool\Shared\Infrastructure\Symfony\Controller\Traits;
 
 
-use Nurschool\Shared\Application\Command\CommandBusInterface;
-use Nurschool\Shared\Application\Command\CommandInterface;
-use Nurschool\Shared\Application\Query\QueryBusInterface;
-use Nurschool\Shared\Application\Query\QueryInterface;
+use Nurschool\Shared\Application\Command\CommandBus;
+use Nurschool\Shared\Application\Command\Command;
+use Nurschool\Shared\Application\Query\QueryBus;
+use Nurschool\Shared\Application\Query\Query;
 use Nurschool\Shared\Application\Query\Response;
 
 trait ApiAwareTrait
 {
-    /** @var CommandBusInterface */
+    /** @var CommandBus */
     protected $commandBus;
 
-    /** @var QueryBusInterface */
+    /** @var QueryBus */
     protected $queryBus;
 
     /**
      * @required
-     * @param CommandBusInterface $commandBus
+     * @param CommandBus $commandBus
      */
-    public function setCommandBus(CommandBusInterface $commandBus): void
+    public function setCommandBus(CommandBus $commandBus): void
     {
         $this->commandBus = $commandBus;
     }
 
     /**
      * @required
-     * @param QueryBusInterface $queryBus
+     * @param QueryBus $queryBus
      */
-    public function setQueryBus(QueryBusInterface $queryBus): void
+    public function setQueryBus(QueryBus $queryBus): void
     {
         $this->queryBus = $queryBus;
     }
 
     /**
-     * @param CommandInterface $command
+     * @param Command $command
      */
-    protected function dispatch(CommandInterface $command): void
+    protected function dispatch(Command $command): void
     {
         $this->commandBus->dispatch($command);
     }
 
     /**
-     * @param QueryInterface $query
+     * @param Query $query
      * @return Response|null
      */
-    protected function ask(QueryInterface $query): ?Response
+    protected function ask(Query $query): ?Response
     {
         return $this->queryBus->ask($query);
     }

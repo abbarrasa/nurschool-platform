@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Nurschool\User\Application\Command\Auth;
 
 
-use Nurschool\Shared\Application\Command\CommandInterface;
+use Nurschool\Shared\Application\Command\Command;
 use Nurschool\User\Domain\ValueObject\Email;
 
-final class AuthUserCommand implements CommandInterface
+final class AuthUserCommand implements Command
 {
     public $email;
 

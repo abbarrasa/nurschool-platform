@@ -26,7 +26,7 @@ interface RepositoryInterface
 
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
 
-    public function save(AggregateRoot $aggregateRoot, bool $andFlush = true);
+    public function save(AggregateRoot $entity);
 
-    public function delete(AggregateRoot $aggregateRoot, bool $andFlush = true);
+    public function delete(AggregateRoot $entity);
 }

@@ -27,14 +27,14 @@ and framework.messenger.transports.async in config/packages/messenger.yaml;
 
  */
 
-use Nurschool\Shared\Application\Command\CommandInterface;
-use Nurschool\Shared\Application\Command\CommandBusInterface;
+use Nurschool\Shared\Application\Command\Command;
+use Nurschool\Shared\Application\Command\CommandBus;
 use Nurschool\Shared\Infrastructure\Symfony\Bus\MessageBusExceptionTrait;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\Exception\NoHandlerForMessageException;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-final class SymfonyCommandBus implements CommandBusInterface
+final class SymfonyCommandBus implements CommandBus
 {
     use MessageBusExceptionTrait;
 
@@ -45,7 +45,7 @@ final class SymfonyCommandBus implements CommandBusInterface
         $this->messageBus = $messageBus;
     }
 
-    public function dispatch(CommandInterface $command): void
+    public function dispatch(Command $command): void
     {
         try {
             $this->messageBus->dispatch($command);

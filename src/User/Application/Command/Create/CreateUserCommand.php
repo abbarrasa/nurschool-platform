@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Nurschool\User\Application\Command\Create;
 
 
-use Nurschool\Shared\Application\Command\CommandInterface;
+use Nurschool\Shared\Application\Command\Command;
 use Nurschool\User\Domain\ValueObject\Email;
 use Nurschool\User\Domain\ValueObject\HashedPassword;
 
-final class CreateUserCommand implements CommandInterface
+final class CreateUserCommand implements Command
 {
     /** @var Email */
     private $email;

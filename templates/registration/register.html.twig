@@ -3,31 +3,41 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    {% for flashError in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
-    {% endfor %}
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-half">
+                <h1>Register</h1>
 
-    <h1>Register</h1>
+                {% for flashError in app.flashes('verify_email_error') %}
+                    <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+                {% endfor %}
 
-    <form action="{{ path('register') }}" method="post">
-        <div class="field">
-            <label for="username">Email</label>
-            <div class="control">
-                <input class="input" type="text" id="email" name="email" placeholder="Your email" />
+                <form action="{{ path('register') }}" method="post">
+                    <div class="field">
+                        <label for="username">Email</label>
+                        <div class="control">
+                            <input class="input" type="text" id="email" name="email" placeholder="Your email" required/>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="password">Password</label>
+                        <div class="control">
+                            <input class="input" type="password" id="password" name="password" placeholder="Your password" required/>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <input class="is-checkradio is-link" id="aggrement" type="checkbox" name="aggrement" required/>
+                        <label for="aggrement">I am agree</label>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-link is-outlined" type="submit">Sign up</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="field">
-            <label for="password">Password</label>
-            <div class="control">
-                <input class="input" type="password" id="password" name="password" placeholder="Your password" />
-            </div>
-        </div>
-        <div class="field">
-            <div class="control">
-                <button class="button is-link is-outlined" type="submit">Sign up</button>
-            </div>
-        </div>
-    </form>
+    </div>
 
 {#    {{ form_start(registrationForm) }}#}
 {#        {{ form_row(registrationForm.email) }}#}

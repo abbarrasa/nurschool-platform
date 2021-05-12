@@ -5,14 +5,24 @@ doctrine:
         # IMPORTANT: You MUST configure your server version,
         # either here or in the DATABASE_URL env var (see .env file)
         #server_version: '13'
+
+        types:
+            uuid: 'Ramsey\Uuid\Doctrine\UuidType'
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         mappings:
-            Nurschool\Shared\Infrastructure\Symfony\Entity:
+#            Nurschool\Shared\Infrastructure\Symfony\Entity:
+#                is_bundle: false
+#                type: annotation
+#                dir: '%kernel.project_dir%/src/Shared/Infrastructure/Symfony/Entity'
+#                prefix: 'Nurschool\Shared\Infrastructure\Symfony\Entity'
+#                alias: Nurschool
+
+            Nurschool\User\Infrastructure\Persistence\Doctrine\Mapping:
                 is_bundle: false
-                type: annotation
-                dir: '%kernel.project_dir%/src/Shared/Infrastructure/Symfony/Entity'
-                prefix: 'Nurschool\Shared\Infrastructure\Symfony\Entity'
+                type: xml
+                dir: '%kernel.project_dir%/src/User/Infrastructure/Persistence/Doctrine/Mapping'
+                prefix: 'Nurschool\User\Domain'
                 alias: Nurschool

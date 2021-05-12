@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Nurschool\Shared\Infrastructure\Bus\Command;
 
 
-use Nurschool\Shared\Application\Command\CommandInterface;
+use Nurschool\Shared\Application\Command\Command;
 
 final class CommandNotRegisteredException extends \RuntimeException
 {
-    public function __construct(CommandInterface $event)
+    public function __construct(Command $event)
     {
         $commandClass = get_class($event);
 

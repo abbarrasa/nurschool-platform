@@ -16,12 +16,12 @@ services:
             $configMailer: '%nurschool_mailer%'
 
     _instanceof:
-        Nurschool\Shared\Application\Command\CommandHandlerInterface:
+        Nurschool\Shared\Application\Command\CommandHandler:
             public: true
             tags:
                 - { name: messenger.message_handler, bus: messenger.bus.command }
 
-        Nurschool\Shared\Application\Query\QueryHandlerInterface:
+        Nurschool\Shared\Application\Query\QueryHandler:
             public: true
             tags:
                 - { name: messenger.message_handler, bus: messenger.bus.query }

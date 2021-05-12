@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Nurschool\Shared\Application\Command;
+namespace Nurschool\Shared\Application\Query;
 
 
-interface CommandInterface
+interface Query
 {
 
 }

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Nurschool\Shared\Infrastructure\Bus\Query;
 
 
-use Nurschool\Shared\Application\Query\QueryBusInterface;
-use Nurschool\Shared\Application\Query\QueryInterface;
+use Nurschool\Shared\Application\Query\QueryBus;
+use Nurschool\Shared\Application\Query\Query;
 use Nurschool\Shared\Application\Query\Response;
 use Nurschool\Shared\Infrastructure\Symfony\Bus\MessageBusExceptionTrait;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
@@ -23,7 +23,7 @@ use Symfony\Component\Messenger\Exception\NoHandlerForMessageException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 
-final class SymfonyQueryBus implements QueryBusInterface
+final class SymfonyQueryBus implements QueryBus
 {
     use MessageBusExceptionTrait;
 
@@ -35,7 +35,7 @@ final class SymfonyQueryBus implements QueryBusInterface
         $this->messageBus = $messageBus;
     }
 
-    public function ask(QueryInterface $query): Response
+    public function ask(Query $query): Response
     {
         try {
             /** @var HandledStamp $stamp */

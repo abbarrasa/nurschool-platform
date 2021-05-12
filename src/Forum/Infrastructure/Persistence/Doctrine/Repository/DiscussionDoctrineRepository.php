@@ -16,7 +16,8 @@ namespace Nurschool\Forum\Infrastructure\Persistence\Doctrine\Repository;
 use Doctrine\Persistence\ManagerRegistry;
 use Nurschool\Forum\Domain\Model\Repository\DiscussionRepositoryInterface;
 use Nurschool\Forum\Infrastructure\Persistence\Doctrine\Entity\Discussion;
-use Nurschool\Shared\Infrastructure\Persistence\Doctrine\Repository\AbstractDoctrineRepository;
+use Nurschool\Shared\Domain\AggregateRoot;
+use Nurschool\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
 
 /**
  * @method Discussion|null find($id, $lockMode = null, $lockVersion = null)
@@ -24,7 +25,7 @@ use Nurschool\Shared\Infrastructure\Persistence\Doctrine\Repository\AbstractDoct
  * @method Discussion[]    findAll()
  * @method Discussion[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-final class DiscussionDoctrineRepository extends AbstractDoctrineRepository implements DiscussionRepositoryInterface
+final class DiscussionDoctrineRepository extends DoctrineRepository implements DiscussionRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {

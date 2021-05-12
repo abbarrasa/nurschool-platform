@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Nurschool\Shared\Infrastructure\Bus\Query;
 
 
-use Nurschool\Shared\Application\Query\QueryInterface;
+use Nurschool\Shared\Application\Query\Query;
 
 class QueryNotRegisteredException extends \RuntimeException
 {
-    public function __construct(QueryInterface $query)
+    public function __construct(Query $query)
     {
         $queryClass = get_class($query);
 

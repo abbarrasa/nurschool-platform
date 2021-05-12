@@ -9,11 +9,11 @@ use Nurschool\Shared\Application\Encoder\HashedPasswordEncoder;
 
 final class HashedPassword
 {
-    private $hashedPassword;
+    private $password;
 
     private function __construct(string $hashedPassword)
     {
-        $this->hashedPassword = $hashedPassword;
+        $this->password = $hashedPassword;
     }
 
     /**
@@ -31,7 +31,7 @@ final class HashedPassword
 
     public function match(string $plainPassword): bool
     {
-        return (new HashedPasswordEncoder())->match($plainPassword, $this->hashedPassword);
+        return (new HashedPasswordEncoder())->match($plainPassword, $this->password);
     }
 
     /**
@@ -46,11 +46,11 @@ final class HashedPassword
 
     public function toString(): string
     {
-        return $this->hashedPassword;
+        return $this->password;
     }
 
     public function __toString(): string
     {
-        return $this->hashedPassword;
+        return $this->password;
     }
 }

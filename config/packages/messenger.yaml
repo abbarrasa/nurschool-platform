@@ -17,5 +17,5 @@ framework:
 
         routing:
             # Route your messages to the transports
-            'Nurschool\Shared\Application\Command\CommandInterface': async
-            'Nurschool\Shared\Application\Query\QueryInterface': sync
+            'Nurschool\Shared\Application\Command\Command': async
+            'Nurschool\Shared\Application\Query\Query': sync

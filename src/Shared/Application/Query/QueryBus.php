@@ -11,10 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Nurschool\Shared\Application\Command;
+namespace Nurschool\Shared\Application\Query;
 
 
-interface CommandBusInterface
+interface QueryBus
 {
-    public function dispatch(CommandInterface $command): void;
+    /**
+     * @param Query $query
+     * @return Response
+     */
+    public function ask(Query $query): Response;
 }

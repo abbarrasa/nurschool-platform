@@ -12,21 +12,19 @@
 namespace Nurschool\Shared\Infrastructure\Symfony\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Nurschool\Shared\Infrastructure\Persistence\Doctrine\Repository\EntityInterface;
 use Nurschool\User\Domain\ValueObject\Credentials;
 use Nurschool\Core\Infrastructure\Persistence\Doctrine\Repository\UserDoctrineRepository;
 use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Ulid;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserDoctrineRepository::class)
  * @ORM\Table(name="nurschool_user")
  * @UniqueEntity(fields={"email"})
  */
-final class User implements EntityInterface, UserInterface
+final class User implements UserInterface
 {
     /**
      * @ORM\Id
