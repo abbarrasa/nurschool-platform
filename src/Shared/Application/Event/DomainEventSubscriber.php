@@ -16,5 +16,5 @@ namespace Nurschool\Shared\Application\Event;
 
 interface DomainEventSubscriber
 {
-    public static function subscribedTo(): array;
+    public function subscribedTo(): array;
 }

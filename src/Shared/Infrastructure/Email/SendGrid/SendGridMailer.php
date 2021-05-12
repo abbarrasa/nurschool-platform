@@ -17,7 +17,7 @@ namespace Nurschool\Shared\Infrastructure\Email\SendGrid;
 use Nurschool\Shared\Domain\Service\Email\MailerInterface;
 use Nurschool\Shared\Domain\Service\Email\SettingsMailerInterface;
 use Nurschool\Shared\Infrastructure\Email\SendGrid\Exception\SendGridException;
-use Nurschool\Core\Domain\Model\UserInterface;
+use Nurschool\User\Domain\User;
 use SendGrid\Mail\Mail;
 use SendGrid\Mail\MailSettings;
 use SendGrid\Mail\Personalization;
@@ -25,7 +25,6 @@ use SendGrid\Mail\SandBoxMode;
 use SendGrid\Mail\To;
 use SendGrid\Response;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Class SendGridMailer
@@ -71,7 +70,7 @@ class SendGridMailer implements MailerInterface
         }
     }
 
-    public function sendConfirmationEmail(UserInterface $user, string $confirmationUrl, \DateTimeInterface $expiresAt)
+    public function sendConfirmationEmail(User $user, string $confirmationUrl, \DateTimeInterface $expiresAt)
     {
 
         $templateId = $this->settingsMailer->getSetting('confirmation.template');
@@ -80,14 +79,14 @@ class SendGridMailer implements MailerInterface
             $this->settingsMailer->getSetting('confirmation.address'),
             $this->settingsMailer->getSetting('confirmation.name')
         ];
-        $email = $this->createMessage($from, $user->getEmail(), $subject, $templateId);
+        $email = $this->createMessage($from, $user->email()->toString(), $subject, $templateId);
 //        $email->addDynamicTemplateData('url', $signatureComponents->getSignedUrl());
 //        $email->addDynamicTemplateData('expiresAt', $signatureComponents->getExpiresAt()->format('g'));
 
         return $this->sendMessage($email);
     }
 
-    public function sendResettingPasswordEmail(UserInterface $user)
+    public function sendResettingPasswordEmail(User $user)
     {
         // TODO: Implement sendResettingPasswordEmail() method.
     }
@@ -246,11 +245,11 @@ class SendGridMailer implements MailerInterface
             throw new AccessDeniedSendGridException($response->body());
         }
 
-        if (preg_match('/5[0-9]{2}/', $response->statusCode())) {
+        if (preg_match('/5[0-9]{2}/', strval($response->statusCode()))) {
             throw new SendGridException($response->body());
         }
 
-        if (preg_match('/4[0-9]{2}/', $response->statusCode())) {
+        if (preg_match('/4[0-9]{2}/', strval($response->statusCode()))) {
             throw new BadRequestSendGridException($response->body());
         }
     }

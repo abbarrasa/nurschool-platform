@@ -5,6 +5,7 @@ namespace Nurschool\Shared\Infrastructure\Symfony\Controller;
 use Nurschool\Core\Infrastructure\Persistence\Doctrine\Repository\UserDoctrineRepository;
 use Nurschool\Shared\Infrastructure\Symfony\Controller\Traits\ApiAwareTrait;
 use Nurschool\Shared\Infrastructure\Symfony\Security\EmailVerifier;
+use Nurschool\Shared\Infrastructure\Symfony\Validator\Constraints\Password;
 use Nurschool\User\Application\Command\Create\CreateUserCommand;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +13,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Validator\Validation;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
@@ -44,6 +48,7 @@ class RegistrationController extends AbstractController
             return $this->render('registration/register.html.twig');
         }
 
+        $this->validateRequest($request);
         $email = $request->request->get('email');
         $password = $request->request->get('password');
 
@@ -111,5 +116,20 @@ class RegistrationController extends AbstractController
         $this->addFlash('success', 'Your email address has been verified.');
 
         return $this->redirectToRoute('app_register');
+    }
+
+
+    private function validateRequest(Request $request): ConstraintViolationListInterface
+    {
+        $constraint = new Assert\Collection(
+            [
+                'email'    => [new Assert\NotBlank(), new Assert\Email()],
+                'password' => [new Assert\NotBlank(), new Password()],
+            ]
+        );
+
+        $input = $request->request->all();
+
+        return Validation::createValidator()->validate($input, $constraint);
     }
 }

@@ -31,7 +31,7 @@ use UnexpectedValueException;
 
 final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
-    private const LOGIN = 'login';
+    private const LOGIN_ROUTE = 'login';
 
     private const SUCCESS_REDIRECT = 'profile';
 
@@ -45,7 +45,9 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function supports(Request $request): bool
     {
-        return $request->getPathInfo() === $this->router->generate(self::LOGIN) && $request->isMethod('POST');
+        return $request->getPathInfo() === $this->router->generate(self::LOGIN_ROUTE) &&
+            $request->isMethod('POST')
+        ;
     }
 
     public function getCredentials(Request $request): array
@@ -81,6 +83,6 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     protected function getLoginUrl()
     {
-        return $this->urlGenerator->generate(self::LOGIN_ROUTE);
+        return $this->router->generate(self::LOGIN_ROUTE);
     }
 }

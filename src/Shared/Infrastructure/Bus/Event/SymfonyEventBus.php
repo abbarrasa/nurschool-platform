@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Nurschool\Shared\Infrastructure\Bus\Event;
 
 
-use Nurschool\Shared\Application\Event\DomainEventInterface;
+use Nurschool\Shared\Application\Event\DomainEvent;
 use Nurschool\Shared\Application\Event\EventBusInterface;
 use Nurschool\Shared\Infrastructure\Symfony\Bus\MessageBusExceptionTrait;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
@@ -32,7 +32,7 @@ final class SymfonyEventBus implements EventBusInterface
         $this->messageBus = $messageBus;
     }
 
-    public function publish(DomainEventInterface ...$events): void
+    public function publish(DomainEvent ...$events): void
     {
         try {
             foreach($events as $event) {

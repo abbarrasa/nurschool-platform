@@ -12,11 +12,11 @@
 namespace Nurschool\Shared\Infrastructure\Bus\Event;
 
 
-use Nurschool\Shared\Application\Event\DomainEventInterface;
+use Nurschool\Shared\Application\Event\DomainEvent;
 
 class EventNotRegisteredException extends \RuntimeException
 {
-    public function __construct(DomainEventInterface $event)
+    public function __construct(DomainEvent $event)
     {
         $eventClass = get_class($event);
 

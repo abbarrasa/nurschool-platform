@@ -12,11 +12,10 @@
 namespace Nurschool\User\Domain\Model\Event;
 
 
-use Nurschool\Shared\Application\Event\DomainEventInterface;
+use Nurschool\Shared\Application\Event\DomainEvent;
 
-class UserCreated implements DomainEventInterface
+class UserCreated implements DomainEvent
 {
-    private $uuid;
 
     public function __construct($uuid)
     {

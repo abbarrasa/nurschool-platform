@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Nurschool\Shared\Domain\Service\Email;
 
 
-use Nurschool\Core\Domain\Model\UserInterface;
+use Nurschool\User\Domain\User;
 
 interface MailerInterface
 {
-    public function sendConfirmationEmail(UserInterface $user, string $confirmationUrl, \DateTimeInterface $expiresAt);
-    public function sendResettingPasswordEmail(UserInterface $user);
+    public function sendConfirmationEmail(User $user, string $confirmationUrl, \DateTimeInterface $expiresAt);
+    public function sendResettingPasswordEmail(User $user);
 
 //    public function sendConfirmationEmail(UserInterface $user, VerifyEmailSignatureComponents $signatureComponents/*string $signedUrl, \DateTimeInterface $expiresAt*/);
 //    public function sendResettingPasswordEmail(UserInterface $user, ResetPasswordToken $resetToken, int $tokenLifetime);
