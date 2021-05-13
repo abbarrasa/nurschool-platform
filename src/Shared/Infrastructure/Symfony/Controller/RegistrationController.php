@@ -46,7 +46,14 @@ class RegistrationController extends AbstractController
             return $this->render('registration/register.html.twig');
         }
 
-        $this->validateRequest($request);
+        $errors = $this->validateRequest($request);
+
+        if ($errors->count()) {
+            return $this->render('registration/register.html.twig', [
+                'errors' => $errors
+            ]);
+        }
+
         $email = $request->request->get('email');
         $password = $request->request->get('password');
 
