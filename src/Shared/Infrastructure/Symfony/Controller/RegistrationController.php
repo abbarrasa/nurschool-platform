@@ -4,21 +4,17 @@ namespace Nurschool\Shared\Infrastructure\Symfony\Controller;
 
 use Nurschool\Core\Infrastructure\Persistence\Doctrine\Repository\UserDoctrineRepository;
 use Nurschool\Shared\Infrastructure\Symfony\Controller\Traits\ApiAwareTrait;
-//use Nurschool\Shared\Infrastructure\Symfony\Security\EmailVerifier;
+use Nurschool\Shared\Infrastructure\Symfony\Security\EmailVerifier;
 use Nurschool\Shared\Infrastructure\Symfony\Validator\Constraints\Password;
 use Nurschool\User\Application\Command\Create\CreateUserCommand;
-use Nurschool\User\Domain\Model\Repository\UserRepositoryInterface;
-use Nurschool\User\Domain\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validation;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
-use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -91,42 +87,23 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/register/confirm", name="register_confirm")
      */
-    public function confirm(
-        Request $request,
-        VerifyEmailHelperInterface $verifyEmailHelper,
-        UserRepositoryInterface $userRepository
-    ): Response
+    public function confirm(Request $request, EmailVerifier $emailVerifier): Response
     {
-        $id = $request->get('id');
-
-        // Verify the user id exists and is not null
-        if (null === $id) {
-            return $this->redirectToRoute('register');
-        }
-
-        /** @var User $user */
-        $user = $userRepository->find($id);
-
-        // Ensure the user exists in persistence
-        if (null === $user) {
-            return $this->redirectToRoute('register');
-        }
-
-        // validate email confirmation link, sets User::isVerified=true and persists
         try {
-            $verifyEmailHelper->validateEmailConfirmation($request->getUri(), $user->id(), $user->email()->toString());
+            $emailVerifier->handleSignedUrl($request);
 
             // @TODO Change the redirect on success and handle or remove the flash message in your templates
             $this->addFlash('success', 'Your email address has been verified.');
 
-            return $this->redirectToRoute('app_register');
+            return $this->redirectToRoute('home');
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $exception->getReason());
 
-            return $this->redirectToRoute('app_register');
+            return $this->redirectToRoute('register');
+        } catch(\Exception $exception) {
+            return $this->redirectToRoute('register');
         }
     }
-
 
     private function validateRequest(Request $request): ConstraintViolationListInterface
     {
@@ -134,6 +111,7 @@ class RegistrationController extends AbstractController
             [
                 'email'    => [new Assert\NotBlank(), new Assert\Email()],
                 'password' => [new Assert\NotBlank(), new Password()],
+                'aggrement' => [new Assert\NotNull(), new Assert\IsTrue()]
             ]
         );
 

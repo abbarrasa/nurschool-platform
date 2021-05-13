@@ -25,6 +25,9 @@ class User extends AggregateRoot
     /** @var FullName */
     private $fullName;
 
+    /** @var bool */
+    private $enabled = false;
+
     private function __construct(UuidInterface $id, Email $email, HashedPassword $password)
     {
         $this->id = $id;
@@ -57,8 +60,23 @@ class User extends AggregateRoot
         return $this->fullName;
     }
 
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
     public function rename(FullName $fullName)
     {
         $this->fullName = $fullName;
+    }
+
+    public function enable()
+    {
+        $this->enabled = true;
+    }
+
+    public function disable()
+    {
+        $this->enabled = false;
     }
 }
