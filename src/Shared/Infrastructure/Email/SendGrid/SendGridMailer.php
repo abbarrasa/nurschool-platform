@@ -57,7 +57,8 @@ class SendGridMailer implements MailerInterface
      * @param SettingsMailerInterface $settingsMailer
      * @throws \SendGrid\Mail\TypeException
      */
-    public function __construct(SettingsMailerInterface $settingsMailer) {
+    public function __construct(SettingsMailerInterface $settingsMailer)
+    {
         $this->settingsMailer = $settingsMailer;
 
         $this->provider = new \SendGrid($this->settingsMailer->getSetting('api_key'));
@@ -70,9 +71,8 @@ class SendGridMailer implements MailerInterface
         }
     }
 
-    public function sendConfirmationEmail(User $user, string $confirmationUrl, \DateTimeInterface $expiresAt)
+    public function sendConfirmationEmail(User $user, string $signedUrl, \DateTimeInterface $expiresAt)
     {
-
         $templateId = $this->settingsMailer->getSetting('confirmation.template');
         $subject = $this->settingsMailer->getSetting('confirmation.subject');
         $from = [
@@ -80,8 +80,8 @@ class SendGridMailer implements MailerInterface
             $this->settingsMailer->getSetting('confirmation.name')
         ];
         $email = $this->createMessage($from, $user->email()->toString(), $subject, $templateId);
-//        $email->addDynamicTemplateData('url', $signatureComponents->getSignedUrl());
-//        $email->addDynamicTemplateData('expiresAt', $signatureComponents->getExpiresAt()->format('g'));
+        $email->addDynamicTemplateData('url', $signedUrl);
+        $email->addDynamicTemplateData('expiresAt', $expiresAt->format('g'));
 
         return $this->sendMessage($email);
     }

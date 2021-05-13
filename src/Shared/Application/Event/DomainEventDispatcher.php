@@ -12,8 +12,7 @@
 namespace Nurschool\Shared\Application\Event;
 
 
-interface DomainEvent
+interface DomainEventDispatcher
 {
-    public function eventName(): string;
-//    public function toPrimitives(): array;
+    public function dispatch(DomainEvent $event): void;
 }

@@ -5,10 +5,10 @@ namespace Nurschool\Shared\Infrastructure\Bus\Event;
 
 
 use Nurschool\Shared\Application\Event\DomainEvent;
-use Nurschool\Shared\Application\Event\DomainEventSubscriber;
+use Nurschool\Shared\Application\Event\DomainEventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-final class SymfonyEventDomainSubscriber implements DomainEventSubscriber
+final class SymfonyEventDomainDispatcher implements DomainEventDispatcher
 {
     private $dispatcher;
 
@@ -19,7 +19,8 @@ final class SymfonyEventDomainSubscriber implements DomainEventSubscriber
 
     public function dispatch(DomainEvent $event): void
     {
-        // TODO: Implement dispatch() method.
+        $eventName = $event->eventName();
+        $this->dispatcher->dispatch($event, $eventName);
     }
 
 }
