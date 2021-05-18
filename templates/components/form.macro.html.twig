@@ -1,0 +1,42 @@
+{% macro input(name, label, attrs) %}
+    {% set values = app.flashes('inputs.' ~ name) %}
+    {% set errors = app.flashes('errors.' ~ name) %}
+    {% set value = values is not empty ? values[0] : '' %}
+    {% set class = errors is not empty ? {'class': 'input is-danger'} : {'class': 'input'} %}
+    {% set attrs = {'type': 'text'} | merge(attrs) %}
+    {% set attrs = attrs | merge({'name': name}) %}
+    {% set attrs = {'id': name} | merge(attrs) %}
+    {% set attrs = {'value': value} | merge(attrs) %}
+    {% set attrs = class | merge(attrs) %}
+    <div class="field">
+        <label for="{{ name }}">{{ label|raw }}</label>
+        <div class="control">
+            <input {% for attr,value in attrs %}{{ attr }}="{{ value }}" {% endfor %}/>
+            {{ _self.errors(errors) }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro checkbox(name, label, attrs) %}
+    {% set values = app.flashes('inputs.' ~ name) %}
+    {% set errors = app.flashes('errors.' ~ name) %}
+    {% set attrs = {'type': 'checkbox'} | merge(attrs) %}
+    {% set attrs = attrs | merge({'name': name}) %}
+    {% set attrs = {'id': name} | merge(attrs) %}
+    {% set attrs = {'value': values[0] | default(1) } | merge(attrs) %}
+    {% set attrs = {'class': 'is-checkradio is-link'} | merge(attrs) %}
+    {% if values is not empty %}
+        {% set attrs = attrs | merge({'checked': 'checked'}) %}
+    {% endif %}
+    <div class="field">
+        <input {% for attr,value in attrs %}{{ attr }}="{{ value }}" {% endfor %}/>
+        <label for="{{ name }}">{{ label|raw }}</label>
+        {{ _self.errors(errors) }}
+    </div>
+{% endmacro %}
+
+{% macro errors(errors) %}
+    {% for error in errors %}
+        <span class="is-size-6 has-text-danger"><i class="fas fa-train"></i> {{ error }}</span>
+    {% endfor %}
+{% endmacro %}
