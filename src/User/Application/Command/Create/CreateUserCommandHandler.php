@@ -34,7 +34,7 @@ final class CreateUserCommandHandler implements CommandHandler
         $email = $command->getEmail();
         $hashedPassword = $command->getHashedPassword();
 
-        $user = $this->creator($email, $hashedPassword);
+        $user = $this->creator->create($email, $hashedPassword);
 
         $event = new UserCreated($user);
         $this->eventDispatcher->dispatch($event);

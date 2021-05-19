@@ -24,6 +24,7 @@
                 <i class="fa fa-{{ attribute(widget_icon, 'icon')|default('') -}}"></i>
             </span>
         {%- endif -%}
+        {{- block('form_help') -}}
         {{- block('form_errors') -}}
     </div>
 {%- endblock form_widget_simple %}
@@ -199,14 +200,37 @@
 {#    {% endif %}#}
 {#{% endblock checkbox_radio_label %}#}
 
+{# Help #}
+
+{% block form_help -%}
+    {%- if help is not empty -%}
+        {%- set help_attr = help_attr|merge({class: (help_attr.class|default('') ~ ' help')|trim}) -%}
+        <p id="{{ id }}_help"{% with { attr: help_attr } %}{{ block('attributes') }}{% endwith %}>
+            {%- if translation_domain is same as(false) -%}
+                {%- if help_html is same as(false) -%}
+                    {{- help -}}
+                {%- else -%}
+                    {{- help|raw -}}
+                {%- endif -%}
+            {%- else -%}
+                {%- if help_html is same as(false) -%}
+                    {{- help|trans(help_translation_parameters, translation_domain) -}}
+                {%- else -%}
+                    {{- help|trans(help_translation_parameters, translation_domain)|raw -}}
+                {%- endif -%}
+            {%- endif -%}
+        </p>
+    {%- endif -%}
+{%- endblock form_help %}
+
 {# Rows #}
 
 {%- block form_row -%}
     <div class="field">
         {{- form_label(form) -}}
         {{- form_widget(form) -}}
-        {%- if form.vars.attr.help_text is defined -%}
-            <p class="help">{{ form.vars.attr.help_text }}</p>
+        {%- if form.vars.attr.help is defined -%}
+            <p {{ block('help_attributes') }}>{{ form.vars.help_html ? form.vars.attr.help|raw : form.vars.attr.help }}</p>
         {%- endif -%}
     </div>
 {%- endblock form_row -%}

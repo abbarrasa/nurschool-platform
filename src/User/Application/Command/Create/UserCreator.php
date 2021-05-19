@@ -15,15 +15,12 @@ namespace Nurschool\User\Application\Command\Create;
 
 
 use Nurschool\Shared\Application\Event\DomainEventDispatcher;
-use Nurschool\Shared\Domain\Model\CreatorInterface;
-use Nurschool\Shared\Infrastructure\Symfony\Event\UserCreated;
 use Nurschool\User\Domain\Model\Repository\UserRepositoryInterface;
 use Nurschool\User\Domain\User;
-use Nurschool\User\Domain\ValueObject\Credentials;
 use Nurschool\User\Domain\ValueObject\Email;
 use Nurschool\User\Domain\ValueObject\HashedPassword;
 
-final class UserCreator implements CreatorInterface
+final class UserCreator
 {
     private $repository;
 
@@ -32,7 +29,7 @@ final class UserCreator implements CreatorInterface
         $this->repository = $repository;
     }
 
-    public function __invoke(Email $email, HashedPassword $hashedPassword): User
+    public function create(Email $email, HashedPassword $hashedPassword): User
     {
         $user = User::create($email, $hashedPassword);
         $this->repository->save($user);
