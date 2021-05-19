@@ -9,12 +9,10 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
-
 namespace Nurschool\Shared\Application\Event;
 
 
-interface DomainEventSubscriber
+interface DomainEvent
 {
-    public function subscribedTo(): array;
+    public function eventName(): string;
 }

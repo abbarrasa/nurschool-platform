@@ -12,31 +12,45 @@
 namespace Nurschool\Shared\Infrastructure\Symfony\EventSubscriber;
 
 
+use Nurschool\Shared\Infrastructure\Email\SendGrid\Logger\SendGridLoggerInterface;
+use Nurschool\Shared\Infrastructure\Symfony\Event\SendGrid\SendingFailed;
+use Nurschool\Shared\Infrastructure\Symfony\Event\SendGrid\SendingFinished;
+use Nurschool\Shared\Infrastructure\Symfony\Event\SendGrid\SendingStarted;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class SendGridEventSubscriber implements SendGridEventSubscriberInterface, EventSubscriberInterface
+class SendGridEventSubscriber implements EventSubscriberInterface
 {
+    /** @var SendGridLoggerInterface */
+    private $logger;
+
+    public function __construct(SendGridLoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     /**
      * @inheritDoc
      */
     public static function getSubscribedEvents()
     {
         return [
-            SendGridEvent::STARTED => 'onStarted',
-            SendGridEvent::FINISHED => 'onFinished',
-            SendGridEvent::FAILED => 'onFailed'
+            SendingStarted::NAME => 'onStarted',
+            SendingFinished::FINISHED => 'onFinished',
+            SendingFailed::FAILED => 'onFailed'
         ];
     }
 
-    public function onFailed(SendGridEventInterface $event): void
+    public function onFailed(SendingFailed $event): void
+    {
+        $mail = $event->getMail();
+        $this->logger->logSendingFailed($mail);
+    }
+
+    public function onStarted(SendingStarted $event): void
     {
     }
 
-    public function onStarted(SendGridEventInterface $event): void
-    {
-    }
-
-    public function onFinished(SendGridEventInterface $event): void
+    public function onFinished(SendingFinished $event): void
     {
     }
 }

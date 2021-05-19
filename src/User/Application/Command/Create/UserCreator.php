@@ -26,20 +26,17 @@ use Nurschool\User\Domain\ValueObject\HashedPassword;
 final class UserCreator implements CreatorInterface
 {
     private $repository;
-    private $eventDispatcher;
 
-    public function __construct(UserRepositoryInterface $repository, DomainEventDispatcher $eventDispatcher)
+    public function __construct(UserRepositoryInterface $repository)
     {
         $this->repository = $repository;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function __invoke(Email $email, HashedPassword $hashedPassword)
+    public function __invoke(Email $email, HashedPassword $hashedPassword): User
     {
         $user = User::create($email, $hashedPassword);
         $this->repository->save($user);
 
-        $event = new UserCreated($user);
-        $this->eventDispatcher->dispatch($event);
+        return $user;
     }
 }

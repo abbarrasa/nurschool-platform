@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Nurschool\Shared\Domain\Model\Dto\Transformer;
+namespace Nurschool\Shared\Application\Event;
 
 
-interface DtoTransformerFactoryInterface
+interface DomainEventListener
 {
-    public function createDtoTranformer(string $dtoClassName): DtoTransformerInterface;
+
 }

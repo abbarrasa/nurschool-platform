@@ -14,5 +14,6 @@ namespace Nurschool\Shared\Application\Event;
 
 interface DomainEventDispatcher
 {
+    public function addListener(string $eventName, DomainEventListener $listener): void;
     public function dispatch(DomainEvent $event): void;
 }

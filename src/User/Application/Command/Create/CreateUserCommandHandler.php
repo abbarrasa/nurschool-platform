@@ -14,16 +14,19 @@ declare(strict_types=1);
 namespace Nurschool\User\Application\Command\Create;
 
 use Nurschool\Shared\Application\Command\CommandHandler;
+use Nurschool\Shared\Application\Event\DomainEventDispatcher;
+use Nurschool\Shared\Infrastructure\Symfony\Event\UserCreated;
 use Nurschool\User\Domain\ValueObject\Credentials;
 
 final class CreateUserCommandHandler implements CommandHandler
 {
-    /** @var UserCreator */
     private $creator;
+    private $eventDispatcher;
 
-    public function __construct(UserCreator $creator)
+    public function __construct(UserCreator $creator, DomainEventDispatcher $eventDispatcher)
     {
         $this->creator = $creator;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function __invoke(CreateUserCommand $command): void
@@ -31,16 +34,9 @@ final class CreateUserCommandHandler implements CommandHandler
         $email = $command->getEmail();
         $hashedPassword = $command->getHashedPassword();
 
-        $this->creator->__invoke($email, $hashedPassword);
+        $user = $this->creator($email, $hashedPassword);
 
-        //https://www.acceseo.com/que-es-symfony-messenger-y-como-podemos-utilizarlo-en-nuestros-proyectos.html
-//        sleep(30);
-//        $log = sprintf(
-//            "%s :: Usuario creado: %s - %s.\n",
-//            (new \DateTime())->format('d/m/Y H:i:s'),
-//            $command->getEmail()->toString(),
-//            $command->getHashedPassword()->toString()
-//        );
-//        file_put_contents('/home/abuitrago/Proyectos/nurschool/public/create_user.txt', $log,FILE_APPEND | LOCK_EX);
+        $event = new UserCreated($user);
+        $this->eventDispatcher->dispatch($event);
     }
 }

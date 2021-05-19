@@ -23,8 +23,6 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 class EmailVerifier
 {
-    private const CONFIRMATION_ROUTE = 'register_confirmation';
-
     private $verifyEmailHelper;
     private $mailer;
     private $userRepository;
@@ -39,10 +37,10 @@ class EmailVerifier
         $this->userRepository = $userRepository;
     }
 
-    public function sendSignedUrl(User $user): void
+    public function sendSignedUrl(string $routeName, User $user): void
     {
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
-            self::CONFIRMATION_ROUTE,
+            $routeName,
             $user->id()->toString(),
             $user->email()->toString(),
             ['id' => $user->id()->toString()]
