@@ -25,7 +25,7 @@ final class Email implements \JsonSerializable
      * Email constructor.
      * @param string $email
      */
-    private function __construct(string $email)
+    public function __construct(string $email)
     {
         $this->email = $email;
     }

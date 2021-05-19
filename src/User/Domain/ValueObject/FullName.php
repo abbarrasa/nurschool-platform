@@ -17,7 +17,7 @@ class FullName
      * @param string $firstname
      * @param string $lastname
      */
-    private function __construct(string $firstname, string $lastname)
+    public function __construct(string $firstname, string $lastname)
     {
         $this->firstname = $firstname;
         $this->lastname = $lastname;

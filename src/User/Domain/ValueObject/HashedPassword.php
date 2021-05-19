@@ -11,7 +11,7 @@ final class HashedPassword
 {
     private $password;
 
-    private function __construct(string $hashedPassword)
+    public function __construct(string $hashedPassword)
     {
         $this->password = $hashedPassword;
     }

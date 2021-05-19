@@ -31,12 +31,9 @@ final class CreateUserCommandHandler implements CommandHandler
 
     public function __invoke(CreateUserCommand $command): void
     {
-        $email = $command->getEmail();
-        $hashedPassword = $command->getHashedPassword();
+        $user = $this->creator->create($command->email, $command->hashedPassword);
 
-        $user = $this->creator->create($email, $hashedPassword);
-
-        $event = new UserCreated($user);
+        $event = UserCreated::create($user);
         $this->eventDispatcher->dispatch($event);
     }
 }

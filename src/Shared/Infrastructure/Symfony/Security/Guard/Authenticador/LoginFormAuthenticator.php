@@ -13,21 +13,15 @@ declare(strict_types=1);
 
 namespace Nurschool\Shared\Infrastructure\Symfony\Security\Guard\Authenticador;
 
-
-use Assert\AssertionFailedException;
-use InvalidArgumentException;
 use Nurschool\User\Application\Command\Auth\AuthUserCommand;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Nurschool\Shared\Application\Command\CommandBus;
+use Nurschool\Shared\Application\Query\QueryBus;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
-use Throwable;
-use UnexpectedValueException;
 
 final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
@@ -38,9 +32,18 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     /** @var UrlGeneratorInterface */
     private $router;
 
-    public function __construct(UrlGeneratorInterface $router)
-    {
+    private $commandBus;
+
+    private $queryBus;
+
+    public function __construct(
+        UrlGeneratorInterface $router,
+        CommandBus $commandBus,
+        QueryBus $queryBus
+    ) {
         $this->router = $router;
+        $this->commandBus = $commandBus;
+        $this->queryBus = $queryBus;
     }
 
     public function supports(Request $request): bool
@@ -64,7 +67,7 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             $email = $credentials['email'];
             $plainPassword = $credentials['password'];
 
-            $signInCommand = new AuthUserCommand($email, $plainPassword);
+            $this->commandBus->dispatch(AuthUserCommand::create($email, $plainPassword));
 
         } catch(\Exception $exception) {
 

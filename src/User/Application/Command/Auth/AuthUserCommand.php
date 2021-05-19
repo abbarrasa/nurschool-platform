@@ -19,16 +19,21 @@ use Nurschool\User\Domain\ValueObject\Email;
 
 final class AuthUserCommand implements Command
 {
+    /** @var Email */
     public $email;
 
+    /** @var string */
     public $plainPassword;
 
-    /**
-     * @throws AssertionFailedException
-     */
-    public function __construct(string $email, string $plainPassword)
+    public function __construct(Email $email, string $plainPassword)
     {
-        $this->email = Email::fromString($email);
+        $this->email = $email;
         $this->plainPassword = $plainPassword;
+    }
+
+    public static function create(string $email, string $plainPassword): self
+    {
+        $email = Email::fromString($email);
+        return new self($email, $plainPassword);
     }
 }

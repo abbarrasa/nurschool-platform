@@ -18,6 +18,7 @@ use Nurschool\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepo
 use Nurschool\User\Domain\Model\Repository\UserRepositoryInterface;
 use Nurschool\User\Domain\User;
 use Nurschool\User\Domain\ValueObject\Credentials;
+use Nurschool\User\Domain\ValueObject\Email;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -30,6 +31,11 @@ final class UserDoctrineRepository extends DoctrineRepository implements UserRep
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
+    }
+
+    public function findByEmail(Email $email): User
+    {
+        return $this->findOneBy(['email' => $email->toString()]);
     }
 
     // /**
