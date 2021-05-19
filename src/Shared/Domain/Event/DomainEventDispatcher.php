@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Shared\Application\Event;
+namespace Nurschool\Shared\Domain\Event;
 
 
 interface DomainEventDispatcher

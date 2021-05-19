@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Nurschool\User\Application\Command\Create;
 
 use Nurschool\Shared\Application\Command\CommandHandler;
-use Nurschool\Shared\Application\Event\DomainEventDispatcher;
+use Nurschool\Shared\Domain\Event\DomainEventDispatcher;
 use Nurschool\Shared\Infrastructure\Symfony\Event\UserCreated;
 use Nurschool\User\Domain\ValueObject\Credentials;
 

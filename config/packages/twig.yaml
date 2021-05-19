@@ -1,2 +1,3 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
+    form_themes: ['components/form/bulma_0_9_x_layout.html.twig']

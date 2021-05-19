@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Nurschool\Shared\Application\Event;
+namespace Nurschool\Shared\Domain\Event;
 
 
 interface DomainEventListener

@@ -3,6 +3,7 @@
 namespace Nurschool\Shared\Infrastructure\Symfony\Form;
 
 use Nurschool\Core\Infrastructure\Persistence\Doctrine\Entity\User;
+use Nurschool\Shared\Infrastructure\Symfony\Validator\Constraints\Password;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -38,17 +39,18 @@ class RegistrationFormType extends AbstractType
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
 //                'mapped' => false,
-//                'constraints' => [
-//                    new NotBlank([
-//                        'message' => 'Please enter a password',
-//                    ]),
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter a password',
+                    ]),
+                    new Password()
 //                    new Length([
 //                        'min' => 6,
 //                        'minMessage' => 'Your password should be at least {{ limit }} characters',
 //                        // max length allowed by Symfony for security reasons
 //                        'max' => 4096,
 //                    ]),
-//                ],
+                ],
             ])
         ;
     }

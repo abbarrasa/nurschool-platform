@@ -26,16 +26,13 @@ abstract class AbstractCrudController extends AbstractController
 {
     protected $serializer;
     protected $validator;
-    protected $dtoTransformerFactory;
 
     public function __construct(
         SerializerInterface $serializer,
-        ValidatorInterface $validator,
-        DtoTransformerFactoryInterface $dtoTransfomerFactory
+        ValidatorInterface $validator
     ) {
         $this->serializer = $serializer;
         $this->validator = $validator;
-        $this->dtoTransformerFactory = $dtoTransfomerFactory;
     }
 
     /**

@@ -12,7 +12,7 @@
 namespace Nurschool\Shared\Infrastructure\Email\SendGrid\Event;
 
 
-use Nurschool\Shared\Application\Event\DomainEvent;
+use Nurschool\Shared\Domain\Event\DomainEvent;
 use SendGrid\Mail\Mail;
 
 interface SendGridEventInterface extends DomainEvent

@@ -35,8 +35,8 @@ class SendGridEventSubscriber implements EventSubscriberInterface
     {
         return [
             SendingStarted::NAME => 'onStarted',
-            SendingFinished::FINISHED => 'onFinished',
-            SendingFailed::FAILED => 'onFailed'
+            SendingFinished::NAME => 'onFinished',
+            SendingFailed::NAME => 'onFailed'
         ];
     }
 

@@ -4,9 +4,9 @@
 namespace Nurschool\Shared\Infrastructure\Bus\Event;
 
 
-use Nurschool\Shared\Application\Event\DomainEvent;
-use Nurschool\Shared\Application\Event\DomainEventDispatcher;
-use Nurschool\Shared\Application\Event\DomainEventListener;
+use Nurschool\Shared\Domain\Event\DomainEvent;
+use Nurschool\Shared\Domain\Event\DomainEventDispatcher;
+use Nurschool\Shared\Domain\Event\DomainEventListener;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class SymfonyEventDomainDispatcher implements DomainEventDispatcher

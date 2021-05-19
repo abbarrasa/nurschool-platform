@@ -11,7 +11,7 @@
 
 namespace Nurschool\Shared\Infrastructure\Symfony\Event;
 
-use Nurschool\Shared\Application\Event\DomainEvent;
+use Nurschool\Shared\Domain\Event\DomainEvent;
 use Nurschool\User\Domain\User;
 use \Symfony\Contracts\EventDispatcher\Event;
 

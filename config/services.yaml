@@ -42,7 +42,7 @@ services:
 
     # event listeners are imported separately to add to event dispatcher at once
     Nurschool\Shared\Infrastructure\Symfony\EventListener\:
-        resource: '../Shared/Infrastructure/Symfony/EventListener/*'
+        resource: '../src/Shared/Infrastructure/Symfony/EventListener/*'
         tags: ['kernel.event_listener']
 
     # add more service definitions when explicit configuration is needed

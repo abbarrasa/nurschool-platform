@@ -1,4 +1,5 @@
 parameters:
+    sendgrid_api_key: '%env(SENDGRID_API_KEY)%'
     nurschool_mailer:
         sandbox: '%env(bool:MAILER_SANDBOX_MODE)%'
         disable_delivery: '%env(bool:MAILER_DISABLE_DELIVERY)%' # default false
@@ -16,5 +17,9 @@ parameters:
             subject: 'Invitation to join to Nurschool'
 
 services:
+    SendGrid:
+        class: SendGrid
+        arguments: [ '%sendgrid_api_key%' ]
+
     nurschool.mailer:
         class: Nurschool\Shared\Infrastructure\Email\SendGrid\SendGridMailer

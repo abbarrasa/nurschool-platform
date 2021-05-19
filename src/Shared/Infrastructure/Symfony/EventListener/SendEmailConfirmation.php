@@ -4,7 +4,7 @@
 namespace Nurschool\Shared\Infrastructure\Symfony\EventListener;
 
 
-use Nurschool\Shared\Application\Event\DomainEventListener;
+use Nurschool\Shared\Domain\Event\DomainEventListener;
 use Nurschool\Shared\Infrastructure\Symfony\Event\UserCreated;
 use Nurschool\Shared\Infrastructure\Symfony\Security\EmailVerifier;
 

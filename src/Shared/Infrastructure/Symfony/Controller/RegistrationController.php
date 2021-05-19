@@ -39,7 +39,9 @@ class RegistrationController extends WebController
             return $this->render('registration/confirmation.html.twig');
         }
 
-        return $this->render('registration/register.html.twig');
+        return $this->render('registration/register.html.twig', [
+            'form' => $form->createView()
+        ]);
 
 //        if ($request->isMethod(Request::METHOD_GET)) {
 //            return $this->render('registration/register.html.twig');

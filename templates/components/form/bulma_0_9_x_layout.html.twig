@@ -4,7 +4,11 @@
 
 {%- block form_widget_simple -%}
     {%- if type is not defined or type not in ['file', 'hidden'] -%}
-        {%- set attr = attr|merge({class: (attr.class|default('') ~ ' input')|trim}) -%}
+        {%- if errors|length > 0 -%}
+            {%- set attr = attr|merge({class: (attr.class|default('') ~ ' is-danger input')|trim}) -%}
+        {%- else -%}
+            {%- set attr = attr|merge({class: (attr.class|default('') ~ ' input')|trim}) -%}
+        {%- endif -%}
     {%- endif -%}
     {%- set size_class = '' -%}
     {%- for size in ['is-small', 'is-medium', 'is-large'] -%}
@@ -74,18 +78,20 @@
 {%- endblock textarea_widget -%}
 
 {%- block number_widget -%}
-    {# type="number" doesn't work with floats #}
+     type="number" doesn't work with floats
     {%- set type = type|default('text') -%}
     {{- block('form_widget_simple') -}}
 {%- endblock number_widget -%}
 
-{% block checkbox_widget -%}
-    {{- form_label(form, null, { widget: parent() }) -}}
-{%- endblock checkbox_widget %}
+{%- block checkbox_widget -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' is-checkradio is-link')|trim}) -%}
+    {{- parent() -}}
+{%- endblock checkbox_widget -%}
 
-{% block radio_widget -%}
-    {{- form_label(form, null, { widget: parent() }) -}}
-{%- endblock radio_widget %}
+{%- block radio_widget -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' is-checkradio is-link')|trim}) -%}
+    {{- parent() -}}
+{%- endblock radio_widget -%}
 
 {%- block datetime_widget -%}
     {% if widget == 'single_text' %}
@@ -118,13 +124,13 @@
 
 {%- block submit_widget -%}
     {%- set type = type|default('submit') -%}
-    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' button is-primary')|trim}) -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' is-outlined is-link')|trim}) -%}
     {{- block('button_widget') -}}
 {%- endblock submit_widget -%}
 
 {%- block reset_widget -%}
     {%- set type = type|default('reset') -%}
-    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' button is-link')|trim}) -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' is-outlined is-primary')|trim}) -%}
     {{- block('button_widget') -}}
 {%- endblock reset_widget -%}
 
@@ -144,44 +150,54 @@
 {# Labels #}
 
 {%- block form_label -%}
-    {%- set label_attr = label_attr|merge({class: (attr.class|default('') ~ ' label')|trim}) -%}
+    {%- set label_attr = label_attr|merge({class: (attr.class|default(''))|trim}) -%}
+    {%- set label_attr = label_attr|merge({}) -%}
     {{- parent() -}}
 {%- endblock form_label -%}
 
-{%- block checkbox_label -%}
-    {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' checkbox')|trim}) -%}
-    {{- block('checkbox_radio_label') -}}
-{%- endblock checkbox_label %}
+{#{%- block checkbox_label -%}#}
+{#    {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' is-checkradio is-link')|trim}) -%}#}
+{#    {%- set label_attr = label_attr|merge({class: (label_attr.class|default(''))|trim}) -%}#}
+{#    {{- block('checkbox_radio_label') -}}#}
+{#{%- endblock checkbox_label %}#}
 
-{%- block radio_label -%}
-    {% set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' radio')|trim}) -%}
-    {{- block('checkbox_radio_label') -}}
-{%- endblock radio_label -%}
+{#{%- block radio_label -%}#}
+{#    {% set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' is-checkradio is-link')|trim}) -%}#}
+{#    {%- set label_attr = label_attr|merge({class: (label_attr.class|default(''))|trim}) -%}#}
+{#    {{- block('checkbox_radio_label') -}}#}
+{#{%- endblock radio_label -%}#}
 
-{%- block checkbox_radio_label -%}
-    {# Do not display the label if widget is not defined in order to prevent double label rendering #}
-    {%- if widget is defined -%}
-        {%- if required -%}
-            {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' required')|trim}) -%}
-        {%- endif -%}
-        {%- if label is not same as(false) and label is empty -%}
-            {%- if label_format is not empty -%}
-                {%- set label = label_format|replace({
-                    '%name%': name,
-                    '%id%': id,
-                }) -%}
-            {%- else -%}
-                {%- set label = name|humanize -%}
-            {%- endif -%}
-        {%- endif -%}
-        {%- if not inline_choice|default(false) %}<div class="control">{% endif -%}
-        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
-        {{- widget|raw }} {{ label is not same as(false) ? (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) -}}
-        </label>
-        {{- block('form_errors') -}}
-        {%- if not inline_choice|default(false) %}</div>{% endif -%}
-    {% endif %}
-{% endblock checkbox_radio_label %}
+{#{%- block checkbox_radio_label -%}#}
+{#    #}{# Do not display the label if widget is not defined in order to prevent double label rendering #}
+{#    {%- if widget is defined -%}#}
+{#        {{- widget|raw }}#}
+{#        {%- if required -%}#}
+{#            {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' required')|trim}) -%}#}
+{#        {%- endif -%}#}
+{#        {%- if label is not same as(false) and label is empty -%}#}
+{#            {%- if label_format is not empty -%}#}
+{#                {%- set label = label_format|replace({#}
+{#                    '%name%': name,#}
+{#                    '%id%': id,#}
+{#                }) -%}#}
+{#            {%- else -%}#}
+{#                {%- set label = name|humanize -%}#}
+{#            {%- endif -%}#}
+
+{#            <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>#}
+{#            {{ label is not same as(false) ? (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) -}}#}
+{#            </label>#}
+{#        {%- endif -%}#}
+{#        #}{#        {%- if not inline_choice|default(false) %}<div class="control">{% endif -%}#}
+
+
+{#        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>#}
+{#        {{- widget|raw }} {{ label is not same as(false) ? (translation_domain is same as(false) ? label : label|trans({}, translation_domain)) -}}#}
+{#        </label>#}
+{#        {{- block('form_errors') -}}#}
+{#        {%- if not inline_choice|default(false) %}</div>{% endif -%}#}
+{#    {% endif %}#}
+{#{% endblock checkbox_radio_label %}#}
 
 {# Rows #}
 
@@ -196,11 +212,17 @@
 {%- endblock form_row -%}
 
 {%- block checkbox_row -%}
-    {{- form_widget(form) -}}
+    <div class="field">
+        {{- form_widget(form) -}}
+        {{- form_label(form) -}}
+    </div>
 {%- endblock checkbox_row -%}
 
 {%- block radio_row -%}
-    {{- form_widget(form) -}}
+    <div class="field">
+        {{- form_widget(form) -}}
+        {{- form_label(form) -}}
+    </div>
 {%- endblock radio_row -%}
 
 {%- block money_row -%}

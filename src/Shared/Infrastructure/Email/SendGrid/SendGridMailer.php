@@ -14,11 +14,10 @@ declare(strict_types=1);
 namespace Nurschool\Shared\Infrastructure\Email\SendGrid;
 
 
-use Nurschool\Shared\Application\Event\DomainEventDispatcher;
+use Nurschool\Shared\Domain\Event\DomainEventDispatcher;
 use Nurschool\Shared\Domain\Service\Email\MailerInterface;
 use Nurschool\Shared\Domain\Service\Email\SettingsMailerInterface;
 use Nurschool\Shared\Infrastructure\Email\SendGrid\Exception\SendGridException;
-use Nurschool\Shared\Infrastructure\Symfony\Event\SendGrid\AbstractSendGridEvent;
 use Nurschool\Shared\Infrastructure\Symfony\Event\SendGrid\SendingFailed;
 use Nurschool\Shared\Infrastructure\Symfony\Event\SendGrid\SendingFinished;
 use Nurschool\Shared\Infrastructure\Symfony\Event\SendGrid\SendingStarted;
