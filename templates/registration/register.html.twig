@@ -4,50 +4,43 @@
 
 {% block body %}
     <div class="container">
-        <div class="columns is-centered">
-            <div class="column is-half">
-                <h1>Register</h1>
+        <div class="section">
+            <h1 class="title">Register</h1>
+            <h2 class="subtitle">A simple container to divide your page into <strong>sections</strong>, like the one you're currently reading.</h2>
+            <div class="columns is-centered">
+                <div class="column is-half">
+                    {{ form_start(form) }}
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.password) }}
+                    {{ form_row(form.agreeTerms) }}
 
-                {{ form_start(form) }}
-                {{ form_row(form.email) }}
-                {{ form_row(form.password) }}
-                {{ form_row(form.agreeTerms) }}
-
-                <div class="field">
-                    <div class="control">
-                        <button class="button is-link is-outlined" type="submit">Sign up</button>
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-link is-outlined" type="submit">Sign up</button>
+                        </div>
                     </div>
+
+                    {{ form_end(form) }}
+
+                    {#                {% if errors is defined %}#}
+                    {#                    {% for error in errors %}#}
+                    {#                        <div class="alert alert-danger" role="alert">{{ error.message }}</div>#}
+                    {#                    {% endfor %}#}
+                    {#                {% endif %}#}
+
+                    {#                {% import "components/form.macro.html.twig" as form %}#}
+                    {#                <form action="{{ path('register') }}" method="post">#}
+                    {#                    {{ form.input('email', 'Email', {'placeholder': 'Your email', 'required': 'required'}) }}#}
+                    {#                    {{ form.input('password', 'Password', {'type': 'password', 'placeholder': 'Your password', 'required': 'required'}) }}#}
+                    {#                    {{ form.checkbox('aggrement', 'I agree to the <a href="/">terms and conditions</a>', {'required': 'required'}) }}#}
+                    {#                    <div class="field">#}
+                    {#                        <div class="control">#}
+                    {#                            <button class="button is-link is-outlined" type="submit">Sign up</button>#}
+                    {#                        </div>#}
+                    {#                    </div>#}
+                    {#                </form>#}
                 </div>
-
-                {{ form_end(form) }}
-
-{#                {% if errors is defined %}#}
-{#                    {% for error in errors %}#}
-{#                        <div class="alert alert-danger" role="alert">{{ error.message }}</div>#}
-{#                    {% endfor %}#}
-{#                {% endif %}#}
-
-{#                {% import "components/form.macro.html.twig" as form %}#}
-{#                <form action="{{ path('register') }}" method="post">#}
-{#                    {{ form.input('email', 'Email', {'placeholder': 'Your email', 'required': 'required'}) }}#}
-{#                    {{ form.input('password', 'Password', {'type': 'password', 'placeholder': 'Your password', 'required': 'required'}) }}#}
-{#                    {{ form.checkbox('aggrement', 'I agree to the <a href="/">terms and conditions</a>', {'required': 'required'}) }}#}
-{#                    <div class="field">#}
-{#                        <div class="control">#}
-{#                            <button class="button is-link is-outlined" type="submit">Sign up</button>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </form>#}
             </div>
         </div>
     </div>
-
-{#    {{ form_start(registrationForm) }}#}
-{#        {{ form_row(registrationForm.email) }}#}
-{#        {{ form_row(registrationForm.plainPassword, {#}
-{#            label: 'Password'#}
-{#        }) }}#}
-{#        {{ form_row(registrationForm.agreeTerms) }}#}
-
-{#    {{ form_end(registrationForm) }}#}
 {% endblock %}
