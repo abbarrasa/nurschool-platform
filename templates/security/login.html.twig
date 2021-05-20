@@ -26,6 +26,7 @@
                             <input class="is-checkradio is-link" id="remember_me" type="checkbox" name="remember_me">
                             <label for="remember_me">Keep me logged in</label>
                         </div>
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                         <div class="field">
                             <div class="control">
                                 <button class="button is-link is-outlined" type="submit">Log in</button>

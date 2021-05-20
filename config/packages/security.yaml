@@ -1,11 +1,17 @@
 security:
-    encoders:
-        Nurschool\Shared\Infrastructure\Symfony\Entity\User:
-            id: 'Nurschool\Shared\Infrastructure\Symfony\Security\Encoder\HashedPasswordEncoder'
+#    encoders:
+#        Nurschool\User\Domain\User:
+#            id: 'Nurschool\Shared\Infrastructure\Symfony\Security\Encoder\HashedPasswordEncoder'
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        users_in_memory: { memory: null }
+#        users_in_memory: { memory: null }
+        users:
+            entity:
+                # the class of the entity that represents users
+                class: 'Nurschool\User\Domain\User'
+                # the property to query by - e.g. username, email, etc
+                property: 'email'
 
     firewalls:
         dev:
@@ -14,7 +20,8 @@ security:
         main:
             anonymous: true
             lazy: true
-            provider: users_in_memory
+#            provider: users_in_memory
+            provider: users
             guard:
                 authenticators:
                     - Nurschool\Shared\Infrastructure\Symfony\Security\Guard\Authenticador\LoginFormAuthenticator

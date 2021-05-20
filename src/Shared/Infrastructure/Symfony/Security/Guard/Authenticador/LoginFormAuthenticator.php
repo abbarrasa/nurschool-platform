@@ -13,14 +13,17 @@ declare(strict_types=1);
 
 namespace Nurschool\Shared\Infrastructure\Symfony\Security\Guard\Authenticador;
 
-use Nurschool\User\Application\Command\Auth\AuthUserCommand;
-use Nurschool\Shared\Application\Command\CommandBus;
-use Nurschool\Shared\Application\Query\QueryBus;
+use Nurschool\User\Application\Command\Auth\UserAuthenticator;
+use Nurschool\User\Domain\ValueObject\Auth\Credentials;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 
 final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
@@ -32,18 +35,21 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     /** @var UrlGeneratorInterface */
     private $router;
 
-    private $commandBus;
+    /** @var CsrfTokenManagerInterface */
+    private $tokenManager;
 
-    private $queryBus;
+    /** @var UserAuthenticator */
+    private $authenticator;
+
 
     public function __construct(
         UrlGeneratorInterface $router,
-        CommandBus $commandBus,
-        QueryBus $queryBus
+        CsrfTokenManagerInterface $tokenManager,
+        UserAuthenticator $authenticator
     ) {
         $this->router = $router;
-        $this->commandBus = $commandBus;
-        $this->queryBus = $queryBus;
+        $this->tokenManager = $tokenManager;
+        $this->authenticator = $authenticator;
     }
 
     public function supports(Request $request): bool
@@ -55,23 +61,33 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function getCredentials(Request $request): array
     {
-        return [
+        $credentials = [
             'email' => $request->request->get('email'),
             'password' => $request->request->get('password'),
+            'csrf_token' => $request->request->get('_csrf_token'),
         ];
+
+        $request->getSession()->set(
+            Security::LAST_USERNAME,
+            $credentials['email']
+        );
+
+        return $credentials;
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        try {
-            $email = $credentials['email'];
-            $plainPassword = $credentials['password'];
-
-            $this->commandBus->dispatch(AuthUserCommand::create($email, $plainPassword));
-
-        } catch(\Exception $exception) {
-
+        $token = new CsrfToken('authenticate', $credentials['csrf_token']);
+        if (!$this->tokenManager->isTokenValid($token)) {
+            throw new InvalidCsrfTokenException();
         }
+
+        $email = $credentials['email'];
+        $plainPassword = $credentials['password'];
+
+        $this->authenticator->authenticate(Credentials::create($email, $plainPassword));
+
+        return $userProvider->loadUserByUsername($email);
     }
 
     public function checkCredentials($credentials, UserInterface $user)

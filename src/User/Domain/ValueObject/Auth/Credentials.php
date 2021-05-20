@@ -9,20 +9,15 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
-
-namespace Nurschool\User\Application\Command\Auth;
+namespace Nurschool\User\Domain\ValueObject\Auth;
 
 
-use Nurschool\Shared\Application\Command\Command;
 use Nurschool\User\Domain\ValueObject\Email;
 
-final class AuthUserCommand implements Command
+class Credentials
 {
-    /** @var Email */
     public $email;
 
-    /** @var string */
     public $plainPassword;
 
     public function __construct(Email $email, string $plainPassword)
@@ -33,7 +28,6 @@ final class AuthUserCommand implements Command
 
     public static function create(string $email, string $plainPassword): self
     {
-        $email = Email::fromString($email);
-        return new self($email, $plainPassword);
+        return new self(Email::fromString($email), $plainPassword);
     }
 }

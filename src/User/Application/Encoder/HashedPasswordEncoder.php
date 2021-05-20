@@ -11,9 +11,9 @@
 
 declare(strict_types = 1);
 
-namespace Nurschool\Shared\Application\Encoder;
+namespace Nurschool\User\Application\Encoder;
 
-use Nurschool\Shared\Domain\Service\Encoder\PasswordEncoderInterface;
+use Nurschool\User\Domain\Service\Encoder\PasswordEncoderInterface;
 
 class HashedPasswordEncoder implements PasswordEncoderInterface
 {

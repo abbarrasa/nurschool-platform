@@ -13,7 +13,7 @@ namespace Nurschool\Shared\Infrastructure\Symfony\Security\Encoder;
 
 
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
-use Nurschool\Shared\Domain\Service\Encoder\PasswordEncoderInterface as PasswordEncoder;
+use Nurschool\User\Domain\Service\Encoder\PasswordEncoderInterface as PasswordEncoder;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
 class HashedPasswordEncoder implements PasswordEncoderInterface
