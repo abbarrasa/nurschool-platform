@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="section">
+                <div id="mithril"></div>
+            </div>
+
+            <div class="section">
+                <div class="column is-half">
+                    {% include 'components/card.html.twig' with { 'title': 'Dashboard', 'text': 'Estoy en mi dashboard.'} only %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

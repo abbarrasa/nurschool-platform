@@ -30,7 +30,7 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
     private const LOGIN_ROUTE = 'login';
 
-    private const SUCCESS_REDIRECT = 'profile';
+    private const SUCCESS_REDIRECT = 'dashboard';
 
     /** @var UrlGeneratorInterface */
     private $router;
@@ -97,7 +97,7 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
     {
-        // TODO: Implement onAuthenticationSuccess() method.
+        $this->router->generate(self::SUCCESS_REDIRECT);
     }
 
     protected function getLoginUrl()
