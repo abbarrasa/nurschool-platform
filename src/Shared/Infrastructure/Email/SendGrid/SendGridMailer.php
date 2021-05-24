@@ -69,13 +69,15 @@ class SendGridMailer implements MailerInterface
         SettingsMailerInterface $settingsMailer,
         DomainEventDispatcher $eventDispatcher)
     {
+
         $this->provider = $provider;
         $this->settingsMailer = $settingsMailer;
         $this->eventDispatcher = $eventDispatcher;
 
         if(false !== ($this->redirectTo = $this->settingsMailer->getSetting('redirect_to'))) {
+            $redirectToAddress = $this->settingsMailer->getSetting('redirect_to_address');
             $this->redirectPersonalization = new Personalization();
-            $this->redirectPersonalization->addTo(new To($this->redirectTo));
+            $this->redirectPersonalization->addTo(new To($redirectToAddress));
 
             $this->personalizationReflection = new \ReflectionProperty(Mail::class, 'personalization');
             $this->personalizationReflection->setAccessible(true);

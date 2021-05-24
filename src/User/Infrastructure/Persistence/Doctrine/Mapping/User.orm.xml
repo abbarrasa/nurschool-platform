@@ -1,8 +1,11 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
-                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
-    <entity name="Nurschool\User\Domain\User" table="nurschool_user" repository-class="Nurschool\User\Infrastructure\Persistence\Doctrine\Repository\UserDoctrineRepository">
+                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping">
+
+    <entity name="Nurschool\User\Infrastructure\Persistence\Doctrine\Entity\User" table="nurschool_user"
+            repository-class="Nurschool\User\Infrastructure\Persistence\Doctrine\Repository\UserDoctrineRepository">
         <id name="id" type="uuid" column="id">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
@@ -10,5 +13,12 @@
         <embedded name="email" class="Nurschool\User\Domain\ValueObject\Email" use-column-prefix="false"/>
         <embedded name="password" class="Nurschool\User\Domain\ValueObject\HashedPassword" use-column-prefix="false"/>
         <embedded name="fullName" class="Nurschool\User\Domain\ValueObject\FullName" use-column-prefix="false"/>
+        <field name="lastLogin" type="datetime" nullable="true"/>
+        <field name="created" type="datetime">
+            <gedmo:timestampable on="create"/>
+        </field>
+        <field name="updated" type="datetime">
+            <gedmo:timestampable on="update"/>
+        </field>
     </entity>
 </doctrine-mapping>

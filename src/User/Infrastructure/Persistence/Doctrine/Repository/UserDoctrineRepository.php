@@ -30,12 +30,12 @@ final class UserDoctrineRepository extends DoctrineRepository implements UserRep
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, User::class);
+        parent::__construct($registry, \Nurschool\User\Infrastructure\Persistence\Doctrine\Entity\User::class);
     }
 
     public function findByEmail(Email $email): User
     {
-        return $this->findOneBy(['email' => $email->toString()]);
+        return $this->findOneBy(['email.value' => $email->toString()]);
     }
 
     // /**

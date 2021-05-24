@@ -19,7 +19,7 @@ use Assert\AssertionFailedException;
 final class Email implements \JsonSerializable
 {
     /** @var string */
-    private $email;
+    private $value;
 
     /**
      * Email constructor.
@@ -27,7 +27,7 @@ final class Email implements \JsonSerializable
      */
     public function __construct(string $email)
     {
-        $this->email = $email;
+        $this->value = $email;
     }
 
     /**
@@ -45,7 +45,7 @@ final class Email implements \JsonSerializable
      */
     public function toString(): string
     {
-        return $this->email;
+        return $this->value;
     }
 
     /**

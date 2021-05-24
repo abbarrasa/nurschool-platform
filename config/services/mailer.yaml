@@ -3,7 +3,7 @@ parameters:
     nurschool_mailer:
         sandbox: '%env(bool:MAILER_SANDBOX_MODE)%'
         disable_delivery: '%env(bool:MAILER_DISABLE_DELIVERY)%' # default false
-        redirect_to: '%env(MAILER_REDIRECT_TO)%' # default false
+        redirect_to: '%env(bool:MAILER_REDIRECT_TO)%' # default false
         default_address: '%env(resolve:MAILER_DEFAULT_ADDRESS)%'
         default_name: '%env(resolve:MAILER_DEFAULT_NAME)%'
         confirmation:

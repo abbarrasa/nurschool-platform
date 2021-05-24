@@ -21,6 +21,7 @@ class UserLogin implements DomainEventListener
     {
         $user = $event->getUser();
         //Update last login user date
+        $user->updateLastLogin(new \DateTime());
 
         $this->repository->save($user);
     }

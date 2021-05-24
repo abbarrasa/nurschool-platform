@@ -38,6 +38,14 @@ class HashedPasswordEncoder implements PasswordEncoderInterface
         $this->cost = $cost;
         $this->maxLenght = $maxLenght;
     }
+
+    public static function instance(
+        string $algo = \PASSWORD_BCRYPT,
+        int $cost = self::COST,
+        int $maxLenght = self::MAX_PASSWORD_LENGTH
+    ): self {
+        return new self($algo, $cost, $maxLenght);
+    }
     
     public function encode(string $plainPassword): string
     {
@@ -57,7 +65,7 @@ class HashedPasswordEncoder implements PasswordEncoderInterface
 
     public function match(string $plainPassword, string $encodedPassword): bool
     {
-        return \password_verify($plainPassword, $this->hashedPassword);
+        return \password_verify($plainPassword, $encodedPassword);
     }
 
     public function needsRehash(string $encodedPassword): bool

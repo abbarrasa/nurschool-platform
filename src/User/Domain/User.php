@@ -10,8 +10,9 @@ use Nurschool\User\Domain\ValueObject\FullName;
 use Nurschool\User\Domain\ValueObject\HashedPassword;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-class User extends AggregateRoot
+class User extends AggregateRoot implements UserInterface
 {
     /** @var UuidInterface */
     private $id;
@@ -24,6 +25,9 @@ class User extends AggregateRoot
 
     /** @var FullName */
     private $fullName;
+
+    /** @var \DateTimeInterface */
+    private $lastLogin;
 
     /** @var bool */
     private $enabled = false;
@@ -60,23 +64,33 @@ class User extends AggregateRoot
         return $this->fullName;
     }
 
-    public function isEnabled(): bool
-    {
-        return $this->enabled;
-    }
-
     public function rename(FullName $fullName)
     {
         $this->fullName = $fullName;
     }
 
-    public function enable()
+    public function enable(): void
     {
         $this->enabled = true;
     }
 
-    public function disable()
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    public function disable(): void
     {
         $this->enabled = false;
+    }
+
+    public function lastLogin(): \DateTimeInterface
+    {
+        return $this->lastLogin;
+    }
+
+    public function updateLastLogin(\DateTimeInterface $lastLogin): void
+    {
+        $this->lastLogin = $lastLogin;
     }
 }

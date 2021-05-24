@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Shared\Infrastructure\Symfony\Security\Encoder;
+declare(strict_types=1);
 
+namespace Nurschool\Shared\Infrastructure\Symfony\Security\Encoder;
 
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 use Nurschool\User\Domain\Service\Encoder\PasswordEncoderInterface as PasswordEncoder;

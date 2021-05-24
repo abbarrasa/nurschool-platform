@@ -25,6 +25,10 @@ final class SymfonyEventDomainDispatcher implements DomainEventDispatcher
 
     public function dispatch(DomainEvent $event): void
     {
+        $listeners = $this->dispatcher->getListeners();
+        var_dump($listeners);
+        die;
+
         $eventName = $event->eventName();
         $this->dispatcher->dispatch($event, $eventName);
     }

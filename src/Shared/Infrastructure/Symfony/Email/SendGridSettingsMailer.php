@@ -14,6 +14,7 @@ namespace Nurschool\Shared\Infrastructure\Symfony\Email;
 
 use Nurschool\Shared\Domain\Service\Email\SettingsMailerInterface;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SendGridSettingsMailer implements SettingsMailerInterface
@@ -105,33 +106,36 @@ class SendGridSettingsMailer implements SettingsMailerInterface
     {
         $resolver
             ->setRequired([
-                'api_key', 'default_address', 'default_name', 'confirmation', 'resetting', 'invitation'
+                'default_address', 'default_name', 'confirmation', 'resetting', 'invitation'
             ])
             ->setDefaults([
                 'sandbox' => false,
                 'disable_delivery' => false,
                 'redirect_to' => false,
+                'redirect_to_address' => function (Options $options) {
+                    return $options['default_address'];
+                },
                 'confirmation' => function (OptionsResolver $resolver, Options $parent) {
                     $resolver
-                        ->setRequired('template', 'subject')
+                        ->setRequired(['template', 'subject'])
                         ->setDefaults([
                             'address' => $parent['default_address'],
                             'name' => $parent['default_name']
                         ])
                     ;
                 },
-                'resetting', function (OptionsResolver $resolver, Options $parent) {
+                'resetting' => function (OptionsResolver $resolver, Options $parent) {
                     $resolver
-                        ->setRequired('template', 'subject')
+                        ->setRequired(['template', 'subject'])
                         ->setDefaults([
                             'address' => $parent['default_address'],
                             'name' => $parent['default_name']
                         ])
                     ;
                 },
-                'invitation', function (OptionsResolver $resolver, Options $parent) {
+                'invitation' => function (OptionsResolver $resolver, Options $parent) {
                     $resolver
-                        ->setRequired('template', 'subject')
+                        ->setRequired(['template', 'subject'])
                         ->setDefaults([
                             'address' => $parent['default_address'],
                             'name' => $parent['default_name']
