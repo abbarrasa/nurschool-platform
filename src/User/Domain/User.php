@@ -10,9 +10,8 @@ use Nurschool\User\Domain\ValueObject\FullName;
 use Nurschool\User\Domain\ValueObject\HashedPassword;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
-class User extends AggregateRoot implements UserInterface
+class User extends AggregateRoot
 {
     /** @var UuidInterface */
     private $id;
