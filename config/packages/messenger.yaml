@@ -9,6 +9,10 @@ framework:
                 middleware:
                     - doctrine_transaction
 
+            messenger.bus.query:
+                middleware:
+                    - doctrine_transaction
+                    -
             messenger.bus.event:
                 middleware:
                     - doctrine_transaction
@@ -24,3 +28,4 @@ framework:
 #            'Nurschool\Shared\Application\Command\Command': async
             'Nurschool\Shared\Application\Command\Command': sync
             'Nurschool\Shared\Application\Query\Query': sync
+            'Nurschool\Shared\Domain\Event\DomainEvent': async
