@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Shared\Infrastructure\Symfony\Event\SendGrid;
+namespace Nurschool\Shared\Infrastructure\Symfony\Event;
 
 use Nurschool\Shared\Infrastructure\Email\SendGrid\Event\SendGridEventInterface;
 use SendGrid\Mail\Mail;
 use Symfony\Contracts\EventDispatcher\Event;
 
-abstract class AbstractSendGridEvent extends Event implements SendGridEventInterface
+final class SendGridEvent extends Event implements SendGridEventInterface
 {
     /** @var Mail */
     private $mail;

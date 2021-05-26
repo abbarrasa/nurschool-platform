@@ -14,13 +14,10 @@ declare(strict_types=1);
 namespace Nurschool\Shared\Infrastructure\Email\SendGrid;
 
 
-use Nurschool\Shared\Domain\Event\DomainEventDispatcher;
 use Nurschool\Shared\Domain\Service\Email\MailerInterface;
 use Nurschool\Shared\Domain\Service\Email\SettingsMailerInterface;
 use Nurschool\Shared\Infrastructure\Email\SendGrid\Exception\SendGridException;
-use Nurschool\Shared\Infrastructure\Symfony\Event\SendGrid\SendingFailed;
-use Nurschool\Shared\Infrastructure\Symfony\Event\SendGrid\SendingFinished;
-use Nurschool\Shared\Infrastructure\Symfony\Event\SendGrid\SendingStarted;
+use Nurschool\Shared\Infrastructure\Symfony\Event\SendGridEvent;
 use Nurschool\User\Domain\User;
 use SendGrid\Mail\Mail;
 use SendGrid\Mail\MailSettings;
@@ -40,6 +37,7 @@ class SendGridMailer implements MailerInterface
     /** @var SettingsMailerInterface */
     private $settingsMailer;
 
+    /** @var SendGridEventDispatcherInterface */
     private $eventDispatcher;
 
     /** @var \SendGrid */
@@ -61,15 +59,14 @@ class SendGridMailer implements MailerInterface
      * SendGridMailer constructor.
      * @param \SendGrid $provider
      * @param SettingsMailerInterface $settingsMailer
-     * @param DomainEventDispatcher $eventDispatcher
+     * @param SendGridEventDispatcherInterface $eventDispatcher
      * @throws \SendGrid\Mail\TypeException
      */
     public function __construct(
         \SendGrid $provider,
         SettingsMailerInterface $settingsMailer,
-        DomainEventDispatcher $eventDispatcher)
+        SendGridEventDispatcherInterface $eventDispatcher)
     {
-
         $this->provider = $provider;
         $this->settingsMailer = $settingsMailer;
         $this->eventDispatcher = $eventDispatcher;
@@ -192,9 +189,9 @@ class SendGridMailer implements MailerInterface
      */
     protected function sendMessage(Mail $mail): ?string
     {
-        $this->eventDispatcher->dispatch(new SendingStarted($mail));
+        $this->eventDispatcher->dispatch(new SendGridEvent($mail), SendGridEvent::STARTED);
         if ($this->disableDelivery) {
-            $this->eventDispatcher->dispatch(new SendingFinished($mail));
+            $this->eventDispatcher->dispatch(new SendGridEvent($mail), SendGridEvent::FINISHED);
             return null;
         }
 
@@ -208,13 +205,13 @@ class SendGridMailer implements MailerInterface
 
             $messageId = $this->getMessageId($response);
 
-            $this->eventDispatcher->dispatch(new SendingFinished($mail, $messageId));
+            $this->eventDispatcher->dispatch(new SendGridEvent($mail, $messageId), SendGridEvent::FINISHED);
 
             return $messageId;
 
         } catch (\Exception $exception) {
             $this->reverseRedirection($mail);
-            $this->eventDispatcher->dispatch(new SendingFailed($mail));
+            $this->eventDispatcher->dispatch(new SendGridEvent($mail), SendGridEvent::FAILED);
             if($exception instanceof SendGridException) {
                 throw $exception;
             }

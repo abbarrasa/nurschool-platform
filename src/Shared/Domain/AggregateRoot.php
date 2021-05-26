@@ -14,20 +14,25 @@ declare(strict_types=1);
 namespace Nurschool\Shared\Domain;
 
 
+use Nurschool\Shared\Domain\Event\DomainEvent;
+
 abstract class AggregateRoot
 {
-    private $domainEvents = [];
+    private $events = [];
 
+    /**
+     * @return DomainEvent[]
+     */
     final public function pullDomainEvents(): array
     {
-        $domainEvents = $this->domainEvents;
-        $this->domainEvents = [];
+        $events = $this->events;
+        $this->events = [];
 
-        return $domainEvents;
+        return $events;
     }
 
-    final protected function record(DomainEvent $domainEvent): void
+    final protected function record(DomainEvent $event): void
     {
-        $this->domainEvents[] = $domainEvent;
+        $this->events[] = $event;
     }
 }

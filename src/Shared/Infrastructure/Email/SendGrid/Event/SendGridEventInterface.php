@@ -12,11 +12,14 @@
 namespace Nurschool\Shared\Infrastructure\Email\SendGrid\Event;
 
 
-use Nurschool\Shared\Domain\Event\DomainEvent;
 use SendGrid\Mail\Mail;
 
-interface SendGridEventInterface extends DomainEvent
+interface SendGridEventInterface
 {
+    public const STARTED = 'sendgrid.started';
+    public const FINISHED = 'sendgrid.finished';
+    public const FAILED = 'sendgrid.failed';
+
     /**
      * @return Mail
      */

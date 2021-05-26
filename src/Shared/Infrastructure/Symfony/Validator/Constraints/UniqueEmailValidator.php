@@ -12,7 +12,7 @@
 namespace Nurschool\Shared\Infrastructure\Symfony\Validator\Constraints;
 
 
-use Nurschool\User\Domain\Model\Repository\UserRepositoryInterface;
+use Nurschool\User\Domain\Model\Repository\UserRepository;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -20,11 +20,11 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 class UniqueEmailValidator extends ConstraintValidator
 {
     /**
-     * @var UserRepositoryInterface
+     * @var UserRepository
      */
     private $repository;
 
-    public function __construct(UserRepositoryInterface $repository)
+    public function __construct(UserRepository $repository)
     {
         $this->repository = $repository;
     }

@@ -9,6 +9,10 @@ framework:
                 middleware:
                     - doctrine_transaction
 
+            messenger.bus.event:
+                middleware:
+                    - doctrine_transaction
+
         transports:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
             async: '%env(MESSENGER_TRANSPORT_DSN)%'
@@ -17,5 +21,6 @@ framework:
 
         routing:
             # Route your messages to the transports
-            'Nurschool\Shared\Application\Command\Command': async
+#            'Nurschool\Shared\Application\Command\Command': async
+            'Nurschool\Shared\Application\Command\Command': sync
             'Nurschool\Shared\Application\Query\Query': sync

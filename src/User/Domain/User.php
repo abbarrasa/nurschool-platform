@@ -5,6 +5,7 @@ namespace Nurschool\User\Domain;
 
 
 use Nurschool\Shared\Domain\AggregateRoot;
+use Nurschool\Shared\Infrastructure\Symfony\Event\UserCreated;
 use Nurschool\User\Domain\ValueObject\Email;
 use Nurschool\User\Domain\ValueObject\FullName;
 use Nurschool\User\Domain\ValueObject\HashedPassword;
@@ -36,6 +37,8 @@ class User extends AggregateRoot
         $this->id = $id;
         $this->email = $email;
         $this->password = $password;
+
+        $this->record(UserCreated::fromPrimitives($this->id, []));
     }
 
     public static function create(Email $email, HashedPassword $password): self

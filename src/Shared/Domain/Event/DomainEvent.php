@@ -24,7 +24,7 @@ abstract class DomainEvent
 
     private $occurredOn;
 
-    public function __construct(string $aggregateId, UuidInterface $eventId, \DateTimeInterface $occurredOn)
+    public function __construct(string $aggregateId, ?UuidInterface $eventId, ?\DateTimeInterface $occurredOn)
     {
         $this->aggregateId = $aggregateId;
         $this->eventId = $eventId ?: Uuid::uuid4();

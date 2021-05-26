@@ -15,7 +15,7 @@ namespace Nurschool\User\Application\Command\Create;
 
 
 use Nurschool\Shared\Application\Event\DomainEventDispatcher;
-use Nurschool\User\Domain\Model\Repository\UserRepositoryInterface;
+use Nurschool\User\Domain\Model\Repository\UserRepository;
 use Nurschool\User\Domain\User;
 use Nurschool\User\Domain\ValueObject\Email;
 use Nurschool\User\Domain\ValueObject\HashedPassword;
@@ -24,7 +24,7 @@ final class UserCreator
 {
     private $repository;
 
-    public function __construct(UserRepositoryInterface $repository)
+    public function __construct(UserRepository $repository)
     {
         $this->repository = $repository;
     }

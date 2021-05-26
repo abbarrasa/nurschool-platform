@@ -18,7 +18,7 @@ use Nurschool\Shared\Domain\Model\Repository\RepositoryInterface;
 use Nurschool\User\Domain\User;
 use Nurschool\User\Domain\ValueObject\Email;
 
-interface UserRepositoryInterface extends RepositoryInterface
+interface UserRepository extends RepositoryInterface
 {
     public function findByEmail(Email $email): User;
 

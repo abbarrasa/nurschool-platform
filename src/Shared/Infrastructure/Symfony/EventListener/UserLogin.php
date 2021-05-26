@@ -4,22 +4,28 @@
 namespace Nurschool\Shared\Infrastructure\Symfony\EventListener;
 
 
-use Nurschool\Shared\Domain\Event\DomainEventListener;
-use Nurschool\Shared\Infrastructure\Symfony\Event\UserAuthenticated;
-use Nurschool\User\Domain\Model\Repository\UserRepositoryInterface;
+use Nurschool\User\Domain\Model\Repository\UserRepository;
+use Nurschool\User\Infrastructure\Persistence\Doctrine\Entity\User;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
-class UserLogin implements DomainEventListener
+class UserLogin
 {
     private $repository;
 
-    private function __construct(UserRepositoryInterface $repository)
+    private function __construct(UserRepository $repository)
     {
         $this->repository = $repository;
     }
 
-    public function __invoke(UserAuthenticated $event): void
+    //App\EventListener\LoginListener:
+    //tags:
+    //- { name: 'kernel.event_listener', event: 'security.interactive_login' }
+    //onSecurityInteractiveLogin
+    public function __invoke(InteractiveLoginEvent $event): void
     {
-        $user = $event->getUser();
+        /** @var User $user */
+        $user = $event->getAuthenticationToken()->getUser();
+
         //Update last login user date
         $user->updateLastLogin(new \DateTime());
 

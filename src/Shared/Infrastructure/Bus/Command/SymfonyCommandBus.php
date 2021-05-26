@@ -50,7 +50,7 @@ final class SymfonyCommandBus implements CommandBus
         try {
             $this->messageBus->dispatch($command);
         } catch(NoHandlerForMessageException $exception) {
-            throw new CommandNotRegisteredException($command);
+            throw new EventNotRegisteredException($command);
         } catch(HandlerFailedException $exception) {
             $this->throwException($exception);
         }

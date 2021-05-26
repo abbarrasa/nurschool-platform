@@ -14,18 +14,18 @@ namespace Nurschool\Shared\Infrastructure\Symfony\Controller;
 
 use Nurschool\Shared\Domain\Model\Repository\RepositoryInterface;
 use Nurschool\Core\Domain\Model\Dto\UserDto;
-use Nurschool\User\Domain\Model\Repository\UserRepositoryInterface;
+use Nurschool\User\Domain\Model\Repository\UserRepository;
 
 class UserController extends AbstractCrudController
 {
-    /** @var UserRepositoryInterface */
+    /** @var UserRepository */
     private $repository;
 
     /**
      * @required
-     * @param UserRepositoryInterface $repository
+     * @param UserRepository $repository
      */
-    public function setRepository(UserRepositoryInterface $repository): void
+    public function setRepository(UserRepository $repository): void
     {
         $this->repository = $repository;
     }

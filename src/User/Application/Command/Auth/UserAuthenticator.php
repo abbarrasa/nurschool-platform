@@ -16,7 +16,7 @@ namespace Nurschool\User\Application\Command\Auth;
 
 use Nurschool\Shared\Domain\Event\DomainEventDispatcher;
 use Nurschool\Shared\Infrastructure\Symfony\Event\UserAuthenticated;
-use Nurschool\User\Domain\Model\Repository\UserRepositoryInterface;
+use Nurschool\User\Domain\Model\Repository\UserRepository;
 use Nurschool\User\Domain\User;
 use Nurschool\User\Domain\ValueObject\Auth\Credentials;
 
@@ -25,7 +25,7 @@ class UserAuthenticator
     private $repository;
     private $eventDispatcher;
 
-    public function __construct(UserRepositoryInterface $repository, DomainEventDispatcher $eventDispatcher)
+    public function __construct(UserRepository $repository, DomainEventDispatcher $eventDispatcher)
     {
         $this->repository = $repository;
         $this->eventDispatcher = $eventDispatcher;

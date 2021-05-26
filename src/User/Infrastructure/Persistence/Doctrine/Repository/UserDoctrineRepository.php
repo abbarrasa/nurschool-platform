@@ -15,10 +15,11 @@ namespace Nurschool\User\Infrastructure\Persistence\Doctrine\Repository;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Nurschool\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
-use Nurschool\User\Domain\Model\Repository\UserRepositoryInterface;
-use Nurschool\User\Domain\User;
+use Nurschool\User\Domain\Model\Repository\UserRepository;
+use Nurschool\User\Domain\User as UserDomain;
 use Nurschool\User\Domain\ValueObject\Credentials;
 use Nurschool\User\Domain\ValueObject\Email;
+use Nurschool\User\Infrastructure\Persistence\Doctrine\Entity\User;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -26,14 +27,14 @@ use Nurschool\User\Domain\ValueObject\Email;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-final class UserDoctrineRepository extends DoctrineRepository implements UserRepositoryInterface
+final class UserDoctrineRepository extends DoctrineRepository implements UserRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, \Nurschool\User\Infrastructure\Persistence\Doctrine\Entity\User::class);
+        parent::__construct($registry, User::class);
     }
 
-    public function findByEmail(Email $email): User
+    public function findByEmail(Email $email): UserDomain
     {
         return $this->findOneBy(['email.value' => $email->toString()]);
     }

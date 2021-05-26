@@ -5,8 +5,9 @@ namespace Nurschool\Shared\Infrastructure\Symfony\EventListener;
 
 
 use Nurschool\Shared\Domain\Event\DomainEventListener;
-use Nurschool\Shared\Infrastructure\Symfony\Event\UserCreated;
 use Nurschool\Shared\Infrastructure\Symfony\Security\EmailVerifier;
+use Nurschool\User\Domain\Event\UserCreated;
+use Nurschool\User\Domain\Model\Repository\UserRepository;
 
 class SendEmailConfirmation implements DomainEventListener
 {
@@ -15,14 +16,19 @@ class SendEmailConfirmation implements DomainEventListener
     /** @var EmailVerifier */
     private $emailVerifier;
 
-    public function __construct(EmailVerifier $emailVerifier)
+    private $repository;
+
+    public function __construct(EmailVerifier $emailVerifier, UserRepository $repository)
     {
         $this->emailVerifier = $emailVerifier;
+        $this->repository = $repository;
     }
 
     public function __invoke(UserCreated $event): void
     {
-        $user = $event->getUser();
+        $id = $event->aggregateId();
+        $user = $this->repository->find($id);
+
         $this->emailVerifier->sendSignedUrl(self::CONFIRMATION_ROUTE, $user);
     }
 }

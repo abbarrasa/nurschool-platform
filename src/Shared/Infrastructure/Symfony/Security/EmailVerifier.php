@@ -16,7 +16,7 @@ namespace Nurschool\Shared\Infrastructure\Symfony\Security;
 use Doctrine\ORM\EntityManagerInterface;
 use Nurschool\Shared\Domain\Service\Email\MailerInterface;
 use Nurschool\Core\Domain\Model\UserInterface;
-use Nurschool\User\Domain\Model\Repository\UserRepositoryInterface;
+use Nurschool\User\Domain\Model\Repository\UserRepository;
 use Nurschool\User\Domain\User;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +32,7 @@ class EmailVerifier
     public function __construct(
         VerifyEmailHelperInterface $helper,
         MailerInterface $mailer,
-        UserRepositoryInterface $userRepository
+        UserRepository $userRepository
     ) {
         $this->verifyEmailHelper = $helper;
         $this->mailer = $mailer;

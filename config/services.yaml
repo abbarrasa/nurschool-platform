@@ -26,6 +26,11 @@ services:
             tags:
                 - { name: messenger.message_handler, bus: messenger.bus.query }
 
+        Nurschool\Shared\Domain\Event\DomainEventListener:
+            public: true
+            tags:
+                - { name: messenger.message_handler, bus: messenger.bus.event }
+
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     Nurschool\:
@@ -41,9 +46,9 @@ services:
         tags: ['controller.service_arguments']
 
     # event listeners are imported separately to add to event dispatcher at once
-    Nurschool\Shared\Infrastructure\Symfony\EventListener\:
-        resource: '../src/Shared/Infrastructure/Symfony/EventListener/*'
-        tags: ['kernel.event_listener']
+#    Nurschool\Shared\Infrastructure\Symfony\EventListener\:
+#        resource: '../src/Shared/Infrastructure/Symfony/EventListener/*'
+#        tags: ['kernel.event_listener']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
