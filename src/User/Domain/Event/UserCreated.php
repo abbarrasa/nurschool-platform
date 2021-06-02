@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Nurschool\User\Domain\Event;
 
 use Nurschool\Shared\Domain\Event\DomainEvent;
@@ -19,7 +21,7 @@ final class UserCreated extends DomainEvent
 
     public static function fromPrimitives(string $aggregateId, array $body, string $eventId, string $occurredOn): DomainEvent
     {
-        // TODO: Implement fromPrimitives() method.
+        return new self($aggregateId, $body, $eventId, $occurredOn);
     }
 
     public function toPrimitives(): array

@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of the Nurschool project.
+ *
+ * (c) Nurschool <https://github.com/abbarrasa/nurschool>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
 
 namespace Nurschool\Shared\Infrastructure\Symfony\EventListener;
 
@@ -17,9 +27,6 @@ class UserLogin
         $this->repository = $repository;
     }
 
-    //App\EventListener\LoginListener:
-    //tags:
-    //- { name: 'kernel.event_listener', event: 'security.interactive_login' }
     //onSecurityInteractiveLogin
     public function __invoke(InteractiveLoginEvent $event): void
     {

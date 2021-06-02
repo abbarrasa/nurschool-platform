@@ -50,6 +50,10 @@ services:
 #        resource: '../src/Shared/Infrastructure/Symfony/EventListener/*'
 #        tags: ['kernel.event_listener']
 
+    Nurschool\Shared\Infrastructure\Symfony\EventListener\UserLogin:
+        tags:
+            - { name: 'kernel.event_listener', event: 'security.interactive_login' }
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
     gedmo.listener.sluggable:

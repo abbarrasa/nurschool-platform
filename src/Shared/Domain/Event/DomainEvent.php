@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Nurschool\Shared\Domain\Event;
 
 
@@ -47,12 +49,12 @@ abstract class DomainEvent
         return $this->aggregateId;
     }
 
-    public function eventId(): string
+    public function eventId(): UuidInterface
     {
         return $this->eventId;
     }
 
-    public function occurredOn(): string
+    public function occurredOn(): \DateTimeInterface
     {
         return $this->occurredOn;
     }

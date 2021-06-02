@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Nurschool\Shared\Infrastructure\Symfony\Security\Guard\Authenticador;
 
-use Nurschool\User\Application\Command\Auth\UserAuthenticator;
-use Nurschool\User\Domain\ValueObject\Auth\Credentials;
+use Nurschool\Shared\Application\Command\CommandBus;
+use Nurschool\User\Application\Command\Auth\AuthUserCommand;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -38,18 +38,17 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     /** @var CsrfTokenManagerInterface */
     private $tokenManager;
 
-    /** @var UserAuthenticator */
-    private $authenticator;
-
+    /** @var CommandBus */
+    private $commandBus;
 
     public function __construct(
         UrlGeneratorInterface $router,
         CsrfTokenManagerInterface $tokenManager,
-        UserAuthenticator $authenticator
+        CommandBus $commandBus
     ) {
         $this->router = $router;
         $this->tokenManager = $tokenManager;
-        $this->authenticator = $authenticator;
+        $this->commandBus = $commandBus;
     }
 
     public function supports(Request $request): bool
@@ -64,7 +63,7 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $credentials = [
             'email' => $request->request->get('email'),
             'password' => $request->request->get('password'),
-            'csrf_token' => $request->request->get('_csrf_token'),
+            'csrf_token' => $request->request->get('csrf_token'),
         ];
 
         $request->getSession()->set(
@@ -77,15 +76,16 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        $token = new CsrfToken('authenticate', $credentials['csrf_token']);
+        $email = $credentials['email'];
+        $plainPassword = $credentials['password'];
+        $csrfToken = $credentials['csrf_token'];
+
+        $token = new CsrfToken('authenticate', $csrfToken);
         if (!$this->tokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
         }
 
-        $email = $credentials['email'];
-        $plainPassword = $credentials['password'];
-
-        $this->authenticator->authenticate(Credentials::create($email, $plainPassword));
+        $this->commandBus->dispatch(AuthUserCommand::create($email, $plainPassword));
 
         return $userProvider->loadUserByUsername($email);
     }
