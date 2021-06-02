@@ -12,7 +12,7 @@ framework:
             messenger.bus.query:
                 middleware:
                     - doctrine_transaction
-                    -
+
             messenger.bus.event:
                 middleware:
                     - doctrine_transaction
