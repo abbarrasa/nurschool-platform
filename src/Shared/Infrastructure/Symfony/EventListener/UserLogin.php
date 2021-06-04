@@ -34,8 +34,6 @@ class UserLogin
         $user = $event->getAuthenticationToken()->getUser();
 
         //Update last login user date
-        $user->updateLastLogin(new \DateTime());
-
-        $this->repository->save($user);
+        $this->repository->updateLastLogin($user);
     }
 }

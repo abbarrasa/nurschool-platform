@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Nurschool\User\Domain;
 
 
-use Nurschool\Shared\Domain\AggregateRoot;
 use Nurschool\Shared\Infrastructure\Symfony\Event\UserCreated;
 use Nurschool\User\Domain\ValueObject\Email;
 use Nurschool\User\Domain\ValueObject\FullName;
@@ -22,7 +21,7 @@ use Nurschool\User\Domain\ValueObject\HashedPassword;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-class User extends AggregateRoot
+class User extends \Nurschool\User\Infrastructure\Persistence\Doctrine\Entity\User
 {
     /** @var UuidInterface */
     private $id;
@@ -101,8 +100,12 @@ class User extends AggregateRoot
         return $this->lastLogin;
     }
 
-    public function updateLastLogin(\DateTimeInterface $lastLogin): void
+    public function updateLastLogin(?\DateTimeInterface $lastLogin = null): void
     {
+        if (null === $lastLogin) {
+            $lastLogin = new \DateTimeImmutable();
+        }
+
         $this->lastLogin = $lastLogin;
     }
 }

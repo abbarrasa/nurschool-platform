@@ -12,10 +12,11 @@
 namespace Nurschool\User\Infrastructure\Persistence\Doctrine\Entity;
 
 use Gedmo\Timestampable\Traits\Timestampable;
+use Nurschool\Shared\Domain\AggregateRoot;
 use Nurschool\User\Domain\User as UserDomain;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-final class User extends UserDomain implements UserInterface
+abstract class User extends AggregateRoot implements UserInterface
 {
     use Timestampable;
 

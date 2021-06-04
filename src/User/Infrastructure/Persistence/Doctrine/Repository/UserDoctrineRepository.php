@@ -39,6 +39,19 @@ final class UserDoctrineRepository extends DoctrineRepository implements UserRep
         return $this->findOneBy(['email.value' => $email->toString()]);
     }
 
+    /**
+     * @param UserDomain $user
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function updateLastLogin(UserDomain $user)
+    {
+        $user->updateLastLogin();
+        $this->save($user);
+    }
+
+
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */
