@@ -16,13 +16,15 @@ namespace Nurschool\Shared\Infrastructure\Bus\Event;
 
 use Nurschool\Shared\Domain\Event\DomainEvent;
 use Nurschool\Shared\Domain\Event\DomainEventDispatcher;
-use Nurschool\Shared\Infrastructure\Bus\Command\EventNotRegisteredException;
+use Nurschool\Shared\Infrastructure\Symfony\Bus\MessageBusExceptionTrait;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\Exception\NoHandlerForMessageException;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 final class SymfonyDomainEventDispatcher implements DomainEventDispatcher
 {
+    use MessageBusExceptionTrait;
+
     private $messageBus;
 
     public function __construct(MessageBusInterface $messageBus)

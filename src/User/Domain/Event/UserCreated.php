@@ -19,7 +19,7 @@ final class UserCreated extends DomainEvent
 {
     private const NAME = 'user.created';
 
-    public static function fromPrimitives(string $aggregateId, array $body, string $eventId, string $occurredOn): DomainEvent
+    public static function fromPrimitives(string $aggregateId, array $body, string $eventId = null, string $occurredOn = null): DomainEvent
     {
         return new self($aggregateId, $body, $eventId, $occurredOn);
     }

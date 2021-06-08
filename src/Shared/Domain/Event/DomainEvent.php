@@ -26,7 +26,7 @@ abstract class DomainEvent
 
     private $occurredOn;
 
-    public function __construct(string $aggregateId, ?UuidInterface $eventId, ?\DateTimeInterface $occurredOn)
+    public function __construct(string $aggregateId, array $body, ?UuidInterface $eventId = null, ?\DateTimeInterface $occurredOn = null)
     {
         $this->aggregateId = $aggregateId;
         $this->eventId = $eventId ?: Uuid::uuid4();
@@ -36,8 +36,8 @@ abstract class DomainEvent
     abstract public static function fromPrimitives(
         string $aggregateId,
         array $body,
-        string $eventId,
-        string $occurredOn
+        string $eventId = null,
+        string $occurredOn = null
     ): self;
 
     abstract public static function eventName(): string;

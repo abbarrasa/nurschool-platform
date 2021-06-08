@@ -16,10 +16,9 @@ namespace Nurschool\User\Infrastructure\Persistence\Doctrine\Repository;
 use Doctrine\Persistence\ManagerRegistry;
 use Nurschool\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
 use Nurschool\User\Domain\Model\Repository\UserRepository;
-use Nurschool\User\Domain\User as UserDomain;
+use Nurschool\User\Domain\User;
 use Nurschool\User\Domain\ValueObject\Credentials;
 use Nurschool\User\Domain\ValueObject\Email;
-use Nurschool\User\Infrastructure\Persistence\Doctrine\Entity\User;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -34,17 +33,17 @@ final class UserDoctrineRepository extends DoctrineRepository implements UserRep
         parent::__construct($registry, User::class);
     }
 
-    public function findByEmail(Email $email): UserDomain
+    public function findByEmail(Email $email): User
     {
         return $this->findOneBy(['email.value' => $email->toString()]);
     }
 
     /**
-     * @param UserDomain $user
+     * @param User $user
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function updateLastLogin(UserDomain $user)
+    public function updateLastLogin(User $user)
     {
         $user->updateLastLogin();
         $this->save($user);

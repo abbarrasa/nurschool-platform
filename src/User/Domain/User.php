@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace Nurschool\User\Domain;
 
-
-use Nurschool\Shared\Infrastructure\Symfony\Event\UserCreated;
+use Nurschool\Shared\Infrastructure\Symfony\Model\User as UserModel;
+use Nurschool\User\Domain\Event\UserCreated;
 use Nurschool\User\Domain\ValueObject\Email;
 use Nurschool\User\Domain\ValueObject\FullName;
 use Nurschool\User\Domain\ValueObject\HashedPassword;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-class User extends \Nurschool\User\Infrastructure\Persistence\Doctrine\Entity\User
+class User extends UserModel
 {
     /** @var UuidInterface */
     private $id;
@@ -47,7 +47,7 @@ class User extends \Nurschool\User\Infrastructure\Persistence\Doctrine\Entity\Us
         $this->email = $email;
         $this->password = $password;
 
-        $this->record(UserCreated::fromPrimitives($this->id, []));
+        $this->record(UserCreated::fromPrimitives($this->id->toString(), []));
     }
 
     public static function create(Email $email, HashedPassword $password): self

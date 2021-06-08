@@ -9,11 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\User\Infrastructure\Persistence\Doctrine\Entity;
+declare(strict_types=1);
+
+namespace Nurschool\Shared\Infrastructure\Symfony\Model;
 
 use Gedmo\Timestampable\Traits\Timestampable;
 use Nurschool\Shared\Domain\AggregateRoot;
-use Nurschool\User\Domain\User as UserDomain;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 abstract class User extends AggregateRoot implements UserInterface

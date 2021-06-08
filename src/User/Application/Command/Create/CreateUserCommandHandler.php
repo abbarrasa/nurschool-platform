@@ -21,19 +21,14 @@ use Nurschool\User\Domain\ValueObject\Credentials;
 final class CreateUserCommandHandler implements CommandHandler
 {
     private $creator;
-    private $eventDispatcher;
 
-    public function __construct(UserCreator $creator, DomainEventDispatcher $eventDispatcher)
+    public function __construct(UserCreator $creator)
     {
         $this->creator = $creator;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function __invoke(CreateUserCommand $command): void
     {
-        $user = $this->creator->create($command->email, $command->hashedPassword);
-
-        $event = UserCreated::create($user);
-        $this->eventDispatcher->dispatch($event);
+        $this->creator->create($command->email, $command->hashedPassword);
     }
 }
