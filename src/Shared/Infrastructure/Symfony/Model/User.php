@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Nurschool\Shared\Infrastructure\Symfony\Model;
 
-use Gedmo\Timestampable\Traits\Timestampable;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Nurschool\Shared\Domain\AggregateRoot;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 abstract class User extends AggregateRoot implements UserInterface
 {
-    use Timestampable;
+    use TimestampableEntity;
 
     private const DEFAULT_ROLE = 'ROLE_USER';
 

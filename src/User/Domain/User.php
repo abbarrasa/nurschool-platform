@@ -21,6 +21,8 @@ use Nurschool\User\Domain\ValueObject\HashedPassword;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
+//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
+
 class User extends UserModel
 {
     /** @var UuidInterface */
@@ -70,7 +72,7 @@ class User extends UserModel
         return $this->password;
     }
 
-    public function fullName(): FullNam
+    public function fullName(): FullName
     {
         return $this->fullName;
     }
