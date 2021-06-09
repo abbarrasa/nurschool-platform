@@ -70,7 +70,7 @@ class User extends UserModel
         return $this->password;
     }
 
-    public function fullName(): FullName
+    public function fullName(): FullNam
     {
         return $this->fullName;
     }
