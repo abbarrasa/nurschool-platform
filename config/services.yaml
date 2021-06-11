@@ -21,15 +21,15 @@ services:
             tags:
                 - { name: messenger.message_handler, bus: messenger.bus.command }
 
-        Nurschool\Shared\Application\Query\QueryHandler:
-            public: true
-            tags:
-                - { name: messenger.message_handler, bus: messenger.bus.query }
-
         Nurschool\Shared\Domain\Event\DomainEventListener:
             public: true
             tags:
                 - { name: messenger.message_handler, bus: messenger.bus.event }
+
+        Nurschool\Shared\Application\Query\QueryHandler:
+            public: true
+            tags:
+                - { name: messenger.message_handler, bus: messenger.bus.query }
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

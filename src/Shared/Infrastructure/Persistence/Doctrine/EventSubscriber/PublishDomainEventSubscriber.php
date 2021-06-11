@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Nurschool\Shared\Infrastructure\Symfony\EventSubscriber;
+namespace Nurschool\Shared\Infrastructure\Persistence\Doctrine\EventSubscriber;
 
 
 use Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface;
