@@ -25,17 +25,18 @@ final class SymfonyDomainEventDispatcher implements DomainEventDispatcher
 {
     use MessageBusExceptionTrait;
 
-    private $messageBus;
+    /** @var MessageBusInterface */
+    private $eventBus;
 
-    public function __construct(MessageBusInterface $messageBus)
+    public function __construct(MessageBusInterface $eventBus)
     {
-        $this->messageBus = $messageBus;
+        $this->eventBus = $eventBus;
     }
 
     public function dispatch(DomainEvent $event): void
     {
         try {
-            $this->messageBus->dispatch($event);
+            $this->eventBus->dispatch($event);
         } catch(NoHandlerForMessageException $exception) {
             throw new EventNotRegisteredException($event);
         } catch(HandlerFailedException $exception) {

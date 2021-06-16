@@ -26,6 +26,7 @@ class SendEmailConfirmation implements DomainEventListener
     /** @var EmailVerifier */
     private $emailVerifier;
 
+    /** @var UserRepository */
     private $repository;
 
     public function __construct(EmailVerifier $emailVerifier, UserRepository $repository)

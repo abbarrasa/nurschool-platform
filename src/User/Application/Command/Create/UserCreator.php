@@ -22,6 +22,7 @@ use Nurschool\User\Domain\ValueObject\HashedPassword;
 
 final class UserCreator
 {
+    /** @var UserRepository */
     private $repository;
 
     public function __construct(UserRepository $repository)

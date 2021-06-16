@@ -28,18 +28,18 @@ final class SymfonyQueryBus implements QueryBus
     use MessageBusExceptionTrait;
 
     /** @var MessageBusInterface */
-    private $messageBus;
+    private $queryBus;
 
-    public function __construct(MessageBusInterface $messageBus)
+    public function __construct(MessageBusInterface $queryBus)
     {
-        $this->messageBus = $messageBus;
+        $this->queryBus = $queryBus;
     }
 
     public function ask(Query $query): Response
     {
         try {
             /** @var HandledStamp $stamp */
-            $stamp = $this->messageBus->dispatch($query)->last(HandledStamp::class);
+            $stamp = $this->queryBus->dispatch($query)->last(HandledStamp::class);
 
             return $stamp->getResult();
         } catch(NoHandlerForMessageException $exception) {

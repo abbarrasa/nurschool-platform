@@ -38,19 +38,20 @@ final class SymfonyCommandBus implements CommandBus
 {
     use MessageBusExceptionTrait;
 
-    private $messageBus;
+    /** @var MessageBusInterface */
+    private $commandBus;
 
-    public function __construct(MessageBusInterface $messageBus)
+    public function __construct(MessageBusInterface $commandBus)
     {
-        $this->messageBus = $messageBus;
+        $this->commandBus = $commandBus;
     }
 
     public function dispatch(Command $command): void
     {
         try {
-            $this->messageBus->dispatch($command);
+            $this->commandBus->dispatch($command);
         } catch(NoHandlerForMessageException $exception) {
-            throw new EventNotRegisteredException($command);
+            throw new CommandNotRegisteredException($command);
         } catch(HandlerFailedException $exception) {
             $this->throwException($exception);
         }
