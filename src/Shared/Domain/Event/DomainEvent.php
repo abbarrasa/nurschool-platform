@@ -22,20 +22,26 @@ abstract class DomainEvent
     /** @var UuidInterface */
     private $eventId;
 
+    /** @var string  */
     private $aggregateId;
 
+    /** @var array */
+    protected $body;
+
+    /** @var \DateTime|\DateTimeInterface */
     private $occurredOn;
 
-    public function __construct(string $aggregateId, array $body, ?UuidInterface $eventId = null, ?\DateTimeInterface $occurredOn = null)
+    public function __construct(string $aggregateId, array $body = [], ?UuidInterface $eventId = null, ?\DateTimeInterface $occurredOn = null)
     {
         $this->aggregateId = $aggregateId;
         $this->eventId = $eventId ?: Uuid::uuid4();
+        $this->body = $body;
         $this->occurredOn = $occurredOn ?: new \DateTime();
     }
 
     abstract public static function fromPrimitives(
         string $aggregateId,
-        array $body,
+        array $body = [],
         string $eventId = null,
         string $occurredOn = null
     ): self;

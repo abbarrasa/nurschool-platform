@@ -16,16 +16,13 @@ namespace Nurschool\Shared\Infrastructure\Persistence\Doctrine\EventSubscriber;
 
 use Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
 use Nurschool\Shared\Domain\AggregateRoot;
+use Nurschool\Shared\Domain\Event\DomainEvent;
 use Nurschool\Shared\Domain\Event\DomainEventDispatcher;
 
 class PublishDomainEventSubscriber implements EventSubscriberInterface
 {
-    /** @var array */
-    private $events = [];
-
     /** @var DomainEventDispatcher */
     private $domainEventDispatcher;
 
@@ -39,47 +36,26 @@ class PublishDomainEventSubscriber implements EventSubscriberInterface
         return [
             Events::postPersist,
             Events::postUpdate,
-            Events::postRemove,
-            Events::postFlush
+            Events::postRemove
         ];
     }
 
     public function postPersist(LifecycleEventArgs $event)
     {
-        $this->collectEvent($event);
-    }
-
-    public function postFlush(PostFlushEventArgs $event)
-    {
-        $this->dispatchCollectedEvents();
-    }
-
-    private function collectEvent(LifecycleEventArgs $event): void
-    {
         $entity = $event->getEntity();
         if ($entity instanceof AggregateRoot) {
             $events = $entity->pullDomainEvents();
-            foreach($events as $event) {
-                // We index by object hash, not to have the same event twice
-                $this->events[spl_object_hash($event)] = $event;
-            }
-//            $this->publishEvents($events);
+            $this->publishEvents($events);
         }
     }
 
-    private function dispatchCollectedEvents(): void
+    /**
+     * @param DomainEvent[] $events
+     */
+    private function publishEvents(array $events): void
     {
-        $events = $this->events;
-        $this->events = [];
-
         foreach($events as $event) {
             $this->domainEventDispatcher->dispatch($event);
         }
-
-        // Maybe listeners emitted some new events!
-        if (!empty($this->events)) {
-            $this->dispatchCollectedEvents();
-        }
     }
-
 }

@@ -25,7 +25,7 @@ final class SendGridEvent extends Event implements SendGridEventInterface
     /** @var string */
     private $messageId;
 
-    public function __construct(Mail $mail, ?string $messageId)
+    public function __construct(Mail $mail, ?string $messageId = null)
     {
         $this->setMail($mail);
         $this->setMessageId($messageId);

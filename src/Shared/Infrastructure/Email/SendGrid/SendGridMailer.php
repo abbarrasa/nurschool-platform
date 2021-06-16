@@ -55,6 +55,9 @@ class SendGridMailer implements MailerInterface
     /** @var Personalization */
     private $redirectPersonalization;
 
+    /** @var bool */
+    private $disableDelivery;
+
     /**
      * SendGridMailer constructor.
      * @param \SendGrid $provider
@@ -71,6 +74,7 @@ class SendGridMailer implements MailerInterface
         $this->settingsMailer = $settingsMailer;
         $this->eventDispatcher = $eventDispatcher;
 
+        $this->disableDelivery = $this->settingsMailer->getSetting('disable_delivery');
         if(false !== ($this->redirectTo = $this->settingsMailer->getSetting('redirect_to'))) {
             $redirectToAddress = $this->settingsMailer->getSetting('redirect_to_address');
             $this->redirectPersonalization = new Personalization();

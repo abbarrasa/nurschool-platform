@@ -49,7 +49,7 @@ class User extends UserModel
         $this->email = $email;
         $this->password = $password;
 
-        $this->record(UserCreated::fromPrimitives($this->id->toString(), []));
+        $this->record(UserCreated::fromPrimitives($this->id->toString()));
     }
 
     public static function create(Email $email, HashedPassword $password): self

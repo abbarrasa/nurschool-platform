@@ -6,10 +6,10 @@
 
     <entity name="Nurschool\User\Domain\User" table="nurschool_user"
             repository-class="Nurschool\User\Infrastructure\Persistence\Doctrine\Repository\UserDoctrineRepository">
-        <id name="id" type="uuid" column="id">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
-        </id>
+        <id name="id" type="uuid" column="id"/>
+<!--            <generator strategy="CUSTOM"/>-->
+<!--            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>-->
+<!--        </id>-->
         <embedded name="email" class="Nurschool\User\Domain\ValueObject\Email" use-column-prefix="false"/>
         <embedded name="password" class="Nurschool\User\Domain\ValueObject\HashedPassword" use-column-prefix="false"/>
         <embedded name="fullName" class="Nurschool\User\Domain\ValueObject\FullName" use-column-prefix="false"/>

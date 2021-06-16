@@ -18,10 +18,12 @@ use Nurschool\Shared\Domain\Event\DomainEventListener;
 use Nurschool\Shared\Infrastructure\Symfony\Security\EmailVerifier;
 use Nurschool\User\Domain\Event\UserCreated;
 use Nurschool\User\Domain\Model\Repository\UserRepository;
+use Nurschool\User\Domain\ValueObject\Email;
+use Ramsey\Uuid\Uuid;
 
 class SendEmailConfirmation implements DomainEventListener
 {
-    private const CONFIRMATION_ROUTE = 'register_confirmation';
+    private const CONFIRMATION_ROUTE = 'register_confirm';
 
     /** @var EmailVerifier */
     private $emailVerifier;
