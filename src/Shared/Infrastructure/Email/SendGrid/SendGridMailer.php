@@ -19,6 +19,7 @@ use Nurschool\Shared\Domain\Service\Email\SettingsMailerInterface;
 use Nurschool\Shared\Infrastructure\Email\SendGrid\Exception\SendGridException;
 use Nurschool\Shared\Infrastructure\Symfony\Event\SendGridEvent;
 use Nurschool\User\Domain\User;
+use SendGrid\Mail\EmailAddress;
 use SendGrid\Mail\Mail;
 use SendGrid\Mail\MailSettings;
 use SendGrid\Mail\Personalization;
@@ -34,9 +35,6 @@ use SendGrid\Response;
  */
 class SendGridMailer implements MailerInterface
 {
-    /** @var SettingsMailerInterface */
-    private $settingsMailer;
-
     /** @var SendGridEventDispatcherInterface */
     private $eventDispatcher;
 
@@ -58,12 +56,17 @@ class SendGridMailer implements MailerInterface
     /** @var bool */
     private $disableDelivery;
 
+    /** @var bool */
+    private $sandbox;
+
+    /** @var array */
+    private $confirmation;
+
     /**
      * SendGridMailer constructor.
      * @param \SendGrid $provider
      * @param SettingsMailerInterface $settingsMailer
      * @param SendGridEventDispatcherInterface $eventDispatcher
-     * @throws \SendGrid\Mail\TypeException
      */
     public function __construct(
         \SendGrid $provider,
@@ -71,29 +74,18 @@ class SendGridMailer implements MailerInterface
         SendGridEventDispatcherInterface $eventDispatcher)
     {
         $this->provider = $provider;
-        $this->settingsMailer = $settingsMailer;
         $this->eventDispatcher = $eventDispatcher;
 
-        $this->disableDelivery = $this->settingsMailer->getSetting('disable_delivery');
-        if(false !== ($this->redirectTo = $this->settingsMailer->getSetting('redirect_to'))) {
-            $redirectToAddress = $this->settingsMailer->getSetting('redirect_to_address');
-            $this->redirectPersonalization = new Personalization();
-            $this->redirectPersonalization->addTo(new To($redirectToAddress));
-
-            $this->personalizationReflection = new \ReflectionProperty(Mail::class, 'personalization');
-            $this->personalizationReflection->setAccessible(true);
-        }
+        $this->configure($settingsMailer);
     }
 
     public function sendConfirmationEmail(User $user, string $signedUrl, \DateTimeInterface $expiresAt)
     {
-        $templateId = $this->settingsMailer->getSetting('confirmation.template');
-        $subject = $this->settingsMailer->getSetting('confirmation.subject');
-        $from = [
-            $this->settingsMailer->getSetting('confirmation.address'),
-            $this->settingsMailer->getSetting('confirmation.name')
-        ];
-        $email = $this->createMessage($from, $user->email()->toString(), $subject, $templateId);
+        $templateId = $this->confirmation['template'];
+        $subject = $this->confirmation['subject'];
+        $address = $this->confirmation['address'];
+        $name = $this->confirmation['name'];
+        $email = $this->createMessage([$address, $name], $user->email()->toString(), $subject, $templateId);
         $email->addDynamicTemplateData('url', $signedUrl);
         $email->addDynamicTemplateData('expiresAt', $expiresAt->format('g'));
 
@@ -105,6 +97,22 @@ class SendGridMailer implements MailerInterface
         // TODO: Implement sendResettingPasswordEmail() method.
     }
 
+    protected function configure(SettingsMailerInterface $settingsMailer)
+    {
+        $settings = $settingsMailer->getAllSettings();
+        $this->sandbox = $settings['sandbox'];
+        $this->disableDelivery = $settings['disable_delivery'];
+        $this->confirmation = $settings['confirmation'];
+
+        if (false !== ($this->redirectTo = $settings['redirect_to'])) {
+            $redirectToAddress = $settings['redirect_to_address'];
+            $this->redirectPersonalization = new Personalization();
+            $this->redirectPersonalization->addTo(new To($redirectToAddress));
+
+            $this->personalizationReflection = new \ReflectionProperty(Mail::class, 'personalization');
+            $this->personalizationReflection->setAccessible(true);
+        }
+    }
 
 //    public function sendConfirmationEmail(UserInterface $user, VerifyEmailSignatureComponents $signatureComponents)
 //    {
@@ -164,7 +172,7 @@ class SendGridMailer implements MailerInterface
         $email        = new Mail();
         $mailSettings = new MailSettings();
         $sandboxMode  = new SandBoxMode();
-        $sandboxMode->setEnable($this->settingsMailer->getSetting('sandbox'));
+        $sandboxMode->setEnable($this->sandbox);
         $mailSettings->setSandboxMode($sandboxMode);
         $email->setMailSettings($mailSettings);
 
