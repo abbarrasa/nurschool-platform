@@ -15,7 +15,7 @@ namespace Nurschool\Shared\Infrastructure\Symfony\EventListener;
 
 
 use Nurschool\User\Domain\Model\Repository\UserRepository;
-use Nurschool\User\Infrastructure\Persistence\Doctrine\Entity\User;
+use Nurschool\User\Domain\User;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class UserLogin

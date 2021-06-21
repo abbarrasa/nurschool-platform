@@ -15,9 +15,11 @@ namespace Nurschool\Shared\Infrastructure\Symfony\Security\Guard\Authenticador;
 
 use Nurschool\Shared\Application\Command\CommandBus;
 use Nurschool\User\Application\Command\Auth\AuthUserCommand;
+use Nurschool\User\Application\Command\Auth\BadCredentials;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -85,9 +87,13 @@ final class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             throw new InvalidCsrfTokenException();
         }
 
-        $this->commandBus->dispatch(AuthUserCommand::create($email, $plainPassword));
+        try {
+            $this->commandBus->dispatch(AuthUserCommand::create($email, $plainPassword));
 
-        return $userProvider->loadUserByUsername($email);
+            return $userProvider->loadUserByUsername($email);
+        } catch(BadCredentials $exception) {
+            throw new BadCredentialsException();
+        }
     }
 
     public function checkCredentials($credentials, UserInterface $user)

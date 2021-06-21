@@ -46,11 +46,29 @@
 
         <div class="navbar-end">
             <div class="navbar-item">
+            {% if app.user %}
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                        {{ app.user.username }}
+                    </a>
+
+                    <div class="navbar-dropdown">
+                        <a class="navbar-item">
+                            Profile
+                        </a>
+                        <hr class="navbar-divider">
+                        <a class="navbar-item" href="{{ path('logout') }}">
+                            Exit
+                        </a>
+                    </div>
+                </div>
+            {% else %}
                 <div class="buttons">
                     <a class="button is-primary" href="{{ path('register') }}">Sign up</a>
                     <a class="button is-link" href="{{ path('login') }}">Log in</a>
                 </div>
             </div>
+            {% endif %}
         </div>
     </div>
 </nav>

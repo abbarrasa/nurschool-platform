@@ -35,12 +35,9 @@ class UserAuthenticator
     {
         $user = $this->repository->findByEmail($credentials->email);
         $this->ensureCredentialsAreValid($user, $credentials->plainPassword);
-
-        $event = UserAuthenticated::create($user);
-        $this->eventDispatcher->dispatch($event);
     }
 
-    private function ensureCredentialsAreValid(User $user, string $plainPassword): void
+    private function ensureCredentialsAreValid(?User $user, string $plainPassword): void
     {
         if (null === $user ||
             !$user->password()->match($plainPassword)

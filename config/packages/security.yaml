@@ -9,7 +9,7 @@ security:
         users:
             entity:
                 # the class of the entity that represents users
-                class: Nurschool\User\Infrastructure\Persistence\Doctrine\Entity\User
+                class: Nurschool\User\Domain\User
                 # the property to query by - e.g. username, email, etc
                 property: 'email.value'
 

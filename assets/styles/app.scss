@@ -3,6 +3,7 @@
 // Set your brand colors
 $turquoise: hsl(171, 100%, 41%);
 $pink: hsl(350, 93%, 73%);
+$red: hsl(353, 100%, 58%);
 //$brown: #757763;
 //$beige-light: #D0D1CD;
 //$beige-lighter: #EFF0EB;
@@ -17,6 +18,9 @@ $radius: 0;
 // Import Bulma
 @import "~bulma/bulma";
 @import "~bulma-checkradio/dist/css/bulma-checkradio";
+
+// Icomoon
+@import "../fonts/icomoon/style.css";
 
 // Nurschool styles
 label, .button, .navbar-item { font-weight: 500; }

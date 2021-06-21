@@ -42,20 +42,30 @@ class PublishDomainEventSubscriber implements EventSubscriberInterface
 
     public function postPersist(LifecycleEventArgs $event)
     {
-        $entity = $event->getEntity();
-        if ($entity instanceof AggregateRoot) {
-            $events = $entity->pullDomainEvents();
-            $this->publishEvents($events);
-        }
+        $this->publishDomainEvents($event);
+    }
+
+    public function postUpdate(LifecycleEventArgs $event)
+    {
+        $this->publishDomainEvents($event);
+    }
+
+    public function postRemove(LifecycleEventArgs $event)
+    {
+        $this->publishDomainEvents($event);
     }
 
     /**
-     * @param DomainEvent[] $events
+     * @param LifecycleEventArgs $event
      */
-    private function publishEvents(array $events): void
+    private function publishDomainEvents(LifecycleEventArgs $event): void
     {
-        foreach($events as $event) {
-            $this->domainEventDispatcher->dispatch($event);
+        $entity = $event->getEntity();
+        if ($entity instanceof AggregateRoot) {
+            $events = $entity->pullDomainEvents();
+            foreach($events as $event) {
+                $this->domainEventDispatcher->dispatch($event);
+            }
         }
     }
 }

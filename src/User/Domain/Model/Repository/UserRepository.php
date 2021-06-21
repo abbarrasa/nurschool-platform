@@ -20,7 +20,7 @@ use Nurschool\User\Domain\ValueObject\Email;
 
 interface UserRepository extends RepositoryInterface
 {
-    public function findByEmail(Email $email): User;
+    public function findByEmail(Email $email): ?User;
 
     public function updateLastLogin(User $user);
 
