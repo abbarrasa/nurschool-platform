@@ -34,7 +34,12 @@ class RegistrationController extends WebController
             $email = $form->get('email')->getData();
             $plainPassword = $form->get('password')->getData();
 
-            $this->dispatch(CreateUserCommand::create($email, $plainPassword));
+            $command = new CreateUserCommand($email);
+            $command->plainPassword = $plainPassword;
+
+            $this->dispatch($command);
+
+//            $this->dispatch(CreateUserCommand::create($email, $plainPassword));
 
             return $this->render('registration/confirmation.html.twig');
         }

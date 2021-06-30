@@ -20,23 +20,27 @@ use Nurschool\User\Domain\ValueObject\HashedPassword;
 
 final class CreateUserCommand implements Command
 {
-    /** @var Email */
     public $email;
 
-    /** @var HashedPassword */
-    public $hashedPassword;
+    public $plainPassword;
 
-    public function __construct(Email $email, HashedPassword $hashedPassword)
+    public $googleId;
+
+    public $firstname;
+
+    public $lastname;
+
+    public function __construct(string $email)
     {
         $this->email = $email;
-        $this->hashedPassword = $hashedPassword;
     }
 
-    public static function create(string $email, string $plainPassword): self
-    {
-        $email = Email::fromString($email);
-        $hashedPassword = HashedPassword::encode($plainPassword);
 
-        return new self($email, $hashedPassword);
-    }
+//    public static function create(string $email, string $plainPassword): self
+//    {
+//        $email = Email::fromString($email);
+//        $hashedPassword = HashedPassword::encode($plainPassword);
+//
+//        return new self($email, $hashedPassword);
+//    }
 }

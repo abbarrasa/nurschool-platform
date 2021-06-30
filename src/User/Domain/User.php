@@ -17,12 +17,15 @@ use Nurschool\Shared\Infrastructure\Symfony\Model\User as UserModel;
 use Nurschool\User\Domain\Event\UserCreated;
 use Nurschool\User\Domain\ValueObject\Email;
 use Nurschool\User\Domain\ValueObject\FullName;
+use Nurschool\User\Domain\ValueObject\GoogleId;
 use Nurschool\User\Domain\ValueObject\HashedPassword;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-//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
-
+/**
+ * Class User
+ * @package Nurschool\User\Domain
+ */
 class User extends UserModel
 {
     /** @var UuidInterface */
@@ -30,6 +33,9 @@ class User extends UserModel
 
     /** @var Email */
     private $email;
+
+    /** @var GoogleId */
+    private $googleId;
 
     /** @var HashedPassword */
     private $password;
@@ -43,8 +49,11 @@ class User extends UserModel
     /** @var bool */
     private $enabled = false;
 
-    private function __construct(UuidInterface $id, Email $email, HashedPassword $password)
-    {
+    private function __construct(
+        UuidInterface $id,
+        Email $email,
+        ?HashedPassword $password = null
+    ) {
         $this->id = $id;
         $this->email = $email;
         $this->password = $password;
@@ -52,9 +61,17 @@ class User extends UserModel
         $this->record(UserCreated::fromPrimitives($this->id->toString()));
     }
 
-    public static function create(Email $email, HashedPassword $password): self
+    public static function create(Email $email, ?HashedPassword $password = null): self
     {
         return new self(Uuid::uuid4(), $email, $password);
+    }
+
+    public static function createFromGoogleId(Email $email, GoogleId $googleId, FullName $fullName): self
+    {
+        $user = new self(Uuid::uuid4(), $email, null);
+        $user->googleId = $googleId;
+
+        return $user;
     }
 
     public function id(): UuidInterface
@@ -65,6 +82,11 @@ class User extends UserModel
     public function email(): Email
     {
         return $this->email;
+    }
+
+    public function googleId(): GoogleId
+    {
+        return $this->googleId;
     }
 
     public function password(): HashedPassword
@@ -97,17 +119,29 @@ class User extends UserModel
         $this->enabled = false;
     }
 
+    public function setGoogleId(string $googleId, string $firstname, string $lastname)
+    {
+        $this->googleId = GoogleId::fromString($googleId);
+        $this->fullName = $this->updateFullName($firstname, $lastname);
+        // Event
+    }
+
     public function lastLogin(): \DateTimeInterface
     {
         return $this->lastLogin;
     }
 
-    public function updateLastLogin(?\DateTimeInterface $lastLogin = null): void
+    public function updateFullName(string $firstname, string $lastname)
     {
-        if (null === $lastLogin) {
-            $lastLogin = new \DateTimeImmutable();
+        $this->fullName = FullName::create($firstname, $lastname);
+    }
+
+    public function updateLastLogin(?\DateTimeInterface $lastLoginDate = null): void
+    {
+        if (null === $lastLoginDate) {
+            $lastLoginDate = new \DateTimeImmutable();
         }
 
-        $this->lastLogin = $lastLogin;
+        $this->lastLogin = $lastLoginDate;
     }
 }

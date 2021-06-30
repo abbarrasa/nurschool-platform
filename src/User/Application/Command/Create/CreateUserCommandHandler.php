@@ -16,6 +16,8 @@ namespace Nurschool\User\Application\Command\Create;
 use Nurschool\Shared\Application\Command\CommandHandler;
 use Nurschool\Shared\Infrastructure\Symfony\Event\UserCreated;
 use Nurschool\User\Domain\ValueObject\Credentials;
+use Nurschool\User\Domain\ValueObject\Email;
+use Nurschool\User\Domain\ValueObject\HashedPassword;
 
 final class CreateUserCommandHandler implements CommandHandler
 {
@@ -29,6 +31,10 @@ final class CreateUserCommandHandler implements CommandHandler
 
     public function __invoke(CreateUserCommand $command): void
     {
-        $this->creator->create($command->email, $command->hashedPassword);
+        $email = Email::fromString($command->email);
+        $hashedPassword = HashedPassword::encode($command->plainPassword);
+
+
+        $this->creator->createUser($command->email, $command->plainPassword);
     }
 }

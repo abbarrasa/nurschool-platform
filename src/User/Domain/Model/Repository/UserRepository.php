@@ -22,6 +22,10 @@ interface UserRepository extends RepositoryInterface
 {
     public function findByEmail(Email $email): ?User;
 
+    public function findByGoogleId(string $googleId): ?User;
+
+    public function updateGoogleId(User $user);
+
     public function updateLastLogin(User $user);
 
 }
