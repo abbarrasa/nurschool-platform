@@ -66,14 +66,6 @@ class User extends UserModel
         return new self(Uuid::uuid4(), $email, $password);
     }
 
-    public static function createFromGoogleId(Email $email, GoogleId $googleId, FullName $fullName): self
-    {
-        $user = new self(Uuid::uuid4(), $email, null);
-        $user->googleId = $googleId;
-
-        return $user;
-    }
-
     public function id(): UuidInterface
     {
         return $this->id;
@@ -119,10 +111,9 @@ class User extends UserModel
         $this->enabled = false;
     }
 
-    public function setGoogleId(string $googleId, string $firstname, string $lastname)
+    public function setGoogleId(GoogleId $googleId)
     {
-        $this->googleId = GoogleId::fromString($googleId);
-        $this->fullName = $this->updateFullName($firstname, $lastname);
+        $this->googleId = $googleId;
         // Event
     }
 

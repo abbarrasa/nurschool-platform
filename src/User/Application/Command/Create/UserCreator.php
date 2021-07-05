@@ -32,22 +32,21 @@ final class UserCreator
         $this->repository = $repository;
     }
 
-    public function createUser(
-        Email $email,
-        ?HashedPassword $hashedPassword = null,
-        ?GoogleId $googleId = null,
-        ?FullName $fullName = null
-    ): User {
+    public function createUser(Email $email, HashedPassword $hashedPassword): User
+    {
         $user = User::create($email, $hashedPassword);
-//        $user->setGoogleId($googleId, $fullName);
         $this->save($user);
 
         return $user;
     }
 
-    public function createGoogleUser(Email $email, )
+    public function createGoogleUser(Email $email, GoogleId $googleId, ?FullName $fullName = null): User
     {
+        $user = User::create($email);
+        $user->setGoogleId($googleId);
+
         $user = User::createFromGoogleId($email, $googleId);
+
         $this->save($user);
 
         return $user;

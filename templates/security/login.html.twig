@@ -10,6 +10,20 @@
                         <div class="notification is-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                     {% endif %}
                     <form action="{{ path('login') }}" method="post">
+
+                        <div class="field">
+                            <div class="control">
+                                <a href="{{ path('connect_start', {'client': 'google'}) }}" class="button is-link">
+                                    <i class="icon-google2"></i>
+                                </a>
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <div class="divider">Exemple</div>
+                        </div>
+
                         <div class="field">
                             <label for="username">Email</label>
                             <div class="control has-icons-left">

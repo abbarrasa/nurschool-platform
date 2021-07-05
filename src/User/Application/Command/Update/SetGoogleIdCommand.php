@@ -19,23 +19,21 @@ use Nurschool\User\Domain\ValueObject\GoogleId;
 
 class SetGoogleIdCommand implements Command
 {
+    /** @var User */
     public $user;
-    public $googleId;
-    public $fullName;
 
-    public function __construct(User $user, GoogleId $googleId, FullName $fullName)
+    /** @var string */
+    public $googleId;
+
+    /** @var string */
+    public $firstname;
+
+    /** @var string */
+    public $lastname;
+
+    public function __construct(User $user, string $googleId)
     {
         $this->user = $user;
         $this->googleId = $googleId;
-        $this->fullName = $fullName;
     }
-
-    static public function create(User $user, string $googleId, string $firstname, string $lastname): self
-    {
-        $googleId = GoogleId::fromString($googleId);
-        $fullName = FullName::create($firstname, $lastname);
-
-        return new self($user, $googleId, $fullName);
-    }
-
 }

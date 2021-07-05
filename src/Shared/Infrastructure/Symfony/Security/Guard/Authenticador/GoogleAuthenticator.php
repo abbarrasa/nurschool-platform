@@ -18,6 +18,7 @@ use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
 use League\OAuth2\Client\Provider\GoogleUser;
 use Nurschool\Shared\Application\Command\CommandBus;
 use Nurschool\User\Application\Command\Create\CreateGoogleUserCommand;
+use Nurschool\User\Application\Command\Create\CreateUserCommand;
 use Nurschool\User\Application\Command\Update\SetGoogleIdCommand;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -82,10 +83,15 @@ class GoogleAuthenticator extends SocialAuthenticator
             $lastname = $googleUser->getLastName();
             $user = $userProvider->loadUserByUsername($email);
             if (null === $user) {
-                $this->commandBus->dispatch(CreateGoogleUserCommand::create($email, $googleId, $firstname, $lastname));
+                $command = new CreateUserCommand($email);
+                $command->googleId = $googleId;
             } else {
-                $this->commandBus->dispatch(SetGoogleIdCommand::create($user, $googleId));
+                $command = new SetGoogleIdCommand($user, $googleId);
             }
+
+            $command->firstname = $firstname;
+            $command->lastname = $lastname;
+            $this->commandBus->dispatch($command);
         }
 
         return $user;

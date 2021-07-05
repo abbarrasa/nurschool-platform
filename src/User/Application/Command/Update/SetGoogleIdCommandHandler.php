@@ -15,5 +15,8 @@ use Nurschool\Shared\Application\Command\CommandHandler;
 
 class SetGoogleIdCommandHandler implements CommandHandler
 {
+    public function __invoke(SetGoogleIdCommand $command): void
+    {
 
+    }
 }

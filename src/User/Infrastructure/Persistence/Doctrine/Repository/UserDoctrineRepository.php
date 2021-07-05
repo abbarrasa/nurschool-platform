@@ -69,6 +69,10 @@ final class UserDoctrineRepository extends DoctrineRepository implements UserRep
         $this->save($user);
     }
 
+    public function updateGoogleId(User $user)
+    {
+        // TODO: Implement updateGoogleId() method.
+    }
 
 
     // /**
