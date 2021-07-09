@@ -12,13 +12,15 @@ Encore
     // copying images from assets
     .copyFiles({
         from: './assets/images',
+        // optional target path, relative to the output dir
+        to: 'images/[path][name].[ext]',
         // only copy files matching this pattern
         pattern: /\.(png|jpg|jpeg)$/
     })
     // copying fonts
     .copyFiles({
         from: './assets/fonts',
-        to: 'fonts'
+        to: 'fonts/[path][name].[ext]',
     })
     // public path used by the web server to access the output path
     .setPublicPath('/build')

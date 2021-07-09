@@ -19,9 +19,11 @@ $radius: 0;
 @import "~bulma/bulma";
 @import "~bulma-checkradio/dist/css/bulma-checkradio";
 @import "~@creativebulma/bulma-divider";
+@import "bulma-social/all.min.css";
 
 // Icomoon
 @import "../fonts/icomoon/style.css";
 
 // Nurschool styles
 label, .button, .navbar-item { font-weight: 500; }
+.icon-lg {  font-size: 1.33333em; line-height: .75em; }

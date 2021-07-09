@@ -22,6 +22,12 @@
 
                     {{ form_end(form) }}
 
+                    <div>
+                        <div class="divider">{{ 'or' | trans }}</div>
+                    </div>
+
+                    {% include 'components/social/sign-in-social.html.twig' only %}
+
                     {#                {% if errors is defined %}#}
                     {#                    {% for error in errors %}#}
                     {#                        <div class="alert alert-danger" role="alert">{{ error.message }}</div>#}

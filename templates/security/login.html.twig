@@ -12,19 +12,6 @@
                     <form action="{{ path('login') }}" method="post">
 
                         <div class="field">
-                            <div class="control">
-                                <a href="{{ path('connect_start', {'client': 'google'}) }}" class="button is-link">
-                                    <i class="icon-google2"></i>
-                                </a>
-                            </div>
-                        </div>
-
-
-                        <div>
-                            <div class="divider">Exemple</div>
-                        </div>
-
-                        <div class="field">
                             <label for="username">Email</label>
                             <div class="control has-icons-left">
                                 <input class="input" type="text" id="username" name="email" value="{{ last_username }}" placeholder="Your email" required autofocus/>
@@ -55,6 +42,13 @@
                             </div>
                         </div>
                     </form>
+
+                    <div>
+                        <div class="divider">{{ 'or' | trans }}</div>
+                    </div>
+
+                    {% include 'components/social/sign-in-social.html.twig' only %}
+
                 </div>
             </div>
         </div>
