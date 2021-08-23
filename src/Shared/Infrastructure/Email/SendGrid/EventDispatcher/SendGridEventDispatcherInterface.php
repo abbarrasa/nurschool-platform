@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Nurschool\Shared\Infrastructure\Email\SendGrid;
+namespace Nurschool\Shared\Infrastructure\Email\SendGrid\EventDispatcher;
 
 
 use Nurschool\Shared\Infrastructure\Email\SendGrid\Event\SendGridEventInterface;

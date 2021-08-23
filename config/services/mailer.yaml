@@ -1,25 +1,34 @@
 parameters:
     sendgrid_api_key: '%env(SENDGRID_API_KEY)%'
-    nurschool_mailer:
-        sandbox: '%env(bool:MAILER_SANDBOX_MODE)%'
-        disable_delivery: '%env(bool:MAILER_DISABLE_DELIVERY)%' # default false
-        redirect_to: '%env(bool:MAILER_REDIRECT_TO)%' # default false
-        default_address: '%env(resolve:MAILER_DEFAULT_ADDRESS)%'
-        default_name: '%env(resolve:MAILER_DEFAULT_NAME)%'
-        confirmation:
-            template: '%env(resolve:MAILER_CONFIRMATION_TEMPLATE_ID)%'
+    sendgrid_mailer:
+        disable_delivery: '%env(bool:SENDGRID_DISABLE_DELIVERY)%'
+        redirect_to: '%env(SENDGRID_REDIRECT_TO)%'
+        sandbox: '%env(bool:SENDGRID_SANDBOX_MODE)%'
+        default_address: '%env(resolve:SENDGRID_DEFAULT_ADDRESS)%'
+        default_name: '%env(resolve:SENDGRID_DEFAULT_NAME)%'
+        email_confirmation:
+            template: '%env(resolve:SENDGRID_CONFIRMATION_TEMPLATE_ID)%'
             subject: 'Welcome to Nurschool'
-        resetting:
-            template: '%env(resolve:MAILER_RESETTING_TEMPLATE_ID)%'
+        email_resetting:
+            template: '%env(resolve:SENDGRID_RESETTING_TEMPLATE_ID)%'
             subject: 'Reset your password'
-        invitation:
-            template: '%env(resolve:MAILER_INVITATION_TEMPLATE_ID)%'
+        email_invitation:
+            template: '%env(resolve:SENDGRID_INVITATION_TEMPLATE_ID)%'
             subject: 'Invitation to join to Nurschool'
 
 services:
     SendGrid:
         class: SendGrid
         arguments: [ '%sendgrid_api_key%' ]
+
+    Nurschool\Shared\Infrastructure\Email\SendGrid\Provider\SendgridProvider:
+        arguments:
+            $disableDelivery: '%sendgrid_disable_delivery%'
+            $redirectTo: '%sendgrid_redirect_to%'
+            $sandbox: '%sendgrid_sandbox%'
+
+    Nurschool\Shared\Infrastructure\Symfony\Email\SendGridSettingsMailer:
+        arguments: [ '%sendgrid_mailer%']
 
     nurschool.mailer:
         class: Nurschool\Shared\Infrastructure\Email\SendGrid\SendGridMailer

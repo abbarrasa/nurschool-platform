@@ -21,9 +21,9 @@ class SendGridSettingsMailer implements SettingsMailerInterface
 {
     private $settings;
 
-    public function __construct(array $configMailer)
+    public function __construct(array $settings)
     {
-        $this->loadSettings($configMailer);
+        $this->loadSettings($settings);
     }
 
     /**
@@ -106,7 +106,7 @@ class SendGridSettingsMailer implements SettingsMailerInterface
     {
         $resolver
             ->setRequired([
-                'default_address', 'default_name', 'confirmation', 'resetting', 'invitation'
+                'default_address', 'default_name', 'email_confirmation'
             ])
             ->setDefaults([
                 'sandbox' => false,
@@ -115,7 +115,7 @@ class SendGridSettingsMailer implements SettingsMailerInterface
                 'redirect_to_address' => function (Options $options) {
                     return $options['default_address'];
                 },
-                'confirmation' => function (OptionsResolver $resolver, Options $parent) {
+                'email_confirmation' => function (OptionsResolver $resolver, Options $parent) {
                     $resolver
                         ->setRequired(['template', 'subject'])
                         ->setDefaults([
@@ -124,24 +124,24 @@ class SendGridSettingsMailer implements SettingsMailerInterface
                         ])
                     ;
                 },
-                'resetting' => function (OptionsResolver $resolver, Options $parent) {
-                    $resolver
-                        ->setRequired(['template', 'subject'])
-                        ->setDefaults([
-                            'address' => $parent['default_address'],
-                            'name' => $parent['default_name']
-                        ])
-                    ;
-                },
-                'invitation' => function (OptionsResolver $resolver, Options $parent) {
-                    $resolver
-                        ->setRequired(['template', 'subject'])
-                        ->setDefaults([
-                            'address' => $parent['default_address'],
-                            'name' => $parent['default_name']
-                        ])
-                    ;
-                }
+//                'resetting' => function (OptionsResolver $resolver, Options $parent) {
+//                    $resolver
+//                        ->setRequired(['template', 'subject'])
+//                        ->setDefaults([
+//                            'address' => $parent['default_address'],
+//                            'name' => $parent['default_name']
+//                        ])
+//                    ;
+//                },
+//                'invitation' => function (OptionsResolver $resolver, Options $parent) {
+//                    $resolver
+//                        ->setRequired(['template', 'subject'])
+//                        ->setDefaults([
+//                            'address' => $parent['default_address'],
+//                            'name' => $parent['default_name']
+//                        ])
+//                    ;
+//                }
             ])
         ;
     }
