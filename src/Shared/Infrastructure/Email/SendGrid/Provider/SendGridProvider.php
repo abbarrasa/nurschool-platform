@@ -1,9 +1,23 @@
 <?php
 
+/*
+ * This file is part of the Nurschool project.
+ *
+ * (c) Nurschool <https://github.com/abbarrasa/nurschool>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
 namespace Nurschool\Shared\Infrastructure\Email\SendGrid\Provider;
 
 use Nurschool\Shared\Infrastructure\Email\SendGrid\EventDispatcher\SendGridEventDispatcherInterface;
+use Nurschool\Shared\Infrastructure\Email\SendGrid\Exception\AccessDeniedSendGridException;
+use Nurschool\Shared\Infrastructure\Email\SendGrid\Exception\BadRequestSendGridException;
 use Nurschool\Shared\Infrastructure\Email\SendGrid\Exception\SendGridException;
+use Nurschool\Shared\Infrastructure\Email\SendGrid\Exception\UnauthorizedSendGridException;
 use Nurschool\Shared\Infrastructure\Symfony\Event\SendGridEvent;
 use SendGrid\Mail\Mail;
 use SendGrid\Mail\MailSettings;

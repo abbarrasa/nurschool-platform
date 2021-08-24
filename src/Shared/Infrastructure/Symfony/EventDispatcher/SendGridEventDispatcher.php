@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Nurschool\Shared\Infrastructure\Symfony\EventDispatcher;
 
 
-use Nurschool\Shared\Infrastructure\Email\SendGrid\SendGridEventDispatcherInterface;
 use Nurschool\Shared\Infrastructure\Email\SendGrid\Event\SendGridEventInterface;
+use Nurschool\Shared\Infrastructure\Email\SendGrid\EventDispatcher\SendGridEventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class SendGridEventDispatcher implements SendGridEventDispatcherInterface

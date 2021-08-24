@@ -65,7 +65,7 @@ class SendGridMailer implements MailerInterface
             'url' => $signedUrl,
             'expiresAt' => $expiresAt->format('g')
         ];
-        $email = $this->createMessage(
+        $email = $this->provider->createMail(
             [$address, $name],
             $user->email()->toString(),
             $subject,
@@ -73,7 +73,7 @@ class SendGridMailer implements MailerInterface
             $data
         );
 
-        return $this->sendMessage($email);
+        return $this->provider->sendMail($email);
     }
 
     public function sendResettingPasswordEmail(User $user)
@@ -86,7 +86,7 @@ class SendGridMailer implements MailerInterface
     {
         $name = null !== $prefix ? "$prefix.$name" : $name;
 
-        return $this->settingsMailer->getSetting($name);
+        return $this->settingsMailer->getSettingValue($name);
     }
 
 //    public function sendConfirmationEmail(UserInterface $user, VerifyEmailSignatureComponents $signatureComponents)

@@ -11,7 +11,6 @@
 
 namespace Nurschool\Shared\Infrastructure\Symfony\Email;
 
-
 use Nurschool\Shared\Domain\Service\Email\SettingsMailerInterface;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 use Symfony\Component\OptionsResolver\Options;
@@ -21,7 +20,7 @@ class SendGridSettingsMailer implements SettingsMailerInterface
 {
     private $settings;
 
-    public function __construct(array $settings)
+    public function __construct(array $settings = [])
     {
         $this->loadSettings($settings);
     }
@@ -51,7 +50,7 @@ class SendGridSettingsMailer implements SettingsMailerInterface
      * @param $value
      * @return void
      */
-    public function setSetting(string $name, $value)
+    public function setSettingValue(string $name, $value)
     {
         $keys = explode('.', $name);
         $current = &$this->settings;
@@ -77,7 +76,7 @@ class SendGridSettingsMailer implements SettingsMailerInterface
      * @param string $name
      * @return mixed|void
      */
-    public function getSetting(string $name)
+    public function getSettingValue(string $name)
     {
         $keys = explode('.', $name);
         return array_reduce($keys, function($a, $b) {

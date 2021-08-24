@@ -29,14 +29,14 @@ interface SettingsMailerInterface
      * @param $value
      * @return mixed
      */
-    public function setSetting(string $name, $value);
+    public function setSettingValue(string $name, $value);
 
     /**
      * Gets a mailer setting value by its name
      * @param string $name
      * @return mixed
      */
-    public function getSetting(string $name);
+    public function getSettingValue(string $name);
 
     /**
      * Gets all mailer settings values
