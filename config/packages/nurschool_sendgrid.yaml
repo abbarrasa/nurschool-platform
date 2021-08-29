@@ -1,0 +1,5 @@
+nurschool_sendgrid:
+    api_key: '%env(SENDGRID_API_KEY)%'
+    disable_delivery: '%env(bool:SENDGRID_DISABLE_DELIVERY)%'
+    redirect_to: '%env(SENDGRID_REDIRECT_TO)%'
+    sandbox: '%env(bool:SENDGRID_SANDBOX_MODE)%'
