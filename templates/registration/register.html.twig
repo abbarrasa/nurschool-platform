@@ -9,6 +9,13 @@
             <h2 class="subtitle">A simple container to divide your page into <strong>sections</strong>, like the one you're currently reading.</h2>
             <div class="columns is-centered">
                 <div class="column is-half">
+
+{#                    {% include 'components/social/sign-in-social.html.twig' only %}#}
+
+{#                    <div>#}
+{#                        <div class="divider">{{ 'or better' | trans }}</div>#}
+{#                    </div>#}
+
                     {{ form_start(form) }}
                     {{ form_row(form.email) }}
                     {{ form_row(form.password) }}
@@ -21,12 +28,6 @@
                     </div>
 
                     {{ form_end(form) }}
-
-                    <div>
-                        <div class="divider">{{ 'or' | trans }}</div>
-                    </div>
-
-                    {% include 'components/social/sign-in-social.html.twig' only %}
 
                     {#                {% if errors is defined %}#}
                     {#                    {% for error in errors %}#}

@@ -1,34 +1,30 @@
 parameters:
-    sendgrid_api_key: '%env(SENDGRID_API_KEY)%'
-    sendgrid_mailer:
-        disable_delivery: '%env(bool:SENDGRID_DISABLE_DELIVERY)%'
-        redirect_to: '%env(SENDGRID_REDIRECT_TO)%'
-        sandbox: '%env(bool:SENDGRID_SANDBOX_MODE)%'
+#    sendgrid_api_key: '%env(SENDGRID_API_KEY)%'
+#    sendgrid_disable_delivery: '%env(bool:SENDGRID_DISABLE_DELIVERY)%'
+#    sendgrid_redirect_to: '%env(SENDGRID_REDIRECT_TO)%'
+#    sendgrid_sandbox: '%env(bool:SENDGRID_SANDBOX_MODE)%'
+    sendgrid_settings:
         default_address: '%env(resolve:SENDGRID_DEFAULT_ADDRESS)%'
         default_name: '%env(resolve:SENDGRID_DEFAULT_NAME)%'
         email_confirmation:
             template: '%env(resolve:SENDGRID_CONFIRMATION_TEMPLATE_ID)%'
             subject: 'Welcome to Nurschool'
-        email_resetting:
-            template: '%env(resolve:SENDGRID_RESETTING_TEMPLATE_ID)%'
-            subject: 'Reset your password'
-        email_invitation:
-            template: '%env(resolve:SENDGRID_INVITATION_TEMPLATE_ID)%'
-            subject: 'Invitation to join to Nurschool'
+#        email_resetting:
+#            template: '%env(resolve:SENDGRID_RESETTING_TEMPLATE_ID)%'
+#            subject: 'Reset your password'
+#        email_invitation:
+#            template: '%env(resolve:SENDGRID_INVITATION_TEMPLATE_ID)%'
+#            subject: 'Invitation to join to Nurschool'
 
 services:
-    SendGrid:
-        class: SendGrid
-        arguments: [ '%sendgrid_api_key%' ]
-
-    Nurschool\Shared\Infrastructure\Email\SendGrid\Provider\SendgridProvider:
-        arguments:
-            $disableDelivery: '%sendgrid_disable_delivery%'
-            $redirectTo: '%sendgrid_redirect_to%'
-            $sandbox: '%sendgrid_sandbox%'
-
-    Nurschool\Shared\Infrastructure\Symfony\Email\SendGridSettingsMailer:
-        arguments: [ '%sendgrid_mailer%']
+    nurschool.settings_mailer:
+        class: Nurschool\Shared\Infrastructure\Email\Settings\SymfonySendgridSettingsMailer
+        arguments: [ '%sendgrid_settings%']
 
     nurschool.mailer:
-        class: Nurschool\Shared\Infrastructure\Email\SendGrid\SendGridMailer
+        class: Nurschool\Shared\Infrastructure\Email\SendgridMailer
+        arguments:
+            - '@nurschool_sendgrid.provider'
+            - '@nurschool.settings_mailer'
+
+    Nurschool\Shared\Domain\Service\Email\MailerInterface: '@nurschool.mailer'

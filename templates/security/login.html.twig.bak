@@ -14,7 +14,8 @@
                         <div class="field">
                             <label for="username">Email</label>
                             <div class="control has-icons-left">
-                                <input class="input" type="text" id="username" name="email" value="{{ last_username }}" placeholder="Your email" required autofocus/>
+                                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="input"
+                                       placeholder="Your email" autocomplete="email" required autofocus>
                                 <span class="icon is-small is-left">
                                     <i class="icon-envelop"></i>
                                 </span>
@@ -22,7 +23,8 @@
                         </div>
                         <div class="field">
                             <p class="control has-icons-left has-icons-right">
-                                <input class="input" type="password" id="password" name="password" placeholder="Your password" required/>
+                                <input type="password" name="password" id="inputPassword" class="input"
+                                       placeholder="Your password" autocomplete="current-password" required>
                                 <span class="icon is-small is-left">
                                     <i class="icon-lock"></i>
                                 </span>
@@ -32,13 +34,13 @@
                             </p>
                         </div>
                         <div class="field">
-                            <input class="is-checkradio is-link" id="remember_me" type="checkbox" name="remember_me">
+                            <input id="remember_me" type="checkbox" name="_remember_me" class="is-checkradio is-link">
                             <label for="remember_me">Keep me logged in</label>
                         </div>
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token('authenticate') }}">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                         <div class="field">
                             <div class="control">
-                                <button class="button is-link is-outlined" type="submit">Log in</button>
+                                <button type="submit" class="button is-link is-outlined">Log in</button>
                             </div>
                         </div>
                     </form>

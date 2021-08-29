@@ -16,6 +16,7 @@
         "knpuniversity/oauth2-client-bundle": "^2.8",
         "league/oauth2-google": "^4.0",
         "nelmio/cors-bundle": "^2.1",
+        "nurschool/sendgrid-bundle": "dev-main",
         "phpdocumentor/reflection-docblock": "^5.2",
         "ramsey/uuid": "^4.1",
         "ramsey/uuid-doctrine": "^1.6",

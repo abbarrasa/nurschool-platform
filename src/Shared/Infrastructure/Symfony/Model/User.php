@@ -69,7 +69,7 @@ abstract class User extends AggregateRoot implements UserInterface
 
     /**
      * @see \Symfony\Component\Security\Core\User\UserInterface
-     * Not needed when using the "bcrypt" algorithm in security.yaml
+     * Not needed when using the "bcrypt" algorithm in security.yaml.bak
      */
     public function getSalt()
     {
@@ -78,7 +78,7 @@ abstract class User extends AggregateRoot implements UserInterface
 
     /**
      * @see \Symfony\Component\Security\Core\User\UserInterface
-     * Not needed when using the "bcrypt" algorithm in security.yaml
+     * Not needed when using the "bcrypt" algorithm in security.yaml.bak
      */
     public function eraseCredentials()
     {

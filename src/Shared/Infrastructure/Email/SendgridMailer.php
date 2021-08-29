@@ -11,45 +11,35 @@
 
 declare(strict_types=1);
 
-namespace Nurschool\Shared\Infrastructure\Email\SendGrid;
+namespace Nurschool\Shared\Infrastructure\Email;
 
 
+use Nurschool\Bundle\NurschoolSendgridBundle\Provider\SendgridProvider;
 use Nurschool\Shared\Domain\Service\Email\MailerInterface;
-use Nurschool\Shared\Domain\Service\Email\SettingsMailerInterface;
-use Nurschool\Shared\Infrastructure\Email\SendGrid\EventDispatcher\SendGridEventDispatcherInterface;
-use Nurschool\Shared\Infrastructure\Email\SendGrid\Exception\SendGridException;
-use Nurschool\Shared\Infrastructure\Email\SendGrid\Provider\SendGridProvider;
-use Nurschool\Shared\Infrastructure\Symfony\Event\SendGridEvent;
+use Nurschool\Shared\Infrastructure\Email\Settings\SymfonySendgridSettingsMailer;
 use Nurschool\User\Domain\User;
-use SendGrid\Mail\EmailAddress;
-use SendGrid\Mail\Mail;
-use SendGrid\Mail\MailSettings;
-use SendGrid\Mail\Personalization;
-use SendGrid\Mail\SandBoxMode;
-use SendGrid\Mail\To;
-use SendGrid\Response;
 
 /**
- * Class SendGridMailer
+ * Class SendgridMailer
  * @package Nurschool\Shared\Infrastructure\Email\SendGrid
  *
  * Sends Nurschool emails using SendGrid REST API
  */
-class SendGridMailer implements MailerInterface
+class SendgridMailer implements MailerInterface
 {
-    /** @var SendGridProvider */
+    /** @var SendgridProvider */
     private $provider;
 
-    /** @var SettingsMailerInterface */
+    /** @var SymfonySendgridSettingsMailer */
     private $settingsMailer;
 
     /**
-     * @param SendGridProvider $provider
-     * @param SettingsMailerInterface $settingsMailer
+     * @param Sendgridprovider $provider
+     * @param SymfonySendGridSettingsMailer $settingsMailer
      */
     public function __construct(
-        SendGridProvider $provider,
-        SettingsMailerInterface $settingsMailer
+        SendgridProvider $provider,
+        SymfonySendgridSettingsMailer $settingsMailer
     ) {
         $this->provider = $provider;
         $this->settingsMailer = $settingsMailer;

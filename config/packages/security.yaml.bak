@@ -1,4 +1,5 @@
 security:
+    enable_authenticator_manager: true
 #    encoders:
 #        Nurschool\User\Domain\User:
 #            id: 'Nurschool\Shared\Infrastructure\Symfony\Security\Encoder\HashedPasswordEncoder'
@@ -18,14 +19,24 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: true
+            #anonymous: true
             lazy: true
 #            provider: users_in_memory
             provider: users
-            guard:
-                authenticators:
-                    - Nurschool\Shared\Infrastructure\Symfony\Security\Guard\Authenticador\LoginFormAuthenticator
+#            guard:
+#                authenticators:
+#                    - Nurschool\Shared\Infrastructure\Symfony\Security\Guard\Authenticador\LoginFormAuthenticator
+#                    - Nurschool\Shared\Infrastructure\Symfony\Security\Guard\Authenticador\GoogleAuthenticator
+#                entry_point: Nurschool\Shared\Infrastructure\Symfony\Security\Guard\Authenticador\LoginFormAuthenticator
 
+#            custom_authenticators:
+#                - Nurschool\Shared\Infrastructure\Symfony\Security\Authenticador\LoginFormAuthenticator
+
+            # allow authentication using a form or HTTP basic
+            form_login: ~
+
+            # configure the form authentication as the entry point for unauthenticated users
+            #entry_point: form_login
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
@@ -37,9 +48,13 @@ security:
                 path: logout
                 # where to redirect after logout
                 target: home
+            custom_authenticator: Nurschool\Security\FormLoginAuthenticator
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        # allow unauthenticated users to access the login form
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

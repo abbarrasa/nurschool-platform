@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Nurschool\Shared\Infrastructure\Symfony\Email;
+namespace Nurschool\Shared\Infrastructure\Email\Settings;
 
 use Nurschool\Shared\Domain\Service\Email\SettingsMailerInterface;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SendGridSettingsMailer implements SettingsMailerInterface
+class SymfonySendgridSettingsMailer implements SettingsMailerInterface
 {
     private $settings;
 
@@ -35,6 +35,7 @@ class SendGridSettingsMailer implements SettingsMailerInterface
         $resolver = new OptionsResolver();
         $this->configureSettings($resolver);
         $this->settings = $resolver->resolve($settings);
+        $a = 1;
     }
 
     /**

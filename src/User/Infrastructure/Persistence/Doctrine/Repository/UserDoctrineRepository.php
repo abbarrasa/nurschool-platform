@@ -41,10 +41,7 @@ final class UserDoctrineRepository extends DoctrineRepository implements UserRep
             ->createQueryBuilder('u')
             ->where('email.value = :email')
             ->orWhere('googleId.value = :googleId')
-            ->setParameters([
-                'email' => $username,
-                'googleId' => $username
-            ])
+            ->setParameters(array_fill_keys(['email', 'googleId'], $username))
         ;
     }
 

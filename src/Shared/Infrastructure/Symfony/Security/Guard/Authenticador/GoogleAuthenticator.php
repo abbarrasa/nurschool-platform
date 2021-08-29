@@ -34,11 +34,20 @@ class GoogleAuthenticator extends SocialAuthenticator
 
     private const SUCCESS_REDIRECT = 'dashboard';
 
-
+    /** @var ClientRegistry */
     private $clientRegistry;
+
+    /** @var CommandBus  */
     private $commandBus;
+
+    /** @var RouterInterface */
     private $router;
 
+    /**
+     * @param ClientRegistry $clientRegistry
+     * @param CommandBus $commandBus
+     * @param RouterInterface $router
+     */
     public function __construct(
         ClientRegistry $clientRegistry,
         CommandBus $commandBus,
@@ -97,25 +106,14 @@ class GoogleAuthenticator extends SocialAuthenticator
         return $user;
     }
 
-    /**
-     * @return GoogleClient
-     */
-    private function getGoogleClient(): GoogleClient
-    {
-        return $this
-            ->clientRegistry
-            ->getClient('google')
-        ;
-    }
-
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        $targetUrl = $this->router->generate(self::SUCCESS_REDIRECT);
-
-        return new RedirectResponse($targetUrl);
+//        $targetUrl = $this->router->generate(self::SUCCESS_REDIRECT);
+//
+//        return new RedirectResponse($targetUrl);
 
         // or, on success, let the request continue to be handled by the controller
-        //return null;
+        return null;
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
@@ -137,6 +135,19 @@ class GoogleAuthenticator extends SocialAuthenticator
         );
     }
 
-    // ...
+    public function supportsRememberMe(): bool
+    {
+        return false;
+    }
 
+    /**
+     * @return GoogleClient
+     */
+    private function getGoogleClient(): GoogleClient
+    {
+        return $this
+            ->clientRegistry
+            ->getClient('google')
+        ;
+    }
 }

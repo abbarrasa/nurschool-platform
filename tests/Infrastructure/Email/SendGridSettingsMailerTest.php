@@ -12,7 +12,7 @@
 namespace Nurschool\Tests\Infrastructure\Email;
 
 
-use Nurschool\Shared\Infrastructure\Symfony\Email\SendGridSettingsMailer;
+use Nurschool\Shared\Infrastructure\Symfony\Email\SymfonySettingsMailer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
@@ -21,13 +21,13 @@ class SendGridSettingsMailerTest extends TestCase
     public function testWithoutSettings()
     {
         $this->expectException(MissingOptionsException::class);
-        $settingsMailer = new SendGridSettingsMailer([]);
+        $settingsMailer = new SymfonySettingsMailer([]);
     }
 
     public function testErrorGettingValue()
     {
         $settings = $this->generateSettings();
-        $settingsMailer = new SendGridSettingsMailer($settings);
+        $settingsMailer = new SymfonySettingsMailer($settings);
 
         $this->expectException(MissingOptionsException::class);
         $this->expectExceptionMessage('"foo" parameter is not defined');
@@ -37,7 +37,7 @@ class SendGridSettingsMailerTest extends TestCase
     public function testAllSettings()
     {
         $settings = $this->generateSettings();
-        $settingsMailer = new SendGridSettingsMailer($settings);
+        $settingsMailer = new SymfonySettingsMailer($settings);
         $sandbox = $settingsMailer->getSettingValue('sandbox');
         $this->assertEquals($settings['sandbox'], $sandbox);
         $disableDelivery = $settingsMailer->getSettingValue('disable_delivery');
