@@ -12,9 +12,13 @@ security:
     firewalls:
         main:
             lazy: true
-            custom_authenticator: Nurschool\Security\LoginFormAuthenticator
+            custom_authenticators:
+                - Nurschool\Security\LoginFormAuthenticator
             logout:
                 path: logout
                 # where to redirect after logout
                 # target: app_any_route
 
+    access_control:
+        # allow unauthenticated users to access the login form
+        - { path: ^/login, roles: PUBLIC_ACCESS }
