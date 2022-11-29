@@ -1,0 +1,10 @@
+Nurschool\Platform\Domain\User:
+  attributes:
+    email:
+      groups: [ "user:read", "user:register" ]
+    fullName:
+      groups: [ "user:read", "user:register" ]
+    avatar:
+      groups: [ "user:read" ]
+    enabled:
+      groups: [ "user:read" ]

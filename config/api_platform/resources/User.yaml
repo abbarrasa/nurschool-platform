@@ -1,0 +1,26 @@
+Nurschool\Platform\Domain\User:
+  attributes:
+    normalization_context:
+      groups: [ "user:read" ]
+  collectionOperations:
+    register:
+      method: POST
+      path: /users/register
+      controller: Nurschool\Platform\Infrastructure\Symfony\Api\Action\User\Register
+      validate: false
+      denormalization_context:
+        groups: [ "user:register" ]      
+      openapi_context:
+        summary: Register a new user
+  itemOperations:
+    get:
+      method: GET
+    activate_account:
+      method: PUT
+      path: users/{id}/activate
+      controller: Nurschool\Platform\Infrastructure\Symfony\Api\Action\User\ActivateAccount
+      deserialize: false
+      denormalization_context:
+        groups: [ "user:write" ]
+      openapi_context:
+        summary: Activate an user account
